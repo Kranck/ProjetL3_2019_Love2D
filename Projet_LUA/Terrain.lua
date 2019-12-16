@@ -18,7 +18,7 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
     this.map_bloc = {}
 
     -- Initialisation d'un terrain de tout le terrain à null
-    -- valeur qu'on modifiera avec l'algo de perlin 
+    -- valeur qu'on modifiera en fct des valeurs de gris
     for i=1, height do
         this.map_bloc[i] = {}
         for j=1, width do
@@ -35,23 +35,6 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
     --     end
     -- end
 
-    scale = 25
-
-    tb_generated_img = {}
-    for i=1, 45 do
-        tb_generated_img[i] = {}
-        for j=1, 80 do
-            tb_generated_img[i][j] = love.math.noise(i/scale,j/scale)
-        end
-    end
-
-    tb_color_img = {}
-    for i=1, 45 do
-        tb_color_img[i] = {}
-        for j=1, 80 do
-            tb_color_img[i][j] = 1 * (1-tb_generated_img[i][j]) + 255 * tb_generated_img[i][j]
-        end
-    end
     -- tb_img_noir_et_blanc = {}
     -- for i=1, 39 do
     --     tb_img_noir_et_blanc[i] = {}
@@ -73,12 +56,22 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
     --     end
     -- end
 
+    scale = 25
+
+    tb_generated_img = {}
+    for i=1, 45 do
+        tb_generated_img[i] = {}
+        for j=1, 80 do
+            tb_generated_img[i][j] = love.math.noise(i/scale,j/scale)*255
+        end
+    end
+
     for i=1, 45 do
         for j=1, 80 do
-            if tb_color_img[i][j] <=120 then
+            if tb_generated_img[i][j] <=120 then
                 this.map_bloc[i][j] = t2
             else 
-                if tb_color_img[i][j]<=200 then
+                if tb_generated_img[i][j]<=200 then
                     this.map_bloc[i][j] = t1
                 end
             end
@@ -88,7 +81,7 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
     imageSaved = love.image.newImageData(80, 45)
     for i=0, 44 do
         for j=0, 79 do
-            value = tb_generated_img[i+1][j+1]
+            value = tb_generated_img[i+1][j+1]/255
             imageSaved:setPixel(j, i, value, value, value, 0.8)
         end
     end
