@@ -1,7 +1,7 @@
 Tile = {}
 Tile.__index = Tile
 
-IMAGE_SIZE = 48
+IMAGE_SIZE = 48 --16
 
 function Tile:New(pos_X, pos_Y) --Générer une Tile
     local this = {}
