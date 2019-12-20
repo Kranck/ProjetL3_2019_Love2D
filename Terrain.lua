@@ -71,7 +71,7 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
             end
         end
 
-        -- On s'assure qu'il n'y ait pas de Tile "flottant dans l'air"
+        -- On s'assure qu'il n'y ait pas de Tile "flottant" dans l'air"
         cptTileAround = 0
         for i=2, height-1 do
             for j=2, width-1 do
