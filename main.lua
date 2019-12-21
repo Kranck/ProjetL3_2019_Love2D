@@ -18,7 +18,7 @@ function love.draw()
     for y=1, terrain.height do
         for x=1, terrain.width do
             --love.graphics.draw(terrain.map_bloc[1][1])
-            if null~=terrain.map_bloc[y][x] then
+            if nil~=terrain.map_bloc[y][x] then
                 love.graphics.draw(terrain.map_bloc[y][x].img, ((x-1)*PIXELSIZE), ((y-1)*PIXELSIZE))
             end
         end
@@ -31,7 +31,7 @@ function love.draw()
         perso1 = Personnage:New(terrain)
         for y=1, terrain.height do
             for x=1, terrain.width do
-                if null~=terrain.map_bloc[y][x] then
+                if nil~=terrain.map_bloc[y][x] then
                     love.graphics.draw(terrain.map_bloc[y][x].img, ((x-1)*PIXELSIZE), ((y-1)*PIXELSIZE))
                 end
             end
@@ -39,7 +39,7 @@ function love.draw()
         love.graphics.draw(perso1.img, perso1.posX, perso1.posY)
     end
 
-    if love.keyboard.isScancodeDown("left") or love.keyboard.isScancodeDown("q") then
+    if love.keyboard.isScancodeDown("left") or love.keyboard.isScancodeDown("a") then
         perso1:MoveTo(-4, 0, terrain)
         love.graphics.draw(perso1.img, perso1.posX, perso1.posY)
     end
@@ -49,7 +49,7 @@ function love.draw()
         love.graphics.draw(perso1.img, perso1.posX, perso1.posY)
     end
 
-    if love.keyboard.isScancodeDown("up") or love.keyboard.isScancodeDown("z") then
+    if love.keyboard.isScancodeDown("up") or love.keyboard.isScancodeDown("w") then
         perso1:MoveTo(0, -4, terrain)
         love.graphics.draw(perso1.img, perso1.posX, perso1.posY)
     end

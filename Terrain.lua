@@ -18,12 +18,12 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
     this.map_bloc = {}
 
     function generateMap()
-        -- Initialisation d'un terrain de tout le terrain à null
+        -- Initialisation d'un terrain de tout le terrain à nil
         -- valeur qu'on modifiera en fct des valeurs de gris
         for i=1, height do
             this.map_bloc[i] = {}
             for j=1, width do
-                this.map_bloc[i][j] = null
+                this.map_bloc[i][j] = nil
             end
         end
 
@@ -67,7 +67,7 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
             value = tab_not_rectiligne[j]
             to_destroy = value
             for i=1, to_destroy do
-                this.map_bloc[i][j] = null
+                this.map_bloc[i][j] = nil
             end
         end
 
@@ -75,20 +75,20 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
         cptTileAround = 0
         for i=2, height-1 do
             for j=2, width-1 do
-                if this.map_bloc[i-1][j]~=null then
+                if this.map_bloc[i-1][j]~=nil then
                     cptTileAround = cptTileAround+1
                 end
-                if this.map_bloc[i+1][j]~=null then
+                if this.map_bloc[i+1][j]~=nil then
                     cptTileAround = cptTileAround+1
                 end
-                if this.map_bloc[i][j+1]~=null then
+                if this.map_bloc[i][j+1]~=nil then
                     cptTileAround = cptTileAround+1
                 end
-                if this.map_bloc[i][j-1]~=null then
+                if this.map_bloc[i][j-1]~=nil then
                     cptTileAround = cptTileAround+1
                 end
                 if cptTileAround <= 1 then
-                    this.map_bloc[i][j] = null
+                    this.map_bloc[i][j] = nil
                 end
                 cptTileAround=0
             end

@@ -19,7 +19,7 @@ function Personnage:New(t) --Générer une Terrain à  partir de 3 Tile différe
     positionAvailable = {}
     for i=1, 44 do
         for j=1, 80 do
-            if t.map_bloc[i][j]==null and t.map_bloc[i+1][j]~=null then
+            if t.map_bloc[i][j]==null and t.map_bloc[i+1][j]~=nil then
                 table.insert(positionAvailable, {i, j})
             end
         end
@@ -40,29 +40,22 @@ function Personnage:MoveTo(x, y, t)
     nextPositionX = actualPositionX+x
     nextPositionY = actualPositionY+y
 
+    xPositionMin = math.floor(((nextPositionX+1)/16)+1)
+    xPositionMax = math.floor(((nextPositionX+15)/16)+1)
+    yPositionMin = math.floor(((nextPositionY+1)/16)+1)
+    yPositionMax = math.floor(((nextPositionY+15)/16)+1)
+
     if nextPositionX < 0 or nextPositionX > 79*TILESIZE or nextPositionY < 0 or nextPositionY > 44*TILESIZE then
         return
     end
 
-    -- if t.map_bloc[math.floor(nextPositionY+1/16)][math.floor(nextPositionX+15/16)]~=null then
-    --     return
-    -- end
+    if yPositionMax > 45 or xPositionMax > 80 then
+        return
+    end
 
-    -- if t.map_bloc[math.floor(nextPositionY+15/16)][math.floor(nextPositionX+15/16)]~=null then
-    --     return
-    -- end
-
-
-    -- if t.map_bloc[math.floor(nextPositionY+15/16)][math.floor(nextPositionX+1/16)]~=null then
-    --     return
-    -- end
-
-    
-    -- if t.map_bloc[math.floor(nextPositionY+1/16)][math.floor(nextPositionX+1/16)]~=null then
-    --     return
-    -- end
-
-    self.posX = nextPositionX
-    self.posY = nextPositionY
+    if (t.map_bloc[yPositionMin][xPositionMin]==nil) and (t.map_bloc[yPositionMax][xPositionMin]==nil) and (t.map_bloc[yPositionMin][xPositionMax]==nil) and (t.map_bloc[yPositionMax][xPositionMax]==nil) then
+        self.posX = nextPositionX
+        self.posY = nextPositionY
+    end
 
 end
