@@ -7,6 +7,8 @@ Terrain.__index = Terrain
 t2 = Terre:New()
 t1 = Minerai:New()
 
+TILESIZE = 32
+
 perlin = love.image.newImageData("perlin_noise.png")
 
 function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile différentes
@@ -44,7 +46,7 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
         -- Boucle qui permet d'affecter des Tile à notre terrain 
         -- en fonction d'une matrice de valeur de gris générée précédemment
         for i=1, height_to_keep do
-            for j=1, 80 do
+            for j=1, width do
                 if tb_generated_img[i][j] < 1/2 then
                     this.map_bloc[height_to_destroy+i][j] = t2
                 else 
@@ -58,12 +60,12 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
         -- On définit une certaine hauteur pour chaque colonne de notre terrain
         -- afin d'éviter d'avoir une map trop rectiligne
         tab_not_rectiligne = {}
-        for i=1, 80 do
+        for i=1, width do
             tab_not_rectiligne[i] = love.math.random(0, 3)+height_to_destroy
         end
 
         -- Boucle qui permet de supprimer certains blocs pour éviter une map trop rectiligne
-        for j=1, 80 do
+        for j=1, width do
             value = tab_not_rectiligne[j]
             to_destroy = value
             for i=1, to_destroy do
@@ -97,7 +99,7 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
         -- On enregistre la matrice de valeur de gris sous une image
         imageSaved = love.image.newImageData(width, height)
         for i=0, height_to_keep-1 do
-            for j=0, 79 do
+            for j=0, width-1 do
                 value = tb_generated_img[i+1][j+1]
                 imageSaved:setPixel(j, i, value, value, value, 0.8)
             end
@@ -138,7 +140,10 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
     --         end
     --     end
     -- end
-
     generateMap()
     return this
+end
+
+function Terrain:DestroyTile(x, y)
+    self.map_bloc[y][x] = nil
 end

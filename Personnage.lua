@@ -5,12 +5,12 @@ Personnage.__index = Personnage
 
 perlin = love.image.newImageData("perlin_noise.png")
 
-TILESIZE = 16
+TILESIZE = 32
 
 function Personnage:New(t) --Générer une Terrain à  partir de 3 Tile différentes
     local this = {}
     setmetatable(this, Personnage)
-    this.img = love.graphics.newImage("tile_2.png")
+    this.img = love.graphics.newImage("jmh.png")
     this.pointDeVie = 100
     this.nbTerre = 0
     this.nbMinerai = 0
@@ -27,8 +27,8 @@ function Personnage:New(t) --Générer une Terrain à  partir de 3 Tile différe
 
     value = table.getn(positionAvailable)
     randomPosition = love.math.random(1, value)
-    this.posX = (positionAvailable[randomPosition][2]-1)*16--Position en pixel
-    this.posY = (positionAvailable[randomPosition][1]-1)*16--Position en pixel
+    this.posX = (positionAvailable[randomPosition][2]-1)*TILESIZE--Position en pixel
+    this.posY = (positionAvailable[randomPosition][1]-1)*TILESIZE--Position en pixel
 
     return this
 end
@@ -40,10 +40,10 @@ function Personnage:MoveTo(x, y, t)
     nextPositionX = actualPositionX+x
     nextPositionY = actualPositionY+y
 
-    xPositionMin = math.floor(((nextPositionX+1)/16)+1)
-    xPositionMax = math.floor(((nextPositionX+15)/16)+1)
-    yPositionMin = math.floor(((nextPositionY+1)/16)+1)
-    yPositionMax = math.floor(((nextPositionY+15)/16)+1)
+    xPositionMin = math.floor(((nextPositionX+1)/TILESIZE)+1)
+    xPositionMax = math.floor(((nextPositionX+(TILESIZE-1))/TILESIZE)+1)
+    yPositionMin = math.floor(((nextPositionY+1)/TILESIZE)+1)
+    yPositionMax = math.floor(((nextPositionY+(TILESIZE-1))/TILESIZE)+1)
 
     if nextPositionX < 0 or nextPositionX > 79*TILESIZE or nextPositionY < 0 or nextPositionY > 44*TILESIZE then
         return
@@ -57,5 +57,15 @@ function Personnage:MoveTo(x, y, t)
         self.posX = nextPositionX
         self.posY = nextPositionY
     end
+
+    
+
+    function Personnage:IsDead
+        if self.pointDeVie <= 0 then
+            return true
+        end
+        return false
+    end
+
 
 end

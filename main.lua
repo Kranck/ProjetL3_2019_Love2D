@@ -6,7 +6,7 @@ require("Personnage")
 
 HEIGHT = 45
 WIDTH = 80
-PIXELSIZE = 16
+TILESIZE = 32
 
 love.window.setMode(1280, 720, {}) --1280 720
 terrain = Terrain:New(HEIGHT, WIDTH)--720/16 1280/16
@@ -19,7 +19,7 @@ function love.draw()
         for x=1, terrain.width do
             --love.graphics.draw(terrain.map_bloc[1][1])
             if nil~=terrain.map_bloc[y][x] then
-                love.graphics.draw(terrain.map_bloc[y][x].img, ((x-1)*PIXELSIZE), ((y-1)*PIXELSIZE))
+                love.graphics.draw(terrain.map_bloc[y][x].img, ((x-1)*TILESIZE), ((y-1)*TILESIZE))
             end
         end
     end
@@ -32,7 +32,7 @@ function love.draw()
         for y=1, terrain.height do
             for x=1, terrain.width do
                 if nil~=terrain.map_bloc[y][x] then
-                    love.graphics.draw(terrain.map_bloc[y][x].img, ((x-1)*PIXELSIZE), ((y-1)*PIXELSIZE))
+                    love.graphics.draw(terrain.map_bloc[y][x].img, ((x-1)*TILESIZE), ((y-1)*TILESIZE))
                 end
             end
         end
