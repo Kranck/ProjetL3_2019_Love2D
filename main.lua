@@ -1,8 +1,9 @@
-require("Tile")
-require("Terrain")
-require("Terre")
-require("Minerai")
-require("Personnage")
+SRCDIR = "sources/"
+require(SRCDIR.."Tile")
+require(SRCDIR.."Terrain")
+require(SRCDIR.."Terre")
+require(SRCDIR.."Minerai")
+require(SRCDIR.."Personnage")
 
 HEIGHT = 45
 WIDTH = 80

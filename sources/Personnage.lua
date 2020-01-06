@@ -1,16 +1,18 @@
-require("Terrain")
+SRCDIR = "sources/"
+ASSETSDIR = "assets/"
+require(SRCDIR.."Terrain")
 
 Personnage = {}
 Personnage.__index = Personnage
 
-perlin = love.image.newImageData("perlin_noise.png")
+perlin = love.image.newImageData(ASSETSDIR.."perlin_noise.png")
 
 TILESIZE = 32
 
 function Personnage:New(t) --Générer une Terrain à  partir de 3 Tile différentes
     local this = {}
     setmetatable(this, Personnage)
-    this.img = love.graphics.newImage("jmh.png")
+    this.img = love.graphics.newImage(ASSETSDIR.."perso/".."jmh.png")
     this.pointDeVie = 100
     this.nbTerre = 0
     this.nbMinerai = 0
@@ -60,7 +62,7 @@ function Personnage:MoveTo(x, y, t)
 
     
 
-    function Personnage:IsDead
+    function Personnage:IsDead()
         if self.pointDeVie <= 0 then
             return true
         end
