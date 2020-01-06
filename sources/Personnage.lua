@@ -21,7 +21,7 @@ function Personnage:New(t) --Générer une Terrain à  partir de 3 Tile différe
     positionAvailable = {}
     for i=1, 44 do
         for j=1, 80 do
-            if t.map_bloc[i][j]==null and t.map_bloc[i+1][j]~=nil then
+            if t.map_bloc[i][j]==nil and t.map_bloc[i+1][j]~=nil then
                 table.insert(positionAvailable, {i, j})
             end
         end
