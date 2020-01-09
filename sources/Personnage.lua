@@ -29,8 +29,10 @@ function Personnage:New(t) --Générer une Terrain à  partir de 3 Tile différe
 
     value = table.getn(positionAvailable)
     randomPosition = love.math.random(1, value)
-    this.posX = (positionAvailable[randomPosition][2]-1)*TILESIZE--Position en pixel
-    this.posY = (positionAvailable[randomPosition][1]-1)*TILESIZE--Position en pixel
+    -- this.posX = (positionAvailable[randomPosition][2]-1)*TILESIZE--Position en pixel
+    -- this.posY = (positionAvailable[randomPosition][1]-1)*TILESIZE--Position en pixel
+    this.posX = 0
+    this.posY = 0
 
     return this
 end

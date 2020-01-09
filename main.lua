@@ -4,6 +4,8 @@ require(SRCDIR.."Terrain")
 require(SRCDIR.."Terre")
 require(SRCDIR.."Minerai")
 require(SRCDIR.."Personnage")
+require(SRCDIR.."Camera")
+
 
 HEIGHT = 45
 WIDTH = 80
@@ -15,6 +17,7 @@ perso1 = Personnage:New(terrain)
 
 -- fonction d'affichage
 function love.draw()
+    Camera:set()
     -- On affiche un terrain dès qu'on lance le programme
     for y=1, terrain.height do
         for x=1, terrain.width do
@@ -59,6 +62,18 @@ function love.draw()
         perso1:MoveTo(0, 4, terrain)
         love.graphics.draw(perso1.img, perso1.posX, perso1.posY)
     end
+
+    if love.mouse.isDown(1) then
+        --Camera.x, Camera.y = Camera:mousePosition()
+        Camera:scale(1.2)
+    end
+
+    if love.mouse.isDown(2) then
+        --Camera.x, Camera.y = Camera:mousePosition()
+        Camera:scale(1/1.2)
+    end
+
+    Camera:unset()
 
 end
 
