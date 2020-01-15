@@ -7,7 +7,6 @@ Camera.x = 0
 Camera.y = 0
 Camera.scaleX = 1
 Camera.scaleY = 1
-Camera.rotation = 0
 
 function Camera:set()
     love.graphics.push()
@@ -23,15 +22,21 @@ function Camera:move(dx, dy)
     self.x = self.x + (dx or 0)
     self.y = self.y + (dy or 0)
 end
-
-function Camera:rotate(dr)
-    self.rotation = self.rotation + dr
-end
   
-function Camera:scale(sx, sy)
-    sx = sx or 1
+function Camera:scale(sx)
+    max_zoom = 2
+    min_zoom = 1/1.2
+    if sx > 1 then --Zooming
+        if self.scaleX*sx/max_zoom >= 1 or self.scaleY*sx/max_zoom >= 1 then
+            return
+        end     
+    else --Dezooming
+        if self.scaleX*sx/min_zoom <= 1 or self.scaleY*sx/min_zoom <= 1 then
+            return
+        end 
+    end
     self.scaleX = self.scaleX * sx
-    self.scaleY = self.scaleY * (sy or sx)
+    self.scaleY = self.scaleY * sx
 end
   
 function Camera:setPosition(x, y)
@@ -46,5 +51,6 @@ end
 
 function Camera:mousePosition()
     return love.mouse.getX(), love.mouse.getY()
+    --return love.mouse.getX() * self.scaleX + self.x, love.mouse.getY() * self.scaleY + self.y
 end
 

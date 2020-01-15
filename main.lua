@@ -65,12 +65,16 @@ function love.draw()
 
     if love.mouse.isDown(1) then
         --Camera.x, Camera.y = Camera:mousePosition()
-        Camera:scale(1.2)
+        for i=1, 20 do
+            Camera:scale(1.001)
+        end
     end
 
     if love.mouse.isDown(2) then
         --Camera.x, Camera.y = Camera:mousePosition()
-        Camera:scale(1/1.2)
+        for i=1, 20 do
+            Camera:scale(1/1.001)
+        end
     end
 
     Camera:unset()
