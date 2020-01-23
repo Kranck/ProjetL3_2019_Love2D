@@ -13,20 +13,19 @@ TILESIZE = 32
 ---- Valeur absolue des vitesses de déplacement
 
 -- Vitesse du saut
-JUMPSPEED = 3.5
+JUMPSPEED = 4.6
 
 -- Vitesse en l'air
-AIRSPEED = 0.7
+AIRSPEED = 1.8
 
 -- Vitesse au sol
-GROUNDSPEED = 3 * AIRSPEED
+GROUNDSPEED = 1.3 * AIRSPEED
 
 -- Accélération de chute
-GRAVITY = 0.12
+GRAVITY = 0.15
 
 -- Vitesse de chute maximale
 MAX_SPEED_FALLING = 3.4
-
 function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différentes
     local this = {}
     this.terrain = t
@@ -61,7 +60,7 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
     return this
 end
 
-function Personnage:MoveTo(x, y)
+local function MoveTo(self, x, y)
 
     actualPositionX = self.posX
     actualPositionY = self.posY
@@ -113,28 +112,25 @@ function Personnage:Jump(grounded)
     end
 end
 
-function Personnage:MoveRight(grounded)
+-- direction == 1 -> droite ; direction == -1 -> gauche
+local function MoveAside(self, grounded, direction)
     if grounded then
-        self.Xspeed = 2 * GROUNDSPEED /3
-        self.Xacc = GROUNDSPEED / 3
+        self.Xspeed = 2 * direction * GROUNDSPEED /3
+        self.Xacc = direction * GROUNDSPEED / 3
     else 
-        if self.Xspeed == 0 then
-            self.Xspeed = AIRSPEED
+        if math.abs(self.Xspeed) <  2 * GROUNDSPEED /3 then
+            self.Xspeed = direction * AIRSPEED
         end
-        self.Xacc = self.Xacc + 0.001 * GROUNDSPEED
+        self.Xacc =  direction * AIRSPEED
     end
 end
 
+function Personnage:MoveRight(grounded)
+    MoveAside(self, grounded, 1)
+end
+
 function Personnage:MoveLeft(grounded)
-    if grounded then 
-        self.Xspeed = 2 * - GROUNDSPEED /3
-        self.Xacc = - GROUNDSPEED / 3
-    else 
-        if self.Xspeed == 0 then
-            self.Xspeed = - AIRSPEED
-        end
-        self.Xacc = self.Xacc - 0.001 * GROUNDSPEED
-    end
+    MoveAside(self, grounded, -1)
 end
 
 function Personnage:Move(grounded)
@@ -146,14 +142,18 @@ function Personnage:Move(grounded)
         self.Yspeed = MAX_SPEED_FALLING
     end
 
-    if self.Xspeed > GROUNDSPEED then
+    if grounded and self.Xspeed > GROUNDSPEED then
         self.Xspeed = GROUNDSPEED
-    elseif self.Xspeed < - GROUNDSPEED then
+    elseif grounded and self.Xspeed < - GROUNDSPEED then
         self.Xspeed = - GROUNDSPEED
+    elseif not grounded and self.Xspeed > AIRSPEED then
+        self.Xspeed = AIRSPEED
+    elseif not grounded and self.Xspeed < - AIRSPEED then
+        self.Xspeed = - AIRSPEED
     end
 
     -- On applique le déplacement 
-    self:MoveTo(self.Xspeed, 0)
-    self:MoveTo(0, self.Yspeed)
+    MoveTo(self, self.Xspeed, 0)
+    MoveTo(self, 0, self.Yspeed)
 
 end
