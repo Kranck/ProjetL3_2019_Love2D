@@ -62,22 +62,47 @@ end
 
 local function MoveTo(self, x, y)
 
-    actualPositionX = self.posX
-    actualPositionY = self.posY
-    nextPositionX = actualPositionX+x
-    nextPositionY = actualPositionY+y
+    
+    local actualPositionX = self.posX
+    local actualPositionY = self.posY
+    local nextPositionX = actualPositionX+x
+    local nextPositionY = actualPositionY+y
 
-    xPositionMin = math.floor(((nextPositionX+1)/TILESIZE)+1)
-    xPositionMax = math.floor(((nextPositionX+(TILESIZE-1))/TILESIZE)+1)
-    yPositionMin = math.floor(((nextPositionY+1)/TILESIZE)+1)
-    yPositionMax = math.floor(((nextPositionY+(TILESIZE-1))/TILESIZE)+1)
+    local xPositionMin = math.floor(((nextPositionX+1)/TILESIZE)+1)
+    local xPositionMax = math.floor(((nextPositionX+(TILESIZE-1))/TILESIZE)+1)
+    local yPositionMin = math.floor(((nextPositionY+1)/TILESIZE)+1)
+    local yPositionMax = math.floor(((nextPositionY+(TILESIZE-1))/TILESIZE)+1)
 
-    if nextPositionX < 0 or nextPositionX > 79*TILESIZE or nextPositionY < 0 or nextPositionY > 44*TILESIZE then
-        return
+    if nextPositionX < 0 then
+        nextPositionX = 0
+    end
+
+    if nextPositionX > 79*TILESIZE then
+        nextPositionX = 79*TILESIZE
+    end
+
+    if nextPositionY < 0 then
+        nextPositionY = 0
+    end
+
+    if nextPositionY > 44*TILESIZE then
+        nextPositionY = 44*TILESIZE
     end
 
     if yPositionMax > 45 or xPositionMax > 80 then
         return
+    end
+
+    if (self.terrain.map_bloc[yPositionMin][xPositionMin]==nil) and (self.terrain.map_bloc[yPositionMax][xPositionMin]==nil) and (self.terrain.map_bloc[yPositionMin][xPositionMax]~=nil) and (self.terrain.map_bloc[yPositionMax][xPositionMax]~=nil) then
+        self.posX = xPositionMin*TILESIZE-TILESIZE
+    end
+
+    if (self.terrain.map_bloc[yPositionMin][xPositionMin]~=nil) and (self.terrain.map_bloc[yPositionMax][xPositionMin]~=nil) and (self.terrain.map_bloc[yPositionMin][xPositionMax]==nil) and (self.terrain.map_bloc[yPositionMax][xPositionMax]==nil) then
+        self.posX = xPositionMax*TILESIZE-TILESIZE
+    end
+
+    if (self.terrain.map_bloc[yPositionMax][xPositionMin]~=nil) and (self.terrain.map_bloc[yPositionMax][xPositionMax]~=nil) and (self.terrain.map_bloc[yPositionMin][xPositionMax]==nil) and (self.terrain.map_bloc[yPositionMin][xPositionMin]==nil) then
+        self.posY = yPositionMin*TILESIZE-TILESIZE
     end
 
     if (self.terrain.map_bloc[yPositionMin][xPositionMin]==nil) and (self.terrain.map_bloc[yPositionMax][xPositionMin]==nil)
@@ -85,7 +110,6 @@ local function MoveTo(self, x, y)
         self.posX = nextPositionX
         self.posY = nextPositionY
     end
-
 end
 
 
