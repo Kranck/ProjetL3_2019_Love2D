@@ -93,20 +93,31 @@ local function MoveTo(self, x, y)
         return
     end
 
-    if (self.terrain.map_bloc[yPositionMin][xPositionMin]==nil) and (self.terrain.map_bloc[yPositionMax][xPositionMin]==nil) and (self.terrain.map_bloc[yPositionMin][xPositionMax]~=nil) and (self.terrain.map_bloc[yPositionMax][xPositionMax]~=nil) then
+    if (self.terrain.map_bloc[yPositionMin][xPositionMin]==nil)
+    and (self.terrain.map_bloc[yPositionMax][xPositionMin]==nil)
+    and (self.terrain.map_bloc[yPositionMin][xPositionMax]~=nil)
+    and (self.terrain.map_bloc[yPositionMax][xPositionMax]~=nil) then
         self.posX = xPositionMin*TILESIZE-TILESIZE
     end
 
-    if (self.terrain.map_bloc[yPositionMin][xPositionMin]~=nil) and (self.terrain.map_bloc[yPositionMax][xPositionMin]~=nil) and (self.terrain.map_bloc[yPositionMin][xPositionMax]==nil) and (self.terrain.map_bloc[yPositionMax][xPositionMax]==nil) then
+    if (self.terrain.map_bloc[yPositionMin][xPositionMin]~=nil)
+    and (self.terrain.map_bloc[yPositionMax][xPositionMin]~=nil)
+    and (self.terrain.map_bloc[yPositionMin][xPositionMax]==nil)
+    and (self.terrain.map_bloc[yPositionMax][xPositionMax]==nil) then
         self.posX = xPositionMax*TILESIZE-TILESIZE
     end
 
-    if (self.terrain.map_bloc[yPositionMax][xPositionMin]~=nil) and (self.terrain.map_bloc[yPositionMax][xPositionMax]~=nil) and (self.terrain.map_bloc[yPositionMin][xPositionMax]==nil) and (self.terrain.map_bloc[yPositionMin][xPositionMin]==nil) then
+    if (self.terrain.map_bloc[yPositionMax][xPositionMin]~=nil)
+    and (self.terrain.map_bloc[yPositionMax][xPositionMax]~=nil)
+    and (self.terrain.map_bloc[yPositionMin][xPositionMax]==nil)
+    and (self.terrain.map_bloc[yPositionMin][xPositionMin]==nil) then
         self.posY = yPositionMin*TILESIZE-TILESIZE
     end
 
-    if (self.terrain.map_bloc[yPositionMin][xPositionMin]==nil) and (self.terrain.map_bloc[yPositionMax][xPositionMin]==nil)
-    and (self.terrain.map_bloc[yPositionMin][xPositionMax]==nil) and (self.terrain.map_bloc[yPositionMax][xPositionMax]==nil) then
+    if (self.terrain.map_bloc[yPositionMin][xPositionMin]==nil)
+    and (self.terrain.map_bloc[yPositionMax][xPositionMin]==nil)
+    and (self.terrain.map_bloc[yPositionMin][xPositionMax]==nil)
+    and (self.terrain.map_bloc[yPositionMax][xPositionMax]==nil) then
         self.posX = nextPositionX
         self.posY = nextPositionY
     end

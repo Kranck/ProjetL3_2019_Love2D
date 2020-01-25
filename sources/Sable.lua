@@ -2,17 +2,17 @@ TEXTUREDIR = "assets/textures/"
 SRCDIR = "sources/"
 require(SRCDIR.."Tile")
 
-Pierre = Tile:New()
-Pierre.__index = Pierre
+Sable = Tile:New()
+Sable.__index = Sable
 
-function Pierre:New()
+function Sable:New()
     local this = {}
-    this.img = love.graphics.newImage(TEXTUREDIR.."Stone_Block.png")
-    setmetatable(this, Pierre)
+    this.img = love.graphics.newImage(TEXTUREDIR.."Sand_Block.png")
+    setmetatable(this, Sable)
     return this
 end
 
-function Pierre:Destroy()
+function Sable:Destroy()
     self.img = love.graphics.newImage(TEXTUREDIR.."destroyed.png")
     self.destroyed = true
 end

@@ -6,13 +6,12 @@ require(SRCDIR.."Minerai")
 require(SRCDIR.."Personnage")
 require(SRCDIR.."Camera")
 
+local nuklear = require 'nuklear'
 
 HEIGHT = 45
 WIDTH = 80
 TILESIZE = 32
 
-love.window.setTitle ("JMH Battleground")
-love.window.setMode(1280, 720, {}) --1280 720
 terrain = Terrain:New(HEIGHT, WIDTH)--720/16 1280/16
 perso1 = Personnage:New(terrain)
 

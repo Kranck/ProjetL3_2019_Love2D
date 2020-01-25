@@ -22,7 +22,7 @@ function Camera:move(dx, dy)
     self.x = self.x + (dx or 0)
     self.y = self.y + (dy or 0)
 end
-  
+
 function Camera:scale(sx)
     max_zoom = 2
     min_zoom = 1/1.2
@@ -38,12 +38,12 @@ function Camera:scale(sx)
     self.scaleX = self.scaleX * sx
     self.scaleY = self.scaleY * sx
 end
-  
+
 function Camera:setPosition(x, y)
     self.x = x or self.x
     self.y = y or self.y
 end
-  
+
 function Camera:setScale(sx, sy)
     self.scaleX = sx or self.scaleX
     self.scaleY = sy or self.scaleY

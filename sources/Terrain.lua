@@ -6,12 +6,8 @@ require(SRCDIR.."Terre")
 Terrain = {}
 Terrain.__index = Terrain
 
-t2 = Terre:New()
-t1 = Minerai:New()
-
 TILESIZE = 32
 
-perlin = love.image.newImageData(ASSETSDIR.."perlin_noise.png")
 
 function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile différentes
     local this = {}
@@ -20,6 +16,7 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
     this.width = width
     this.background = love.graphics.newImage(ASSETSDIR.."sky_background.jpg")
     this.map_bloc = {}
+    
 
     function generateMap()
         -- Initialisation d'un terrain de tout le terrain à nil
@@ -32,7 +29,10 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
         end
 
         -- Initialisation des variables nécéssaire pour la génération d'un bruit de perlin
-        scale = love.math.random(10, 40)
+        love.math.setRandomSeed(os.time())
+        scale = 19
+        dx = love.math.random(0, 1000)
+        dy = love.math.random(0, 1000)
         height_to_destroy = love.math.random(10, 15)
         height_to_keep = height-height_to_destroy
 
@@ -41,7 +41,7 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
         for i=1, height_to_keep do
             tb_generated_img[i] = {}
             for j=1, 80 do
-                tb_generated_img[i][j] = love.math.noise(i/scale,j/scale)
+                tb_generated_img[i][j] = love.math.noise(i/scale + dx , j/scale + dy)
             end
         end
 
@@ -49,11 +49,11 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
         -- en fonction d'une matrice de valeur de gris générée précédemment
         for i=1, height_to_keep do
             for j=1, width do
-                if tb_generated_img[i][j] < 1/2 then
-                    this.map_bloc[height_to_destroy+i][j] = t2
+                if tb_generated_img[i][j] < 1/4 then
+                    this.map_bloc[height_to_destroy+i][j] = Terre:New()
                 else 
-                    if tb_generated_img[i][j] < 3/4 then
-                        this.map_bloc[height_to_destroy+i][j] = t1
+                    if tb_generated_img[i][j] < 1/2 then
+                        this.map_bloc[height_to_destroy+i][j] = Pierre:New()
                     end
                 end
             end
@@ -109,39 +109,6 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
         imageSaved:encode("png", "newImage.png")
     end
 
-    -- GENERER UN TERRAIN A PARTIR D'UNE IMAGE
-    -- PEUT ETRE UTILE PAR LA SUITE SI ON GENERE A PARTIR
-    -- D'IMAGES ENREGISTREES
-
-    -- tb_img_noir_et_blanc = {}
-    -- for i=1, height do
-    --     tb_img_noir_et_blanc[i] = {}
-    --     for j=1, width do
-    --         x = love.math.noise(i, j)*255;
-    --         tb_img_noir_et_blanc[i][j] = x
-    --     end
-    -- end
-
-    -- tb_img_noir_et_blanc = {}
-    -- for i=1, 39 do
-    --     tb_img_noir_et_blanc[i] = {}
-    --     for j=1, 39 do
-    --         r, g, b = perlin:getPixel(i, j)
-    --         tb_img_noir_et_blanc[i][j] = (r+g+b)/3*255
-    --     end
-    -- end
-
-    -- for i=1, 39 do
-    --     for j=1, 39 do
-    --         if tb_img_noir_et_blanc[i][j] <=75 then
-    --             this.map_bloc[i][j] = t1
-    --         else 
-    --             if tb_img_noir_et_blanc[i][j] <= 150 then
-    --                 this.map_bloc[i][j] = t2
-    --             end
-    --         end
-    --     end
-    -- end
     generateMap()
     return this
 end
