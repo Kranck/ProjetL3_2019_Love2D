@@ -5,7 +5,6 @@ require(SRCDIR.."Terrain")
 Personnage = {}
 Personnage.__index = Personnage
 
-perlin = love.image.newImageData(ASSETSDIR.."perlin_noise.png")
 
 -- Taille du pavage
 TILESIZE = 32
