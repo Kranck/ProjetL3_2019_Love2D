@@ -187,7 +187,12 @@ function Personnage:Move(grounded)
     end
 
     -- On applique le déplacement 
-    MoveTo(self, math.floor(self.Xspeed), 0)
+
+    if (self.Xspeed - math.floor(self.Xspeed)>0.5) then
+        MoveTo(self, math.floor(self.Xspeed+1), 0)
+    else
+        MoveTo(self, math.floor(self.Xspeed), 0)
+    end
     MoveTo(self, 0, math.floor(self.Yspeed))
 
 end
