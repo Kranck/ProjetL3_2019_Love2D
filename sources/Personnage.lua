@@ -187,7 +187,7 @@ function Personnage:Move(grounded)
     end
 
     -- On applique le déplacement 
-    MoveTo(self, self.Xspeed, 0)
-    MoveTo(self, 0, self.Yspeed)
+    MoveTo(self, math.floor(self.Xspeed), 0)
+    MoveTo(self, 0, math.floor(self.Yspeed))
 
 end
