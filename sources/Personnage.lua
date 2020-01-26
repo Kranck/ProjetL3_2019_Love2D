@@ -196,3 +196,15 @@ function Personnage:Move(grounded)
     MoveTo(self, 0, math.floor(self.Yspeed))
 
 end
+
+function Personnage:Destroy(tile_posX, tile_posY)
+    -- Indice de la tile à retirer
+    print(tile_posX)
+    print(tile_posY)
+    nb_tileX = math.floor(tile_posX/TILESIZE)
+    nb_tileY = math.floor(tile_posY/TILESIZE)
+    if(self.terrain.map_bloc[nb_tileY + 1][nb_tileX + 1] == nil) then
+        return
+    end
+    self.terrain.map_bloc[nb_tileY + 1][nb_tileX + 1] = nil;
+end

@@ -99,6 +99,11 @@ function love.draw()
 
     Camera:unset()
 
+    function love.keypressed(key)
+        if key == 'f' then
+            perso1:Destroy(perso1.posX + 32, perso1.posY)
+        end
+    end
     
     -- Affiche les informations de débuggage pour un personnage
     if DEBUG then
