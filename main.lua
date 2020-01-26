@@ -83,19 +83,21 @@ function love.draw()
         perso1.Xacc = 0
     end
 
-    if love.mouse.isDown(1) then
-        --Camera.x, Camera.y = Camera:mousePosition()
-        for i=1, 20 do
-            Camera:scale(1.001, perso1)
-        end
+    function love.wheelmoved(x, y)
+        if y<0 then
+            --Camera.x, Camera.y = Camera:mousePosition()
+            for i=1, 50 do
+                Camera:scale(1.001, perso1)
+            end
+        elseif y>0 then
+            --Camera.x, Camera.y = Camera:mousePosition()
+            for i=1, 50 do
+                Camera:scale(1/1.001, perso1)
+            end
+        end    
     end
 
-    if love.mouse.isDown(2) then
-        --Camera.x, Camera.y = Camera:mousePosition()
-        for i=1, 20 do
-            Camera:scale(1/1.001, perso1)
-        end
-    end
+    love.wheelmoved(0, 0)
 
     Camera:unset()
 
