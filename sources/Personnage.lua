@@ -199,12 +199,13 @@ end
 
 function Personnage:Destroy(tile_posX, tile_posY)
     -- Indice de la tile à retirer
-    print(tile_posX)
-    print(tile_posY)
     nb_tileX = math.floor(tile_posX/TILESIZE)
     nb_tileY = math.floor(tile_posY/TILESIZE)
     if(self.terrain.map_bloc[nb_tileY + 1][nb_tileX + 1] == nil) then
         return
     end
-    self.terrain.map_bloc[nb_tileY + 1][nb_tileX + 1] = nil;
+    self.terrain.map_bloc[nb_tileY + 1][nb_tileX + 1].pdv = self.terrain.map_bloc[nb_tileY + 1][nb_tileX + 1].pdv - 1;
+    if(self.terrain.map_bloc[nb_tileY + 1][nb_tileX + 1].pdv == 0) then
+        self.terrain.map_bloc[nb_tileY + 1][nb_tileX + 1] = nil
+    end
 end

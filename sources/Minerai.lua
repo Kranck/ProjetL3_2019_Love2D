@@ -8,6 +8,7 @@ Pierre.__index = Pierre
 function Pierre:New()
     local this = {}
     this.img = love.graphics.newImage(TEXTUREDIR.."Stone_Block.png")
+    this.pdv = 5
     setmetatable(this, Pierre)
     return this
 end

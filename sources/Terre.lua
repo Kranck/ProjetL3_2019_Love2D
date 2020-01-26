@@ -8,6 +8,7 @@ Terre.__index = Terre
 function Terre:New()
     local this = {}
     this.img = love.graphics.newImage(TEXTUREDIR.."Earth_Block.png")
+    this.pdv = 3
     setmetatable(this, Terre)
     return this
 end
