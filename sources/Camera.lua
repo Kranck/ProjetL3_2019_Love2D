@@ -23,7 +23,12 @@ function Camera:move(dx, dy)
     self.y = self.y + (dy or 0)
 end
 
-function Camera:scale(sx)
+function Camera:setPosition(perso1)
+    self.x = perso1.posX-(window_width/2*self.scaleX) or self.x
+    self.y = perso1.posY-(window_height/2*self.scaleY) or self.y
+end
+
+function Camera:scale(sx, p)
     max_zoom = 2
     min_zoom = 1/1.2
     if sx > 1 then --Zooming
@@ -37,11 +42,10 @@ function Camera:scale(sx)
     end
     self.scaleX = self.scaleX * sx
     self.scaleY = self.scaleY * sx
-end
 
-function Camera:setPosition(x, y)
-    self.x = x or self.x
-    self.y = y or self.y
+    window_width, window_height = love.graphics.getDimensions()
+
+    self:setPosition(p)
 end
 
 function Camera:setScale(sx, sy)
@@ -54,3 +58,14 @@ function Camera:mousePosition()
     --return love.mouse.getX() * self.scaleX + self.x, love.mouse.getY() * self.scaleY + self.y
 end
 
+-- function Camera:centerAroundPersonnage(p)
+--     window_width, window_height = love.graphics.getDimensions()
+
+--     self.x = (p.posX-window_width)*self.scaleX
+--     self.y = (p.posY-window_height)*self.scaleY
+
+--     if self.x < 0 or self.y < 0 then
+--         self.x=0
+--         self.y=0
+--     end
+-- end

@@ -31,7 +31,11 @@ function love.draw()
             end
         end
     end
+    --Camera:centerAroundPersonnage(perso1)
+    window_width, window_height = love.graphics.getDimensions()
+    Camera:setPosition(perso1)
     love.graphics.draw(perso1.img, perso1.posX, perso1.posY)
+    
 
     function love.keyreleased(key)
         -- Dès qu'on appuie sur entrée génère une nouvelle map et la redessine
@@ -82,14 +86,14 @@ function love.draw()
     if love.mouse.isDown(1) then
         --Camera.x, Camera.y = Camera:mousePosition()
         for i=1, 20 do
-            Camera:scale(1.001)
+            Camera:scale(1.001, perso1)
         end
     end
 
     if love.mouse.isDown(2) then
         --Camera.x, Camera.y = Camera:mousePosition()
         for i=1, 20 do
-            Camera:scale(1/1.001)
+            Camera:scale(1/1.001, perso1)
         end
     end
 
