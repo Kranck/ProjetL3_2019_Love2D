@@ -25,11 +25,17 @@ GRAVITY = 0.15
 
 -- Vitesse de chute maximale
 MAX_SPEED_FALLING = 3.4
+
+-- Orientation
+RIGHT = 1
+LEFT = -1
+
 function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différentes
     local this = {}
     this.terrain = t
     setmetatable(this, Personnage)
-    this.img = love.graphics.newImage(ASSETSDIR.."perso/".."jmh.png")
+    this.sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite.png")
+    this.img = love.graphics.newQuad(0, 0, 32, 32, this.sprite:getDimensions());
 
     -- Positions que peut prendre le personnage
     positionAvailable = {}
@@ -46,6 +52,7 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
 
     this.pointDeVie = 100
 
+    this.orientation = RIGHT
 
     this.posX = (positionAvailable[randomPosition][2]-1)*TILESIZE--Position en pixel
     this.posY = (positionAvailable[randomPosition][1]-1)*TILESIZE--Position en pixel
@@ -161,10 +168,14 @@ end
 
 function Personnage:MoveRight(grounded)
     MoveAside(self, grounded, 1)
+    self.img = love.graphics.newQuad(0, 0, 32, 32, self.sprite:getDimensions());
+    self.orientation = RIGHT
 end
 
 function Personnage:MoveLeft(grounded)
     MoveAside(self, grounded, -1)
+    self.img = love.graphics.newQuad(32, 0, 32, 32, self.sprite:getDimensions());
+    self.orientation = LEFT
 end
 
 function Personnage:Move(grounded)

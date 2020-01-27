@@ -34,7 +34,7 @@ function love.draw()
     --Camera:centerAroundPersonnage(perso1)
     window_width, window_height = love.graphics.getDimensions()
     Camera:setPosition(perso1)
-    love.graphics.draw(perso1.img, perso1.posX, perso1.posY)
+    love.graphics.draw(perso1.sprite, perso1.img, perso1.posX, perso1.posY)
     
 
     function love.keyreleased(key)
@@ -49,7 +49,7 @@ function love.draw()
                     end
                 end
             end
-            love.graphics.draw(perso1.img, perso1.posX, perso1.posY)
+            love.graphics.draw(perso1.sprite, perso1.img, perso1.posX, perso1.posY)
         end
     end
 
@@ -59,19 +59,19 @@ function love.draw()
 
     if love.keyboard.isScancodeDown("left") or love.keyboard.isScancodeDown("a") then
         perso1:MoveLeft(grounded)
-        love.graphics.draw(perso1.img, perso1.posX, perso1.posY)
+        love.graphics.draw(perso1.sprite, perso1.img, perso1.posX, perso1.posY)
         moved = true
     end
 
     if love.keyboard.isScancodeDown("right") or love.keyboard.isScancodeDown("d") then
         perso1:MoveRight(grounded);
-        love.graphics.draw(perso1.img, perso1.posX, perso1.posY)
+        love.graphics.draw(perso1.sprite, perso1.img, perso1.posX, perso1.posY)
         moved = true
     end
 
     if love.keyboard.isScancodeDown("space") then
         perso1:Jump(grounded)
-        love.graphics.draw(perso1.img, perso1.posX, perso1.posY)
+        love.graphics.draw(perso1.sprite, perso1.img, perso1.posX, perso1.posY)
     end
 
     -- On applique les modifications dues aux inputs
@@ -103,7 +103,7 @@ function love.draw()
 
     function love.keypressed(key)
         if key == 'f' then
-            perso1:Destroy(perso1.posX + 32, perso1.posY)
+            perso1:Destroy(perso1.posX + 32 * perso1.orientation, perso1.posY)
         end
     end
     
