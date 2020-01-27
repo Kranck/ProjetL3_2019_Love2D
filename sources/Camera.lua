@@ -25,7 +25,21 @@ end
 
 function Camera:setPosition(perso1)
     self.x = perso1.posX-(window_width/2*self.scaleX) or self.x
+    if self.x<0 then
+        self.x=0
+    end
+    xMax = 80*TILESIZE-(window_width*self.scaleX)
+    if self.x>xMax then
+        self.x=xMax
+    end
     self.y = perso1.posY-(window_height/2*self.scaleY) or self.y
+    if self.y<0 then
+        self.y=0
+    end
+    yMax = 45*TILESIZE-(window_height*self.scaleY)
+    if self.y>yMax then
+        self.y=yMax
+    end
 end
 
 function Camera:scale(sx, p)
@@ -55,17 +69,4 @@ end
 
 function Camera:mousePosition()
     return love.mouse.getX(), love.mouse.getY()
-    --return love.mouse.getX() * self.scaleX + self.x, love.mouse.getY() * self.scaleY + self.y
 end
-
--- function Camera:centerAroundPersonnage(p)
---     window_width, window_height = love.graphics.getDimensions()
-
---     self.x = (p.posX-window_width)*self.scaleX
---     self.y = (p.posY-window_height)*self.scaleY
-
---     if self.x < 0 or self.y < 0 then
---         self.x=0
---         self.y=0
---     end
--- end
