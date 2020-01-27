@@ -103,7 +103,7 @@ function love.draw()
 
     function love.keypressed(key)
         if key == 'f' then
-            perso1:Destroy(perso1.posX + 32 * perso1.orientation, perso1.posY)
+            perso1:Destroy(perso1.posX + 32 * perso1.orientation, perso1.posY + 16)
         end
     end
     
