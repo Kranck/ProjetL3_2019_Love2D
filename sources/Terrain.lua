@@ -28,7 +28,7 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
             end
         end
 
-        -- Initialisation des variables nécéssaire pour la génération d'un bruit de perlin
+        -- Initialisation des variables nécéssaires pour la génération d'un bruit de perlin
         love.math.setRandomSeed(os.time())
         scale = 19
         dx = love.math.random(0, 1000)
@@ -50,10 +50,10 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
         for i=1, height_to_keep do
             for j=1, width do
                 if tb_generated_img[i][j] < 1/4 then
-                    this.map_bloc[height_to_destroy+i][j] = Terre:New()
+                    this.map_bloc[height_to_destroy+i][j] = Pierre:New()
                 else 
                     if tb_generated_img[i][j] < 1/2 then
-                        this.map_bloc[height_to_destroy+i][j] = Pierre:New()
+                        this.map_bloc[height_to_destroy+i][j] = Terre:New()
                     end
                 end
             end
