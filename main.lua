@@ -69,6 +69,14 @@ function love.draw()
         moved = true
     end
 
+    if love.keyboard.isScancodeDown("up") or love.keyboard.isScancodeDown("w") then
+        perso1.angle = perso1.angle + 1;
+    end
+
+    if love.keyboard.isScancodeDown("down") or love.keyboard.isScancodeDown("s") then
+        perso1.angle = perso1.angle - 1;
+    end
+
     if love.keyboard.isScancodeDown("space") then
         perso1:Jump(grounded)
         love.graphics.draw(perso1.sprite, perso1.img, perso1.posX, perso1.posY)
@@ -103,7 +111,29 @@ function love.draw()
 
     function love.keypressed(key)
         if key == 'f' then
-            perso1:Destroy(perso1.posX + 32 * perso1.orientation, perso1.posY + 16)
+            angle_in_radian = perso1.angle * math.pi/180
+            startX = perso1.posX + TILESIZE/2
+            startY = perso1.posY + TILESIZE/2
+            tile_to_destroyX = startX + TILESIZE *math.cos(angle_in_radian) * perso1.orientation
+            tile_to_destroyY = startY - TILESIZE * math.sin(angle_in_radian)
+
+            coeff_droite = (tile_to_destroyY - startY) / (tile_to_destroyX - startX)
+            ordonne_origin = startY - coeff_droite * startX
+            signe_pas = 1
+            if(tile_to_destroyX < startX) then
+                signe_pas = -1
+            end
+            pas = 1 * signe_pas
+            for i = startX, tile_to_destroyX, pas do
+                img_i = coeff_droite * i + ordonne_origin
+                nb_tileX =  math.floor(i/TILESIZE) + 1
+                nb_tileY = math.floor(img_i/TILESIZE) + 1
+                if(terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
+                    perso1:Destroy(i, img_i)
+                    break
+                end
+            end
+            --perso1:Destroy(tile_to_destroyX, tile_to_destroyY)
         end
     end
     
@@ -114,6 +144,7 @@ function love.draw()
         love.graphics.print("Accélération X : "..perso1.Xacc.." ; Y : "..perso1.Yacc , 0, 40)
         love.graphics.print((grounded and "Grounded" or "Not Grounded"), 0, 60)
         love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 0, 100)
+        love.graphics.print("Angle : "..perso1.angle, 0, 120)
     end
 
 end

@@ -30,13 +30,17 @@ MAX_SPEED_FALLING = 3.4
 RIGHT = 1
 LEFT = -1
 
+-- RANGE
+RANGE = 100
+
 function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différentes
     local this = {}
     this.terrain = t
     setmetatable(this, Personnage)
     this.sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite.png")
     this.img = love.graphics.newQuad(0, 0, 32, 32, this.sprite:getDimensions());
-
+    this.range = RANGE
+    this.angle = 0
     -- Positions que peut prendre le personnage
     positionAvailable = {}
     for i=1, 44 do
