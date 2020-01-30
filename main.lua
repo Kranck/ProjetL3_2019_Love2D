@@ -2,7 +2,7 @@ SRCDIR = "sources/"
 require(SRCDIR.."Tile")
 require(SRCDIR.."Terrain")
 require(SRCDIR.."Terre")
-require(SRCDIR.."Minerai")
+require(SRCDIR.."Pierre")
 require(SRCDIR.."Personnage")
 require(SRCDIR.."Camera")
 
