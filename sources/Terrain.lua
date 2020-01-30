@@ -2,6 +2,7 @@ ASSETSDIR = "assets/"
 SRCDIR = "sources/"
 require(SRCDIR.."Pierre")
 require(SRCDIR.."Terre")
+require(SRCDIR.."Gold")
 
 Terrain = {}
 Terrain.__index = Terrain
