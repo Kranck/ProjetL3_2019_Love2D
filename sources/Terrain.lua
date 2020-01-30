@@ -82,6 +82,7 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
         cptTileAround = 0
         for i=1, height do
             for j=1, width do
+                -- Corners
                 if i==1 then
                     if j==1 then
                         if this.map_bloc[i][j+1]~=nil then
@@ -108,34 +109,55 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
                         cptTileAround=0
                     end
                 end
-                if j==1 then
-                    if i==height then
-                        if this.map_bloc[i][j+1]~=nil then
-                            cptTileAround = cptTileAround+1
-                        end
+                if i==height then
+                    if j==1 then
                         if this.map_bloc[i-1][j]~=nil then
                             cptTileAround = cptTileAround+1
                         end
-                    else 
-                        if i~=1 then
-                            if this.map_bloc[i-1][j]~=nil then
-                                cptTileAround = cptTileAround+1
-                            end
-                            if this.map_bloc[i+1][j]~=nil then
-                                cptTileAround = cptTileAround+1
-                            end
-                            if this.map_bloc[i][j+1]~=nil then
-                                cptTileAround = cptTileAround+1
-                            end
+                        if this.map_bloc[i][j+1]~=nil then
+                            cptTileAround = cptTileAround+1
                         end
+                        if cptTileAround <= 1 then
+                            this.map_bloc[i][j] = nil
+                        end
+                        cptTileAround=0
+                    end
+                    if j==width then
+                        if this.map_bloc[i-1][j]~=nil then
+                            cptTileAround = cptTileAround+1
+                        end
+                        if this.map_bloc[i][j-1]~=nil then
+                            cptTileAround = cptTileAround+1
+                        end
+                        if cptTileAround <= 1 then
+                            this.map_bloc[i][j] = nil
+                        end
+                        cptTileAround=0
+                    end
+                end
+                -- Sides
+                    --Left One
+                if j==1 and i~=1 and i~=height then
+                    if this.map_bloc[i-1][j]~=nil then
+                        cptTileAround = cptTileAround+1
+                    end
+                    if this.map_bloc[i+1][j]~=nil then
+                        cptTileAround = cptTileAround+1
+                    end
+                    if this.map_bloc[i][j+1]~=nil then
+                        cptTileAround = cptTileAround+1
                     end
                     if cptTileAround <= 1 then
                         this.map_bloc[i][j] = nil
                     end
                     cptTileAround=0
                 end
-                if j==width and i==height then
+                    --Right One
+                if j==width and i~=1 and i~=height then
                     if this.map_bloc[i-1][j]~=nil then
+                        cptTileAround = cptTileAround+1
+                    end
+                    if this.map_bloc[i+1][j]~=nil then
                         cptTileAround = cptTileAround+1
                     end
                     if this.map_bloc[i][j-1]~=nil then
@@ -146,6 +168,23 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
                     end
                     cptTileAround=0
                 end
+                    --Bottom One
+                if i==height and j~=1 and j~=width then
+                    if this.map_bloc[i][j-1]~=nil then
+                        cptTileAround = cptTileAround+1
+                    end
+                    if this.map_bloc[i][j+1]~=nil then
+                        cptTileAround = cptTileAround+1
+                    end
+                    if this.map_bloc[i-1][j]~=nil then
+                        cptTileAround = cptTileAround+1
+                    end
+                    if cptTileAround <= 1 then
+                        this.map_bloc[i][j] = nil
+                    end
+                    cptTileAround=0
+                end
+                -- Middle
                 if i~=1 and i~=height and j~=1 and j~=1 then
                     if this.map_bloc[i-1][j]~=nil then
                         cptTileAround = cptTileAround+1
@@ -159,7 +198,7 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
                     if this.map_bloc[i][j-1]~=nil then
                         cptTileAround = cptTileAround+1
                     end
-                    if cptTileAround <= 1 then
+                    if cptTileAround <=1 then
                         this.map_bloc[i][j] = nil
                     end
                     cptTileAround=0
