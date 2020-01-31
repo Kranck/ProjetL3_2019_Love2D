@@ -100,41 +100,8 @@ function love.draw()
     Camera:unset()
 
     function love.keypressed(key)
-        -- Alexy : Rebalance ca dans le comportement de la fonction destroyBlock ca n'a rien à foutre dans le main
         if key == 'f' then
-            angle = perso1.getAngle()
-            angle_in_radian = angle * math.pi/180
-            pos = perso1.getPos()
-            orientation = perso1.getOrientation()
-            range = perso1.getRange()
-
-            startX = pos.posX + TILESIZE/2
-            startY = pos.posY + TILESIZE/2
-            if orientation < 0 then
-                startX = startX -1
-            end
-            if angle > 0 then 
-                startY = startY - 1
-            end
-            tile_to_destroyX = startX + range *math.cos(angle_in_radian) * orientation
-            tile_to_destroyY = startY - range *math.sin(angle_in_radian)
-            coeff_droite = (tile_to_destroyY - startY) / (tile_to_destroyX - startX)
-            ordonne_origin = startY - coeff_droite * startX
-            signe_pas = 1
-            if(tile_to_destroyX < startX) then
-                signe_pas = -1
-            end
-            pas = 1 * signe_pas
-            for i = startX, tile_to_destroyX, pas do
-                img_i = coeff_droite * i + ordonne_origin
-                nb_tileX =  math.floor(i/TILESIZE) + 1
-                nb_tileY = math.floor(img_i/TILESIZE) + 1
-                if(terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
-                    perso1.DestroyBlock(i, img_i)
-                    break
-                end
-            end
-            --perso1:Destroy(tile_to_destroyX, tile_to_destroyY)
+            perso1.DestroyBlock()
         end
     end
     

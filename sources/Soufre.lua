@@ -9,8 +9,7 @@ function Sou
 fre:New()
     local this = {}
     this.img = love.graphics.newImage(TEXTUREDIR.."Sulfure_Block.png")
-    setmetatable(this, Sou
-fre)
+    setmetatable(this, Soufre)
     return this
 end
 
