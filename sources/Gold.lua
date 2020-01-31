@@ -8,6 +8,7 @@ Gold.__index = Gold
 function Gold:New()
     local this = {}
     this.img = love.graphics.newImage(TEXTUREDIR.."Gold_Block.png")
+    this.pdv = 7
     setmetatable(this, Gold)
     return this
 end

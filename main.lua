@@ -114,8 +114,14 @@ function love.draw()
             angle_in_radian = perso1.angle * math.pi/180
             startX = perso1.posX + TILESIZE/2
             startY = perso1.posY + TILESIZE/2
-            tile_to_destroyX = startX + TILESIZE *math.cos(angle_in_radian) * perso1.orientation
-            tile_to_destroyY = startY - TILESIZE * math.sin(angle_in_radian)
+            if perso1.orientation < 0 then
+                startX = startX -1
+            end
+            if perso1.angle > 0 then 
+                startY = startY - 1
+            end
+            tile_to_destroyX = startX + perso1.range *math.cos(angle_in_radian) * perso1.orientation
+            tile_to_destroyY = startY - perso1.range * math.sin(angle_in_radian)
 
             coeff_droite = (tile_to_destroyY - startY) / (tile_to_destroyX - startX)
             ordonne_origin = startY - coeff_droite * startX
