@@ -102,14 +102,22 @@ function love.draw()
     function love.keypressed(key)
         -- Alexy : Rebalance ca dans le comportement de la fonction destroyBlock ca n'a rien à foutre dans le main
         if key == 'f' then
-            angle_in_radian = perso1.getAngle() * math.pi/180
+            angle = perso1.getAngle()
+            angle_in_radian = angle * math.pi/180
             pos = perso1.getPos()
             orientation = perso1.getOrientation()
+            range = perso1.getRange()
+
             startX = pos.posX + TILESIZE/2
             startY = pos.posY + TILESIZE/2
-            tile_to_destroyX = startX + TILESIZE *math.cos(angle_in_radian) * orientation
-            tile_to_destroyY = startY - TILESIZE * math.sin(angle_in_radian)
-
+            if orientation < 0 then
+                startX = startX -1
+            end
+            if angle > 0 then 
+                startY = startY - 1
+            end
+            tile_to_destroyX = startX + range *math.cos(angle_in_radian) * orientation
+            tile_to_destroyY = startY - range *math.sin(angle_in_radian)
             coeff_droite = (tile_to_destroyY - startY) / (tile_to_destroyX - startX)
             ordonne_origin = startY - coeff_droite * startX
             signe_pas = 1

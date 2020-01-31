@@ -267,6 +267,9 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
     -- Getter Orientation
     local getOrientation = function () return self.orientation end
 
+    -- Getter Range
+    local getRange = function () return self.range end
+
     setmetatable(self, Personnage)
 
     return {
@@ -282,6 +285,7 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
         getAngle = getAngle,
         getOrientation = getOrientation,
         DestroyBlock = DestroyBlock,
+        getRange = getRange,
     }
 
 end -- End Personnage:New
