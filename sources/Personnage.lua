@@ -236,35 +236,31 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
     
     -- Destruction du block par le personnage
     local DestroyBlock = function ()
-        angle = perso1.getAngle()
-        angle_in_radian = angle * math.pi/180
-        pos = perso1.getPos()
-        orientation = perso1.getOrientation()
-        range = perso1.getRange()
+        local angle_in_radian = self.angle * math.pi/180
 
-        startX = pos.posX + TILESIZE/2
-        startY = pos.posY + TILESIZE/2
-        if orientation < 0 then
+        local startX = self.posX + TILESIZE/2
+        local startY = self.posY + TILESIZE/2
+        if self.orientation < 0 then
             startX = startX -1
         end
-        if angle > 0 then 
+        if self.angle > 0 then 
             startY = startY - 1
         end
-        tile_to_destroyX = startX + range *math.cos(angle_in_radian) * orientation
-        tile_to_destroyY = startY - range *math.sin(angle_in_radian)
-        coeff_droite = (tile_to_destroyY - startY) / (tile_to_destroyX - startX)
-        ordonne_origin = startY - coeff_droite * startX
+        local tile_to_destroyX = startX + self.range *math.cos(angle_in_radian) * self.orientation
+        local tile_to_destroyY = startY - self.range *math.sin(angle_in_radian)
+        local coeff_droite = (tile_to_destroyY - startY) / (tile_to_destroyX - startX)
+        local ordonne_origin = startY - coeff_droite * startX
         -- Si l'angle est trop élevé, on casse le bloc du haut
-        if(math.abs(perso1.getAngle()) > 86) then
-            signe_pas = 1
-            if(perso1.getAngle() > 0) then
+        if(math.abs(self.angle) > 86) then
+            local signe_pas = 1
+            if(self.angle > 0) then
                 signe_pas = -1
             end
-            end_Y = startY + perso1.getRange() * signe_pas
+            local end_Y = startY + self.range * signe_pas
             for j = startY, end_Y, signe_pas do
-                nb_tileX =  math.floor(startX/TILESIZE) + 1
-                nb_tileY = math.floor(j/TILESIZE) + 1
-                if(terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
+                local nb_tileX =  math.floor(startX/TILESIZE) + 1
+                local nb_tileY = math.floor(j/TILESIZE) + 1
+                if(self.terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
                     self.terrain.map_bloc[nb_tileY][nb_tileX].pdv = self.terrain.map_bloc[nb_tileY][nb_tileX].pdv - 1;
                     if(self.terrain.map_bloc[nb_tileY][nb_tileX].pdv == 0) then
                         self.terrain.map_bloc[nb_tileY][nb_tileX] = nil
@@ -279,12 +275,12 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
         if(tile_to_destroyX < startX) then
             signe_pas = -1
         end
-        pas = 1 * signe_pas
+        local pas = 1 * signe_pas
         for i = startX, tile_to_destroyX, pas do
-            img_i = coeff_droite * i + ordonne_origin
+            local img_i = coeff_droite * i + ordonne_origin
             nb_tileX =  math.floor(i/TILESIZE) + 1
             nb_tileY = math.floor(img_i/TILESIZE) + 1
-            if(terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
+            if(self.terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
                 self.terrain.map_bloc[nb_tileY][nb_tileX].pdv = self.terrain.map_bloc[nb_tileY][nb_tileX].pdv - 1;
                 if(self.terrain.map_bloc[nb_tileY][nb_tileX].pdv == 0) then
                     self.terrain.map_bloc[nb_tileY][nb_tileX] = nil
@@ -293,8 +289,6 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
             end
         end
 
-        -- Indice de la tile à retirer
-        
     end
     
     -- Affiche les informations de débugages liés au personnage

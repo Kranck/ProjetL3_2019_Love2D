@@ -8,12 +8,12 @@ require(SRCDIR.."Camera")
 
 local nuklear = require 'nuklear'
 
-HEIGHT = 45
-WIDTH = 80
+HEIGHT =  720/16  -- 45
+WIDTH  = 1280/16 -- 80
 TILESIZE = 32
 
-terrain = Terrain:New(HEIGHT, WIDTH)--720/16 1280/16
-perso1 = Personnage:New(terrain)
+terrain = Terrain:New(HEIGHT, WIDTH)
+perso = Personnage:New(terrain)
 
 -- option de debug
 DEBUG = true
@@ -31,16 +31,16 @@ function love.draw()
             end
         end
     end
-    --Camera:centerAroundPersonnage(perso1)
+    --Camera:centerAroundPersonnage(perso)
     window_width, window_height = love.graphics.getDimensions()
-    Camera:setPosition(perso1)
+    Camera:setPosition(perso)
     
 
     function love.keyreleased(key)
         -- Dès qu'on appuie sur entrée génère une nouvelle map et la redessine
         if key == "return" then
             terrain = Terrain:New(HEIGHT, WIDTH)
-            perso1 = Personnage:New(terrain)
+            perso = Personnage:New(terrain)
             for y=1, terrain.height do
                 for x=1, terrain.width do
                     if nil~=terrain.map_bloc[y][x] then
@@ -52,45 +52,45 @@ function love.draw()
     end
 
     -- Reset info before movement
-    grounded = perso1.isGrounded()
+    grounded = perso.isGrounded()
     moved = false -- Reset : le personnage ne s'est pas déplacer pendant cette frame
 
     if love.keyboard.isScancodeDown("left") or love.keyboard.isScancodeDown("a") then
-        perso1.MoveLeft(grounded)
+        perso.MoveLeft(grounded)
         moved = true -- a bougé
     end
 
     if love.keyboard.isScancodeDown("right") or love.keyboard.isScancodeDown("d") then
-        perso1.MoveRight(grounded);
+        perso.MoveRight(grounded);
         moved = true -- a bougé
     end
 
     if love.keyboard.isScancodeDown("up") or love.keyboard.isScancodeDown("w") then
-        perso1.changeAngleUp()
+        perso.changeAngleUp()
     end
 
     if love.keyboard.isScancodeDown("down") or love.keyboard.isScancodeDown("s") then
-        perso1.changeAngleDown()
+        perso.changeAngleDown()
     end
 
     if love.keyboard.isScancodeDown("space") then
-        perso1.Jump(grounded)
+        perso.Jump(grounded)
     end
 
     -- On applique les modifications dues aux inputs
-    perso1.Move(grounded, moved)
+    perso.Move(grounded, moved)
 
 
     function love.wheelmoved(x, y)
         if y<0 then
             --Camera.x, Camera.y = Camera:mousePosition()
             for i=1, 50 do
-                Camera:scale(1.001, perso1)
+                Camera:scale(1.001, perso)
             end
         elseif y>0 then
             --Camera.x, Camera.y = Camera:mousePosition()
             for i=1, 50 do
-                Camera:scale(1/1.001, perso1)
+                Camera:scale(1/1.001, perso)
             end
         end    
     end
@@ -101,13 +101,13 @@ function love.draw()
 
     function love.keypressed(key)
         if key == 'f' then
-            perso1.DestroyBlock()
+            perso.DestroyBlock()
         end
     end
     
     -- Affiche les informations de débuggage pour un personnage
     if DEBUG then
-        perso1.Debug(grounded)
+        perso.Debug(grounded)
     end
 
 end
