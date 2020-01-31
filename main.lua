@@ -34,7 +34,6 @@ function love.draw()
     --Camera:centerAroundPersonnage(perso1)
     window_width, window_height = love.graphics.getDimensions()
     Camera:setPosition(perso1)
-    love.graphics.draw(perso1.sprite, perso1.img, perso1.posX, perso1.posY)
     
 
     function love.keyreleased(key)
@@ -49,47 +48,38 @@ function love.draw()
                     end
                 end
             end
-            love.graphics.draw(perso1.sprite, perso1.img, perso1.posX, perso1.posY)
         end
     end
 
     -- Reset info before movement
-    grounded = perso1:isGrounded()
-    moved = false
+    grounded = perso1.isGrounded()
+    moved = false -- Reset : le personnage ne s'est pas déplacer pendant cette frame
 
     if love.keyboard.isScancodeDown("left") or love.keyboard.isScancodeDown("a") then
-        perso1:MoveLeft(grounded)
-        love.graphics.draw(perso1.sprite, perso1.img, perso1.posX, perso1.posY)
-        moved = true
+        perso1.MoveLeft(grounded)
+        moved = true -- a bougé
     end
 
     if love.keyboard.isScancodeDown("right") or love.keyboard.isScancodeDown("d") then
-        perso1:MoveRight(grounded);
-        love.graphics.draw(perso1.sprite, perso1.img, perso1.posX, perso1.posY)
-        moved = true
+        perso1.MoveRight(grounded);
+        moved = true -- a bougé
     end
 
     if love.keyboard.isScancodeDown("up") or love.keyboard.isScancodeDown("w") then
-        perso1.angle = perso1.angle + 1;
+        perso1.changeAngleUp()
     end
 
     if love.keyboard.isScancodeDown("down") or love.keyboard.isScancodeDown("s") then
-        perso1.angle = perso1.angle - 1;
+        perso1.changeAngleDown()
     end
 
     if love.keyboard.isScancodeDown("space") then
-        perso1:Jump(grounded)
-        love.graphics.draw(perso1.sprite, perso1.img, perso1.posX, perso1.posY)
+        perso1.Jump(grounded)
     end
 
     -- On applique les modifications dues aux inputs
-    perso1:Move(grounded)
-    
-    if grounded and not moved then
-        -- On stop le mouvement au sol
-        perso1.Xspeed = 0
-        perso1.Xacc = 0
-    end
+    perso1.Move(grounded, moved)
+
 
     function love.wheelmoved(x, y)
         if y<0 then
@@ -110,11 +100,14 @@ function love.draw()
     Camera:unset()
 
     function love.keypressed(key)
+        -- Alexy : Rebalance ca dans le comportement de la fonction destroyBlock ca n'a rien à foutre dans le main
         if key == 'f' then
-            angle_in_radian = perso1.angle * math.pi/180
-            startX = perso1.posX + TILESIZE/2
-            startY = perso1.posY + TILESIZE/2
-            tile_to_destroyX = startX + TILESIZE *math.cos(angle_in_radian) * perso1.orientation
+            angle_in_radian = perso1.getAngle() * math.pi/180
+            pos = perso1.getPos()
+            orientation = perso1.getOrientation()
+            startX = pos.posX + TILESIZE/2
+            startY = pos.posY + TILESIZE/2
+            tile_to_destroyX = startX + TILESIZE *math.cos(angle_in_radian) * orientation
             tile_to_destroyY = startY - TILESIZE * math.sin(angle_in_radian)
 
             coeff_droite = (tile_to_destroyY - startY) / (tile_to_destroyX - startX)
@@ -129,7 +122,7 @@ function love.draw()
                 nb_tileX =  math.floor(i/TILESIZE) + 1
                 nb_tileY = math.floor(img_i/TILESIZE) + 1
                 if(terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
-                    perso1:Destroy(i, img_i)
+                    perso1.DestroyBlock(i, img_i)
                     break
                 end
             end
@@ -139,12 +132,7 @@ function love.draw()
     
     -- Affiche les informations de débuggage pour un personnage
     if DEBUG then
-        love.graphics.print("Position        X : "..perso1.posX.." ; Y : "..perso1.posY , 0, 0)
-        love.graphics.print("Speed          X : "..perso1.Xspeed.." ; Y : "..perso1.Yspeed , 0, 20)
-        love.graphics.print("Accélération X : "..perso1.Xacc.." ; Y : "..perso1.Yacc , 0, 40)
-        love.graphics.print((grounded and "Grounded" or "Not Grounded"), 0, 60)
-        love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 0, 100)
-        love.graphics.print("Angle : "..perso1.angle, 0, 120)
+        perso1.Debug(grounded)
     end
 
 end
