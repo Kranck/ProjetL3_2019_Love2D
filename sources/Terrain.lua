@@ -3,6 +3,8 @@ require("var")
 require(SRCDIR.."Pierre")
 require(SRCDIR.."Terre")
 require(SRCDIR.."Gold")
+require(SRCDIR.."Fer")
+require(SRCDIR.."Soufre")
 
 Terrain = {}
 Terrain.__index = Terrain
@@ -63,8 +65,17 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
                 if tb_generated_img[i][j] < 1/4 then
                     this.map_bloc[height_to_destroy+i][j] = Pierre:New()
                 end
-                if tb_generated_img[i][j] < 1/50 then
-                    this.map_bloc[height_to_destroy+i][j] = Gold:New()
+                if tb_generated_img[i][j] < 1/25 then
+                    local randomNumber = love.math.random(1, 112)
+                        if randomNumber<112 then
+                            this.map_bloc[height_to_destroy+i][j] = Gold:New()
+                        end
+                        if randomNumber<96 then
+                            this.map_bloc[height_to_destroy+i][j] = Soufre:New()
+                        end
+                        if randomNumber<64 then
+                            this.map_bloc[height_to_destroy+i][j] = Fer:New()
+                        end
                 end
             end
         end
