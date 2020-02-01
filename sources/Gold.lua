@@ -1,8 +1,6 @@
-TEXTUREDIR = "assets/textures/"
-SRCDIR = "sources/"
+require("var")
 require(SRCDIR.."Tile")
 
-TILESIZE = 32
 
 Gold = Tile:New()
 Gold.sprite = love.graphics.newImage(TEXTUREDIR.."Gold_Block.png")

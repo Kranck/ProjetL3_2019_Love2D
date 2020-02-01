@@ -1,13 +1,13 @@
+require("var")
+
 Tile = {}
 Tile.__index = Tile
-
-IMAGE_SIZE = 32
 
 function Tile:New(pos_X, pos_Y) --Générer une Tile
     local this = {}
     setmetatable(this, Tile)
-    this.tile_width = IMAGE_SIZE
-    this.tile_height = IMAGE_SIZE
+    this.tile_width = TILESIZE
+    this.tile_height = TILESIZE
     this.position_X = pos_X
     this.position_Y = pos_Y
     this.destroyed = false

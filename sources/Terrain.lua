@@ -1,14 +1,11 @@
-ASSETSDIR = "assets/"
-SRCDIR = "sources/"
+require("var")
+
 require(SRCDIR.."Pierre")
 require(SRCDIR.."Terre")
 require(SRCDIR.."Gold")
 
 Terrain = {}
 Terrain.__index = Terrain
-
-TILESIZE = 32
-
 
 function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile différentes
     local this = {}

@@ -1,9 +1,6 @@
-TEXTUREDIR = "assets/textures/"
-SRCDIR = "sources/"
+require("var")
 require(SRCDIR.."Tile")
 
-
-TILESIZE = 32
 
 Terre = Tile:New()
 Terre.__index = Terre

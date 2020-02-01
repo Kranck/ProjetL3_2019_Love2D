@@ -1,8 +1,5 @@
-TEXTUREDIR = "assets/textures/"
-SRCDIR = "sources/"
+require("var")
 require(SRCDIR.."Tile")
-
-TILESIZE = 32
 
 Soufre = Tile:New()
 Soufre.sprite = love.graphics.newImage(TEXTUREDIR.."Sulfure_Block.png")

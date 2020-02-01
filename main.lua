@@ -1,4 +1,5 @@
-SRCDIR = "sources/"
+require("var")
+
 require(SRCDIR.."Tile")
 require(SRCDIR.."Terrain")
 require(SRCDIR.."Terre")
@@ -7,10 +8,6 @@ require(SRCDIR.."Personnage")
 require(SRCDIR.."Camera")
 
 local nuklear = require 'nuklear'
-
-HEIGHT =  720/16  -- 45
-WIDTH  = 1280/16 -- 80
-TILESIZE = 32
 
 terrain = Terrain:New(HEIGHT, WIDTH)
 perso = Personnage:New(terrain)

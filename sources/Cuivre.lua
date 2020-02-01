@@ -1,8 +1,5 @@
-TEXTUREDIR = "assets/textures/"
-SRCDIR = "sources/"
+require("var")
 require(SRCDIR.."Tile")
-
-TILESIZE = 32
 
 Cuivre = Tile:New()
 Cuivre.sprite = love.graphics.newImage(TEXTUREDIR.."Copper_Block.png")

@@ -1,8 +1,5 @@
-TEXTUREDIR = "assets/textures/"
-SRCDIR = "sources/"
+require("var")
 require(SRCDIR.."Tile")
-
-TILESIZE = 32
 
 Pierre = Tile:New()
 Pierre.sprite = love.graphics.newImage(TEXTUREDIR.."Stone_Block.png")

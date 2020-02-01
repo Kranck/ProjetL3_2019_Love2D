@@ -1,37 +1,27 @@
 SRCDIR = "sources/"
-ASSETSDIR = "assets/"
 require(SRCDIR.."Terrain")
 
 Personnage = {}
 Personnage.__index = Personnage
 
-
--- Taille du pavage
-TILESIZE = 32
-
----- Valeur absolue des vitesses de déplacement
-
 -- Vitesse du saut
-JUMPSPEED = 4.6
+local JUMPSPEED = 4.6
 
 -- Vitesse en l'air
-AIRSPEED = 1.8
+local AIRSPEED = 1.8
 
 -- Vitesse au sol
-GROUNDSPEED = 1.3 * AIRSPEED
+local GROUNDSPEED = 1.3 * AIRSPEED
 
 -- Accélération de chute
-GRAVITY = 0.15
+local GRAVITY = 0.15
 
 -- Vitesse de chute maximale
-MAX_SPEED_FALLING = 3.4
+local MAX_SPEED_FALLING = 3.4
 
--- Orientation
-RIGHT = 1
-LEFT = -1
 
 -- RANGE
-RANGE = 100
+local RANGE = 100
 
 function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différentes
     -- Positions que peut prendre le personnage

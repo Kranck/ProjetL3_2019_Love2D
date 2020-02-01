@@ -1,5 +1,5 @@
-SRCDIR = "sources/"
-ASSETSDIR = "assets/"
+require("var")
+
 require(SRCDIR.."Terrain")
 
 Camera = {}
@@ -25,19 +25,19 @@ end
 
 function Camera:setPosition(p)
     position = p.getPos()
-    self.x = position.posX-(window_width/2*self.scaleX) or self.x
-    if self.x<0 then
-        self.x=0
+    self.x = position.posX - (window_width / 2 * self.scaleX) or self.x
+    if self.x < 0 then
+        self.x = 0
     end
-    xMax = 80*TILESIZE-(window_width*self.scaleX)
-    if self.x>xMax then
-        self.x=xMax
+    xMax = 80 * TILESIZE - (window_width*self.scaleX)
+    if self.x > xMax then
+        self.x = xMax
     end
-    self.y = position.posY-(window_height/2*self.scaleY) or self.y
+    self.y = position.posY-(window_height / 2  * self.scaleY) or self.y
     if self.y<0 then
         self.y=0
     end
-    yMax = 45*TILESIZE-(window_height*self.scaleY)
+    yMax = 45 * TILESIZE - (window_height * self.scaleY)
     if self.y>yMax then
         self.y=yMax
     end
@@ -48,11 +48,11 @@ function Camera:scale(sx, perso)
     max_zoom = 2
     min_zoom = 1/1.2
     if sx > 1 then --Zooming
-        if self.scaleX*sx/max_zoom >= 1 or self.scaleY*sx/max_zoom >= 1 then
+        if self.scaleX * sx / max_zoom >= 1 or self.scaleY * sx / max_zoom >= 1 then
             return
         end     
     else --Dezooming
-        if self.scaleX*sx/min_zoom <= 1 or self.scaleY*sx/min_zoom <= 1 then
+        if self.scaleX * sx / min_zoom <= 1 or self.scaleY * sx / min_zoom <= 1 then
             return
         end 
     end
