@@ -26,9 +26,8 @@ function Soufre:New()
 end
 
 function Soufre:ChangeQuad(newNum, newHp)
-    self.dx = newNum or self.dx
     self.pdv = newHp or self.pdv
-    self.img = love.graphics.newQuad(self.dx * TILESIZE, (Soufre.hp - self.pdv) * TILESIZE , TILESIZE, TILESIZE, Soufre.sprite:getDimensions())
+    self.img = love.graphics.newQuad(0, 0, TILESIZE, TILESIZE, Soufre.sprite:getDimensions())
 end
 
 function Soufre:Destroy()

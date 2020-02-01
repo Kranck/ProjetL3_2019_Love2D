@@ -25,9 +25,8 @@ function Pierre:New()
 end
 
 function Pierre:ChangeQuad(newNum, newHp)
-    self.dx = newNum or self.dx
     self.pdv = newHp or self.pdv
-    self.img = love.graphics.newQuad(self.dx * TILESIZE, (Pierre.hp - self.pdv) * TILESIZE , TILESIZE, TILESIZE, Pierre.sprite:getDimensions())
+    self.img = love.graphics.newQuad(0, 0 , TILESIZE, TILESIZE, Pierre.sprite:getDimensions())
 end
 
 function Pierre:Destroy()

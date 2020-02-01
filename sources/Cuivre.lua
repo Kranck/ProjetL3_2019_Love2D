@@ -26,9 +26,8 @@ function Cuivre:New()
 end
 
 function Cuivre:ChangeQuad(newNum, newHp)
-    self.dx = newNum or self.dx
     self.pdv = newHp or self.pdv
-    self.img = love.graphics.newQuad(self.dx * TILESIZE, (Cuivre.hp - self.pdv) * TILESIZE , TILESIZE, TILESIZE, Cuivre.sprite:getDimensions())
+    self.img = love.graphics.newQuad(0, 0, TILESIZE, TILESIZE, Cuivre.sprite:getDimensions())
 end
 
 function Cuivre:Destroy()

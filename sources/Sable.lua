@@ -26,9 +26,8 @@ function Sable:New()
 end
 
 function Sable:ChangeQuad(newNum, newHp)
-    self.dx = newNum or self.dx
     self.pdv = newHp or self.pdv
-    self.img = love.graphics.newQuad(self.dx * TILESIZE, (Sable.hp - self.pdv) * TILESIZE , TILESIZE, TILESIZE, Sable.sprite:getDimensions())
+    self.img = love.graphics.newQuad(0, 0, TILESIZE, TILESIZE, Sable.sprite:getDimensions())
 end
 
 function Sable:Destroy()

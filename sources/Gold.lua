@@ -26,9 +26,8 @@ function Gold:New()
 end
 
 function Gold:ChangeQuad(newNum, newHp)
-    self.dx = newNum or self.dx
     self.pdv = newHp or self.pdv
-    self.img = love.graphics.newQuad(self.dx * TILESIZE, (Gold.hp - self.pdv) * TILESIZE , TILESIZE, TILESIZE, Gold.sprite:getDimensions())
+    self.img = love.graphics.newQuad(0, 0, TILESIZE, TILESIZE, Gold.sprite:getDimensions())
 end
 
 function Gold:Destroy()
