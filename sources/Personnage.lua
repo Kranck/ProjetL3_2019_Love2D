@@ -235,6 +235,7 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
     end
     
     -- Destruction du block par le personnage
+    -- Alexy : Ce serait bien de merge le code dupliqué
     local DestroyBlock = function ()
         local angle_in_radian = self.angle * math.pi/180
 
@@ -261,7 +262,8 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
                 local nb_tileX =  math.floor(startX/TILESIZE) + 1
                 local nb_tileY = math.floor(j/TILESIZE) + 1
                 if(self.terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
-                    self.terrain.map_bloc[nb_tileY][nb_tileX].pdv = self.terrain.map_bloc[nb_tileY][nb_tileX].pdv - 1;
+                    self.terrain.map_bloc[nb_tileY][nb_tileX]:ChangeQuad(nil, self.terrain.map_bloc[nb_tileY][nb_tileX].pdv - 1)
+                    
                     if(self.terrain.map_bloc[nb_tileY][nb_tileX].pdv == 0) then
                         self.terrain.map_bloc[nb_tileY][nb_tileX] = nil
                     end
@@ -281,7 +283,7 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
             nb_tileX =  math.floor(i/TILESIZE) + 1
             nb_tileY = math.floor(img_i/TILESIZE) + 1
             if(self.terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
-                self.terrain.map_bloc[nb_tileY][nb_tileX].pdv = self.terrain.map_bloc[nb_tileY][nb_tileX].pdv - 1;
+                self.terrain.map_bloc[nb_tileY][nb_tileX]:ChangeQuad(nil, self.terrain.map_bloc[nb_tileY][nb_tileX].pdv - 1)
                 if(self.terrain.map_bloc[nb_tileY][nb_tileX].pdv == 0) then
                     self.terrain.map_bloc[nb_tileY][nb_tileX] = nil
                 end
