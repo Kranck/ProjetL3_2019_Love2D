@@ -5,6 +5,7 @@ require(SRCDIR.."Tile")
 Sable = Tile:New()
 Sable.sprite = love.graphics.newImage(TEXTUREDIR.."Sand_Block.png")
 Sable.__index = Sable
+Sable.__type = "Sable"
 
 function Sable:New()
     local this = {}

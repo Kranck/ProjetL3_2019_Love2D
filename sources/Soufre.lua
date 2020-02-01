@@ -5,6 +5,7 @@ require(SRCDIR.."Tile")
 Soufre = Tile:New()
 Soufre.sprite = love.graphics.newImage(TEXTUREDIR.."Sulfure_Block.png")
 Soufre.__index = Soufre
+Soufre.__type = "Soufre"
 
 function Soufre:New()
     local this = {}

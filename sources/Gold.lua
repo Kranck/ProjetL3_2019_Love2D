@@ -5,6 +5,7 @@ require(SRCDIR.."Tile")
 Gold = Tile:New()
 Gold.sprite = love.graphics.newImage(TEXTUREDIR.."Gold_Block.png")
 Gold.__index = Gold
+Gold.__type = "Gold"
 
 function Gold:New()
     local this = {}

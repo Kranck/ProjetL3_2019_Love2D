@@ -61,20 +61,7 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
         for i=1, height_to_keep do
             for j=1, width do
                 if tb_generated_img[i][j] < 1/2 then
-                    local sprite_val = 0
-                    if i-1 > 0 and tb_generated_img[i-1][j] >= 1/2 then -- top at air
-                        sprite_val = sprite_val + 8
-                    end
-                    if j+1 <= this.width and tb_generated_img[i][j+1] >= 1/2 then -- right at air
-                        sprite_val = sprite_val + 4
-                    end
-                    if i+1 <= height_to_keep and tb_generated_img[i+1][j] >= 1/2 then -- bootom at air
-                        sprite_val = sprite_val + 2
-                    end
-                    if j-1 > 0 and tb_generated_img[i][j-1] >= 1/2 then -- left at air
-                        sprite_val = sprite_val + 1
-                    end
-                    this.map_bloc[height_to_destroy+i][j] = Terre:New(sprite_val)
+                    this.map_bloc[height_to_destroy+i][j] = Terre:New(0)
                 end
                 if tb_generated_img[i][j] < 1/4 then
                     this.map_bloc[height_to_destroy+i][j] = Pierre:New()
@@ -238,6 +225,30 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
             end
         end
         imageSaved:encode("png", "newImage.png")
+
+        
+        -- On donne le bon design aux blocs de terre
+        for i=1, height do
+            for j=1, width do
+                if this.map_bloc[i][j] ~= nil and this.map_bloc[i][j].__type == "Terre" then
+                    local sprite_val = 0
+                    if i-1 > 0 and this.map_bloc[i-1][j] == nil then -- top at air
+                        sprite_val = sprite_val + 8
+                    end
+                    if j+1 <= width and this.map_bloc[i][j+1] == nil then -- right at air
+                        sprite_val = sprite_val + 4
+                    end
+                    if i+1 <= height and this.map_bloc[i+1][j] == nil then -- bootom at air
+                        sprite_val = sprite_val + 2
+                    end
+                    if j-1 > 0 and this.map_bloc[i][j-1] == nil then -- left at air
+                        sprite_val = sprite_val + 1
+                    end
+                    this.map_bloc[i][j]:ChangeQuad(sprite_val)
+                end
+            end
+        end
+
     end
 
     generateMap()

@@ -5,6 +5,7 @@ require(SRCDIR.."Tile")
 Pierre = Tile:New()
 Pierre.sprite = love.graphics.newImage(TEXTUREDIR.."Stone_Block.png")
 Pierre.__index = Pierre
+Pierre.__type = "Pierre"
 
 function Pierre:New()
     local this = {}

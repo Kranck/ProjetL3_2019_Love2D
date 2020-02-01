@@ -94,6 +94,7 @@ function love.draw()
     -- Affiche les informations de débuggage pour un personnage
     if DEBUG then
         perso.Debug(grounded)
+        love.graphics.print(Terre:New().__type, 0, 180)
     end
 
 end

@@ -5,6 +5,7 @@ require(SRCDIR.."Tile")
 Cuivre = Tile:New()
 Cuivre.sprite = love.graphics.newImage(TEXTUREDIR.."Copper_Block.png")
 Cuivre.__index = Cuivre
+Cuivre.__type = "Cuivre"
 
 function Cuivre:New()
     local this = {}
