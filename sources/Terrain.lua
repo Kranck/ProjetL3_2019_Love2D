@@ -89,129 +89,25 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
         end
 
         -- On s'assure qu'il n'y ait pas de Tile "flottant" dans l'air"
-        cptTileAround = 0
         for i=1, height do
             for j=1, width do
-                -- Corners
-                if i==1 then
-                    if j==1 then
-                        if this.map_bloc[i][j+1]~=nil then
-                            cptTileAround = cptTileAround+1
-                        end
-                        if this.map_bloc[i+1][j]~=nil then
-                            cptTileAround = cptTileAround+1
-                        end
-                        if cptTileAround <= 1 then
-                            this.map_bloc[i][j] = nil
-                        end
-                        cptTileAround=0
+                if this.map_bloc[i][j] ~= nil then
+                    local sprite_val = 0
+                    if i-1 > 0 and this.map_bloc[i-1][j] == nil then -- top at air
+                        sprite_val = sprite_val + 8
                     end
-                    if j==width then
-                        if this.map_bloc[i][j-1]~=nil then
-                            cptTileAround = cptTileAround+1
-                        end
-                        if this.map_bloc[i+1][j]~=nil then
-                            cptTileAround = cptTileAround+1
-                        end
-                        if cptTileAround <= 1 then
-                            this.map_bloc[i][j] = nil
-                        end
-                        cptTileAround=0
+                    if j+1 <= width and this.map_bloc[i][j+1] == nil then -- right at air
+                        sprite_val = sprite_val + 4
                     end
-                end
-                if i==height then
-                    if j==1 then
-                        if this.map_bloc[i-1][j]~=nil then
-                            cptTileAround = cptTileAround+1
-                        end
-                        if this.map_bloc[i][j+1]~=nil then
-                            cptTileAround = cptTileAround+1
-                        end
-                        if cptTileAround <= 1 then
-                            this.map_bloc[i][j] = nil
-                        end
-                        cptTileAround=0
+                    if i+1 <= height and this.map_bloc[i+1][j] == nil then -- bootom at air
+                        sprite_val = sprite_val + 2
                     end
-                    if j==width then
-                        if this.map_bloc[i-1][j]~=nil then
-                            cptTileAround = cptTileAround+1
-                        end
-                        if this.map_bloc[i][j-1]~=nil then
-                            cptTileAround = cptTileAround+1
-                        end
-                        if cptTileAround <= 1 then
-                            this.map_bloc[i][j] = nil
-                        end
-                        cptTileAround=0
+                    if j-1 > 0 and this.map_bloc[i][j-1] == nil then -- left at air
+                        sprite_val = sprite_val + 1
                     end
-                end
-                -- Sides
-                    --Left One
-                if j==1 and i~=1 and i~=height then
-                    if this.map_bloc[i-1][j]~=nil then
-                        cptTileAround = cptTileAround+1
+                    if sprite_val==15 then
+                        this.map_bloc[i][j]=nil
                     end
-                    if this.map_bloc[i+1][j]~=nil then
-                        cptTileAround = cptTileAround+1
-                    end
-                    if this.map_bloc[i][j+1]~=nil then
-                        cptTileAround = cptTileAround+1
-                    end
-                    if cptTileAround <= 1 then
-                        this.map_bloc[i][j] = nil
-                    end
-                    cptTileAround=0
-                end
-                    --Right One
-                if j==width and i~=1 and i~=height then
-                    if this.map_bloc[i-1][j]~=nil then
-                        cptTileAround = cptTileAround+1
-                    end
-                    if this.map_bloc[i+1][j]~=nil then
-                        cptTileAround = cptTileAround+1
-                    end
-                    if this.map_bloc[i][j-1]~=nil then
-                        cptTileAround = cptTileAround+1
-                    end
-                    if cptTileAround <= 1 then
-                        this.map_bloc[i][j] = nil
-                    end
-                    cptTileAround=0
-                end
-                    --Bottom One
-                if i==height and j~=1 and j~=width then
-                    if this.map_bloc[i][j-1]~=nil then
-                        cptTileAround = cptTileAround+1
-                    end
-                    if this.map_bloc[i][j+1]~=nil then
-                        cptTileAround = cptTileAround+1
-                    end
-                    if this.map_bloc[i-1][j]~=nil then
-                        cptTileAround = cptTileAround+1
-                    end
-                    if cptTileAround <= 1 then
-                        this.map_bloc[i][j] = nil
-                    end
-                    cptTileAround=0
-                end
-                -- Middle
-                if i~=1 and i~=height and j~=1 and j~=width then
-                    if this.map_bloc[i-1][j]~=nil then
-                        cptTileAround = cptTileAround+1
-                    end
-                    if this.map_bloc[i+1][j]~=nil then
-                        cptTileAround = cptTileAround+1
-                    end
-                    if this.map_bloc[i][j+1]~=nil then
-                        cptTileAround = cptTileAround+1
-                    end
-                    if this.map_bloc[i][j-1]~=nil then
-                        cptTileAround = cptTileAround+1
-                    end
-                    if cptTileAround < 2 then
-                        this.map_bloc[i][j] = nil
-                    end
-                    cptTileAround=0
                 end
             end
         end
@@ -250,9 +146,22 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
         end
 
     end
-
     generateMap()
     return this
+end
+
+function Terrain:EmptyPositionForPersonnage()
+    local positionAvailable = {}
+    for i=1, 44 do
+        for j=1, 80 do
+            if self.map_bloc[i][j]==nil and self.map_bloc[i+1][j]~=nil then
+                table.insert(positionAvailable, {i, j})
+            end
+        end
+    end
+    local value = table.getn(positionAvailable)
+    local randomPosition = love.math.random(1, value)
+    return positionAvailable[randomPosition]
 end
 
 function Terrain:DestroyTile(x, y)

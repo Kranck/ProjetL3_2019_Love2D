@@ -37,20 +37,10 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
     -- Positions que peut prendre le personnage
     -- Killian : à mettre dans la class terrain en fonction qui renvoie une seul position donné
     -- + stocker le reste dans terrain : utiliset la séquence de Halton
-    local positionAvailable = {}
-    for i=1, 44 do
-        for j=1, 80 do
-            if terrain.map_bloc[i][j]==nil and terrain.map_bloc[i+1][j]~=nil then
-                table.insert(positionAvailable, {i, j})
-            end
-        end
-    end
-    local value = table.getn(positionAvailable)
-    local randomPosition = love.math.random(1, value)
 
     -- Sprite où chercher les images
     local sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite.png")
-
+    local positionTab = t:EmptyPositionForPersonnage()
     local self = {
         sprite  = sprite,
         terrain = t,
@@ -58,10 +48,10 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
         img     = love.graphics.newQuad(0, 0, 32, 32, sprite:getDimensions()),
         angle   = 0,        -- angle 
         pointDeVie = 100,
-        posX = (positionAvailable[randomPosition][2]-1)*TILESIZE,  -- Position en pixel
+        posX = (positionTab[2]-1)*TILESIZE,  -- Position en pixel
         orientation = RIGHT,
         Xspeed = 0, -- Horizontal Speed
-        posY = (positionAvailable[randomPosition][1]-1)*TILESIZE, -- Position en pixel
+        posY = (positionTab[1]-1)*TILESIZE, -- Position en pixel
         Xacc = 0,   -- Horizontal acceleration
         Yspeed = 0, -- Vertical Speed
         Yacc = GRAVITY -- Vertical acceleration
