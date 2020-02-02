@@ -63,6 +63,8 @@ function love.draw()
     -- On applique les modifications dues aux inputs
     perso.Move(grounded, moved)
 
+    -- On affiche le curseur pour la visée
+    perso.DrawCursor()
 
     function love.wheelmoved(x, y)
         if y<0 then
