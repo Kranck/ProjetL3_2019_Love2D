@@ -21,7 +21,7 @@ local MAX_SPEED_FALLING = 3.4
 
 
 -- RANGE
-local RANGE = 100
+local RANGE = TILESIZE * 2
 
 function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différentes
     -- Positions que peut prendre le personnage
@@ -272,6 +272,15 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
         end
 
     end
+
+    -- Affiche le cursor en fonction de l'angle du personnage
+    local DrawCursor = function ()
+        local angle_in_radian = self.angle * math.pi/180
+        local cursor_img = love.graphics.newImage("assets/textures/Cursor.png")
+        local cursor_posX = self.posX + self.range *math.cos(angle_in_radian) * self.orientation
+        local cursor_posY = self.posY- self.range *math.sin(angle_in_radian)
+        love.graphics.draw(cursor_img, cursor_posX, cursor_posY)
+    end
     
     -- Affiche les informations de débugages liés au personnage
     local Debug = function (grounded)
@@ -310,6 +319,7 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
         getAngle = getAngle,
         getOrientation = getOrientation,
         DestroyBlock = DestroyBlock,
+        DrawCursor = DrawCursor,
         getRange = getRange,
     }
 
