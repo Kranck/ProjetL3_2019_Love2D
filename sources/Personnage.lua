@@ -131,6 +131,11 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
         if grounded then
             self.Yspeed = - JUMPSPEED
         end
+        if(self.orientation == RIGHT) then
+            self.img = love.graphics.newQuad(64, 0, 32, 32, self.sprite:getDimensions())
+        else
+            self.img = love.graphics.newQuad(96, 0, 32, 32, self.sprite:getDimensions())
+        end
     end
 
     -- Logique commune du déplacement horizontal
@@ -152,6 +157,10 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
         MoveAside(grounded, 1)
         self.img = love.graphics.newQuad(0, 0, 32, 32, self.sprite:getDimensions());
         self.orientation = RIGHT
+        -- Gérer l'affichage du perso lors du saut
+        if(not grounded) then 
+            self.img = love.graphics.newQuad(64, 0, 32, 32, self.sprite:getDimensions())
+        end
     end
 
     -- Déplacement horizontal vers la gauche
@@ -159,6 +168,10 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
         MoveAside(grounded, -1)
         self.img = love.graphics.newQuad(32, 0, 32, 32, self.sprite:getDimensions());
         self.orientation = LEFT
+        -- Gérer l'affichage du perso lors du saut
+        if(not grounded) then 
+            self.img = love.graphics.newQuad(96, 0, 32, 32, self.sprite:getDimensions())
+        end
     end
 
     -- Méthode de draw du personnage prenant en comptant les inputs
@@ -197,6 +210,11 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
             -- On stop le mouvement au sol
             self.Xspeed = 0
             self.Xacc = 0
+            if(self.orientation == RIGHT) then
+                self.img = love.graphics.newQuad(0, 0, 32, 32, self.sprite:getDimensions())
+            else
+                self.img = love.graphics.newQuad(32, 0, 32, 32, self.sprite:getDimensions())
+            end
         end
     end
 
@@ -231,9 +249,10 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
         local tile_to_destroyY = startY - self.range *math.sin(angle_in_radian)
         local coeff_droite = (tile_to_destroyY - startY) / (tile_to_destroyX - startX)
         local ordonne_origin = startY - coeff_droite * startX
+
         -- Si l'angle est trop élevé, on casse le bloc du haut
+        local signe_pas = 1
         if(math.abs(self.angle) > 86) then
-            local signe_pas = 1
             if(self.angle > 0) then
                 signe_pas = -1
             end
@@ -243,7 +262,6 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
                 local nb_tileY = math.floor(j/TILESIZE) + 1
                 if(self.terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
                     self.terrain.map_bloc[nb_tileY][nb_tileX]:ChangeQuad(nil, self.terrain.map_bloc[nb_tileY][nb_tileX].pdv - 1)
-                    
                     if(self.terrain.map_bloc[nb_tileY][nb_tileX].pdv == 0) then
                         self.terrain.map_bloc[nb_tileY][nb_tileX] = nil
                     end
@@ -253,10 +271,10 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
         return
         end
 
-        signe_pas = 1
         if(tile_to_destroyX < startX) then
             signe_pas = -1
         end
+
         local pas = 1 * signe_pas
         for i = startX, tile_to_destroyX, pas do
             local img_i = coeff_droite * i + ordonne_origin
