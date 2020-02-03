@@ -60,17 +60,10 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
         for i=1, height_to_keep do
             for j=1, width do
                 if tb_generated_img[i][j] < 1/2 then
-<<<<<<< HEAD
                     this.map_bloc[height_to_destroy+i][j] = Terre:New(0)
                 end
                 if tb_generated_img[i][j] < 1/4 then
                     this.map_bloc[height_to_destroy+i][j] = Pierre:New()
-<<<<<<< HEAD
-                else 
-                    if tb_generated_img[i][j] < 1/2 then
-                        this.map_bloc[height_to_destroy+i][j] = Terre:New()
-                    end
-=======
                 end
                 if tb_generated_img[i][j] < 1/15 then
                     local randomNumber = love.math.random(1, 112)
@@ -83,16 +76,7 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
                         if randomNumber<64 then
                             this.map_bloc[height_to_destroy+i][j] = Fer:New()
                         end
->>>>>>> dev0.0
-=======
                     this.map_bloc[height_to_destroy+i][j] = Terre:New()
-                end
-                if tb_generated_img[i][j] < 1/4 then
-                    this.map_bloc[height_to_destroy+i][j] = Pierre:New()
-                end
-                if tb_generated_img[i][j] < 1/50 then
-                    this.map_bloc[height_to_destroy+i][j] = Gold:New()
->>>>>>> dd94f8281dc1a1100903f25fd96a27ed3b62d545
                 end
             end
         end
@@ -114,7 +98,6 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
         end
 
         -- On s'assure qu'il n'y ait pas de Tile "flottant" dans l'air"
-<<<<<<< HEAD
         for i=1, height do
             for j=1, width do
                 if this.map_bloc[i][j] ~= nil then
@@ -134,92 +117,6 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
                     if sprite_val==15 then
                         this.map_bloc[i][j]=nil
                     end
-=======
-        cptTileAround = 0
-        for i=1, height do
-            for j=1, width do
-                if i==1 then
-                    if j==1 then
-                        if this.map_bloc[i][j+1]~=nil then
-                            cptTileAround = cptTileAround+1
-                        end
-                        if this.map_bloc[i+1][j]~=nil then
-                            cptTileAround = cptTileAround+1
-                        end
-                        if cptTileAround < 1 then
-                            this.map_bloc[i][j] = nil
-                        end
-                        cptTileAround=0
-                    end
-                    if j==width then
-                        if this.map_bloc[i][j-1]~=nil then
-                            cptTileAround = cptTileAround+1
-                        end
-                        if this.map_bloc[i+1][j]~=nil then
-                            cptTileAround = cptTileAround+1
-                        end
-                        if cptTileAround < 1 then
-                            this.map_bloc[i][j] = nil
-                        end
-                        cptTileAround=0
-                    end
-                end
-                if j==1 then
-                    if i==height then
-                        if this.map_bloc[i][j+1]~=nil then
-                            cptTileAround = cptTileAround+1
-                        end
-                        if this.map_bloc[i-1][j]~=nil then
-                            cptTileAround = cptTileAround+1
-                        end 
-                    else 
-                        if i~=1 then
-                            if this.map_bloc[i-1][j]~=nil then
-                                cptTileAround = cptTileAround+1
-                            end
-                            if this.map_bloc[i+1][j]~=nil then
-                                cptTileAround = cptTileAround+1
-                            end
-                            if this.map_bloc[i][j+1]~=nil then
-                                cptTileAround = cptTileAround+1
-                            end
-                        end
-                    end
-                    if cptTileAround < 1 then
-                        this.map_bloc[i][j] = nil
-                    end
-                    cptTileAround=0
-                end
-                if j==width and i==height then
-                    if this.map_bloc[i-1][j]~=nil then
-                        cptTileAround = cptTileAround+1
-                    end
-                    if this.map_bloc[i][j-1]~=nil then
-                        cptTileAround = cptTileAround+1
-                    end
-                    if cptTileAround < 1 then
-                        this.map_bloc[i][j] = nil
-                    end
-                    cptTileAround=0
-                end
-                if i~=1 and i~=height and j~=1 and j~=1 then
-                    if this.map_bloc[i-1][j]~=nil then
-                        cptTileAround = cptTileAround+1
-                    end
-                    if this.map_bloc[i+1][j]~=nil then
-                        cptTileAround = cptTileAround+1
-                    end
-                    if this.map_bloc[i][j+1]~=nil then
-                        cptTileAround = cptTileAround+1
-                    end
-                    if this.map_bloc[i][j-1]~=nil then
-                        cptTileAround = cptTileAround+1
-                    end
-                    if cptTileAround <= 1 then
-                        this.map_bloc[i][j] = nil
-                    end
-                    cptTileAround=0
->>>>>>> dd94f8281dc1a1100903f25fd96a27ed3b62d545
                 end
             end
         end
