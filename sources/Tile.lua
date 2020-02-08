@@ -33,7 +33,3 @@ end
 function Tile:GetTileDestroyed() --Getter
     return self.destroyed
 end
-
---function Tile:DestroyTile() --Détruire une Tile
---
---end
