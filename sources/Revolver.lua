@@ -1,8 +1,8 @@
 require("var")
-require(SRCDIR.."Arme")
+require(SRCDIR.."ArmeDistance")
 
 
-Revolver = Arme:New()
+Revolver = ArmeDistance:New()
 Revolver.__type = "Revolver"
 Revolver.sprite = love.graphics.newImage(TEXTUREDIR.."Revolver.png")
 Revolver.degats = 5

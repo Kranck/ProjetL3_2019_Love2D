@@ -10,7 +10,7 @@ Pioche.coutEnGold = 0
 Pioche.range = 2
 Pioche.pattern = Arme.pattern --Array of [nbTerre, nbPierre, nbFer]
 
-function Revolver:New(nbTerre, nbPierre, nbFer)
+function PiocheNew(nbTerre, nbPierre, nbFer)
     local this = {}
     this.degats = Pioche.degats
     this.img = Pioche.sprite
