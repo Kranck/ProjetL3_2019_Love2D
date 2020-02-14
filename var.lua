@@ -4,6 +4,7 @@ TILESDIR = "sources/tiles/"
 UIDIR = "sources/ui/"
 ASSETSDIR = "assets/"
 TEXTUREDIR = "assets/textures/"
+WEAPONDIR = "sources/weapons/"
 
 ------------------ Tailles --------------------
 

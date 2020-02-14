@@ -1,4 +1,5 @@
-SRCDIR = "sources/"
+require('var')
+
 require(SRCDIR.."Terrain")
 
 Personnage = {}
@@ -23,7 +24,7 @@ local MAX_SPEED_FALLING = 3.4
 -- RANGE
 local RANGE = TILESIZE * 2
 
-function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différentes
+function Personnage:New(t) -- Générer un Terrain à partir de 3 Tiles différentes
     -- Positions que peut prendre le personnage
     -- Killian : à mettre dans la class terrain en fonction qui renvoie une seul position donné
     -- + stocker le reste dans terrain : utiliset la séquence de Halton

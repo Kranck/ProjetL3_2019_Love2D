@@ -1,5 +1,5 @@
 require("var")
-require(SRCDIR.."ArmeDistance")
+require(WEAPONDIR.."ArmeDistance")
 
 
 Revolver = ArmeDistance:New()

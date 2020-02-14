@@ -1,5 +1,5 @@
 require("var")
-require(SRCDIR.."Arme")
+require(WEAPONDIR.."Arme")
 
 
 Pioche = Arme:New()
