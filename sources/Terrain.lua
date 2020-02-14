@@ -1,10 +1,10 @@
 require("var")
 
-require(SRCDIR.."Pierre")
-require(SRCDIR.."Terre")
-require(SRCDIR.."Gold")
-require(SRCDIR.."Fer")
-require(SRCDIR.."Soufre")
+require(TILESDIR.."Pierre")
+require(TILESDIR.."Terre")
+require(TILESDIR.."Gold")
+require(TILESDIR.."Fer")
+require(TILESDIR.."Soufre")
 
 Terrain = {}
 Terrain.__index = Terrain

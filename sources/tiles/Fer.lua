@@ -1,5 +1,5 @@
-TEXTUREDIR = "assets/textures/"
-SRCDIR = "sources/"
+require('var')
+
 require(SRCDIR.."Tile")
 
 TILESIZE = 32

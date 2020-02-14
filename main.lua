@@ -2,12 +2,15 @@ require("var")
 
 require(SRCDIR.."Tile")
 require(SRCDIR.."Terrain")
-require(SRCDIR.."Terre")
-require(SRCDIR.."Pierre")
+require(TILESDIR.."Terre")
+require(TILESDIR.."Pierre")
 require(SRCDIR.."Personnage")
 require(SRCDIR.."Camera")
 
 local nuklear = require 'nuklear'
+local Menu    = require(UIDIR..'uiMenu')
+local InGame  = require(UIDIR..'uiInGame')
+local Pause   = require(UIDIR..'uiPause')
 
 terrain = Terrain:New(HEIGHT, WIDTH)
 perso = Personnage:New(terrain)
@@ -15,9 +18,25 @@ perso = Personnage:New(terrain)
 -- option de debug
 DEBUG = true
 
+-- HUDs
+local uiMenu, uiInGame, uiPause
+
+function love.load()
+    uiMenu   = nuklear.newUI()
+    uiInGame = nuklear.newUI()
+    uiPause  = nuklear.newUI()
+end
+
+-- update func to correctly set up UIs
+function love.update()
+    uiMenu:frame(Menu)
+    uiInGame:frame(InGame)
+    uiPause:frame(Pause)
+end
 
 -- fonction d'affichage
 function love.draw()
+
     Camera:set()    
 
     function love.keyreleased(key)
@@ -89,11 +108,12 @@ function love.draw()
             perso.DestroyBlock()
         end
     end
+
+    uiInGame:draw()
     
     -- Affiche les informations de débuggage pour un personnage
     if DEBUG then
         perso.Debug(grounded)
-        love.graphics.print(Terre:New().__type, 0, 180)
     end
 
 end

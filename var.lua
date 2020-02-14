@@ -1,7 +1,10 @@
 --------- Chemins vers les fichiers -----------
 SRCDIR = "sources/"
+TILESDIR = "sources/tiles/"
+UIDIR = "sources/ui/"
 ASSETSDIR = "assets/"
 TEXTUREDIR = "assets/textures/"
+
 ------------------ Tailles --------------------
 
 HEIGHT =  720/16  -- 45
@@ -9,7 +12,6 @@ WIDTH  = 1280/16 -- 80
 
 -- Taille du pavage
 TILESIZE = 32
-
 
 -- Orientation values
 RIGHT = 1
