@@ -35,7 +35,7 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
         sprite  = sprite,
         terrain = t,
         range   = RANGE,    -- Distance à laquelle le personnage peut casser des blocs
-        img     = love.graphics.newQuad(0, 0, 32, 32, sprite:getDimensions()),
+        img     = love.graphics.newQuad(0, 0, TILESIZE, TILESIZE, sprite:getDimensions()),
         angle   = 0,        -- angle 
         pointDeVie = 100,
         posX = (positionTab[2]-1)*TILESIZE,  -- Position en pixel
@@ -132,9 +132,9 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
             self.Yspeed = - JUMPSPEED
         end
         if(self.orientation == RIGHT) then
-            self.img = love.graphics.newQuad(64, 0, 32, 32, self.sprite:getDimensions())
+            self.img = love.graphics.newQuad(TILESIZE * 2, 0, TILESIZE, TILESIZE, self.sprite:getDimensions())
         else
-            self.img = love.graphics.newQuad(96, 0, 32, 32, self.sprite:getDimensions())
+            self.img = love.graphics.newQuad(TILESIZE * 3, 0, TILESIZE, TILESIZE, self.sprite:getDimensions())
         end
     end
 
@@ -155,22 +155,22 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
     -- Déplacement horizontal vers la droite
     local MoveRight = function (grounded)
         MoveAside(grounded, 1)
-        self.img = love.graphics.newQuad(0, 0, 32, 32, self.sprite:getDimensions());
+        self.img = love.graphics.newQuad(0, 0, TILESIZE, TILESIZE, self.sprite:getDimensions());
         self.orientation = RIGHT
         -- Gérer l'affichage du perso lors du saut
         if(not grounded) then 
-            self.img = love.graphics.newQuad(64, 0, 32, 32, self.sprite:getDimensions())
+            self.img = love.graphics.newQuad(64, 0, TILESIZE, TILESIZE, self.sprite:getDimensions())
         end
     end
 
     -- Déplacement horizontal vers la gauche
     local MoveLeft = function (grounded)
         MoveAside(grounded, -1)
-        self.img = love.graphics.newQuad(32, 0, 32, 32, self.sprite:getDimensions());
+        self.img = love.graphics.newQuad(TILESIZE, 0, TILESIZE, TILESIZE, self.sprite:getDimensions());
         self.orientation = LEFT
         -- Gérer l'affichage du perso lors du saut
         if(not grounded) then 
-            self.img = love.graphics.newQuad(96, 0, 32, 32, self.sprite:getDimensions())
+            self.img = love.graphics.newQuad(TILESIZE * 3, 0, TILESIZE, TILESIZE, self.sprite:getDimensions())
         end
     end
 
@@ -211,9 +211,9 @@ function Personnage:New(t) -- Générer une Terrain à  partir de 3 Tile différ
             self.Xspeed = 0
             self.Xacc = 0
             if(self.orientation == RIGHT) then
-                self.img = love.graphics.newQuad(0, 0, 32, 32, self.sprite:getDimensions())
+                self.img = love.graphics.newQuad(0, 0, TILESIZE, TILESIZE, self.sprite:getDimensions())
             else
-                self.img = love.graphics.newQuad(32, 0, 32, 32, self.sprite:getDimensions())
+                self.img = love.graphics.newQuad(TILESIZE, 0, TILESIZE, TILESIZE, self.sprite:getDimensions())
             end
         end
     end
