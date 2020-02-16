@@ -1,15 +1,16 @@
 require("var")
 require(SRCDIR.."Personnage")
+--require(SRCDIR.."../Pioche")
 
 Equipe = {}
 Equipe.__index = Equipe
 
-function Equipe:New()
+function Equipe:New(t)
     local this = {}
     setmetatable(this, Equipe)
-    this.personnages = {p1 = Personnage:New(), p2 = Personnage:New(), p3 = Personnage:New(), p4 = Personnage:New()}
+    this.personnages = {Personnage:New(t), Personnage:New(t), Personnage:New(t), Personnage:New(t)}
     this.materiaux = {0, 0, 0, 0, 0} -- Terre, Pierre, Fer, Souffre, Gold
-    this.armePermanente = Pioche:New()
+    --this.armePermanente = Pioche:New()
     this.armeCraft = {}
     return this
 end

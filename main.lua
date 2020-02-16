@@ -6,6 +6,7 @@ require(TILESDIR.."Terre")
 require(TILESDIR.."Pierre")
 require(SRCDIR.."Personnage")
 require(SRCDIR.."Camera")
+require(SRCDIR.."Equipe")
 
 local nuklear = require 'nuklear'
 local Menu    = require(UIDIR..'uiMenu')
@@ -13,7 +14,8 @@ local InGame  = require(UIDIR..'uiInGame')
 local Pause   = require(UIDIR..'uiPause')
 
 terrain = Terrain:New(HEIGHT, WIDTH)
-perso = Personnage:New(terrain)
+equipe1 = Equipe:New(terrain)
+perso = equipe1.personnages[1]
 
 -- option de debug
 DEBUG = true
@@ -37,18 +39,41 @@ end
 -- fonction d'affichage
 function love.draw()
 
-    Camera:set()    
+    Camera:set()
 
     function love.keyreleased(key)
         -- Dès qu'on appuie sur entrée génère une nouvelle map et la redessine
         if key == "return" then
             terrain = Terrain:New(HEIGHT, WIDTH)
-            perso = Personnage:New(terrain)
+            equipe1 = Equipe:New(terrain)
+            for i=1, 4 do
+                equipe1.personnages[i]:Move(true, false)
+            end
+        end
+
+        if key == "1" then
+            perso = equipe1.personnages[1]
+        end 
+
+        if key == "2" then
+            perso = equipe1.personnages[2]
+        end
+
+        if key == "3" then
+            perso = equipe1.personnages[3]
+        end
+
+        if key == "4" then
+            perso = equipe1.personnages[4]
         end
     end
 
     -- On affiche un terrain dès qu'on lance le programme
     terrain.draw()
+    -- On affiche les personnages de l'équipe dès qu'on lance le programme
+    for i=1, 4 do
+        equipe1.personnages[i]:Move(true, false)
+    end
 
     window_width, window_height = love.graphics.getDimensions()
     Camera:setPosition(perso)
