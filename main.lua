@@ -15,7 +15,11 @@ local Pause   = require(UIDIR..'uiPause')
 
 terrain = Terrain:New(HEIGHT, WIDTH)
 equipe1 = Equipe:New(terrain)
-perso = equipe1.personnages[1]
+equipe1.personnages["perso1"]:Move(true, false)
+equipe1.personnages["perso2"]:Move(true, false)
+equipe1.personnages["perso3"]:Move(true, false)
+equipe1.personnages["perso4"]:Move(true, false)
+perso = equipe1.personnages["perso1"]
 
 -- option de debug
 DEBUG = true
@@ -46,36 +50,35 @@ function love.draw()
         if key == "return" then
             terrain = Terrain:New(HEIGHT, WIDTH)
             equipe1 = Equipe:New(terrain)
-            for i=1, 4 do
-                equipe1.personnages[i]:Move(true, false)
-            end
-            perso = equipe1.personnages[1]
+            equipe1.personnages["perso1"]:Move(true, false)
+            equipe1.personnages["perso2"]:Move(true, false)
+            equipe1.personnages["perso3"]:Move(true, false)
+            equipe1.personnages["perso4"]:Move(true, false)
+            perso = equipe1.personnages["perso1"]
         end
 
         if key == "1" then
-            perso = equipe1.personnages[1]
+            perso = equipe1.personnages["perso1"]
         end 
 
         if key == "2" then
-            perso = equipe1.personnages[2]
+            perso = equipe1.personnages["perso2"]
         end
 
         if key == "3" then
-            perso = equipe1.personnages[3]
+            perso = equipe1.personnages["perso3"]
         end
 
         if key == "4" then
-            perso = equipe1.personnages[4]
+            perso = equipe1.personnages["perso4"]
         end
     end
 
     -- On affiche un terrain dès qu'on lance le programme
     terrain.draw()
     -- On affiche les personnages de l'équipe dès qu'on lance le programme
-    for i=1, 4 do
-        equipe1.personnages[i]:Move(true, false)
-    end
-
+    
+    
     window_width, window_height = love.graphics.getDimensions()
     Camera:setPosition(perso)
 

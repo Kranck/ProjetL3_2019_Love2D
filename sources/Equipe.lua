@@ -8,7 +8,11 @@ Equipe.__index = Equipe
 function Equipe:New(t)
     local this = {}
     setmetatable(this, Equipe)
-    this.personnages = {Personnage:New(t, this), Personnage:New(t, this), Personnage:New(t, this), Personnage:New(t, this)}
+    this.personnages = {}
+    this.personnages["perso1"]=Personnage:New(t, this)
+    this.personnages["perso2"]=Personnage:New(t, this)
+    this.personnages["perso3"]=Personnage:New(t, this)
+    this.personnages["perso4"]=Personnage:New(t, this)
     this.materiaux = {} 
     this.materiaux["Terre"]=0 
     this.materiaux["Pierre"]=0
