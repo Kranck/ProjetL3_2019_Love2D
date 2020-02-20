@@ -49,6 +49,7 @@ function love.draw()
             for i=1, 4 do
                 equipe1.personnages[i]:Move(true, false)
             end
+            perso = equipe1.personnages[1]
         end
 
         if key == "1" then
@@ -131,7 +132,6 @@ function love.draw()
     function love.keypressed(key)
         if key == 'f' then
             perso.DestroyBlock()
-            
         end
     end
 
