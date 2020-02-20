@@ -4,7 +4,6 @@ require(SRCDIR.."Tile")
 Pierre = Tile:New()
 Pierre.sprite = love.graphics.newImage(TEXTUREDIR.."Stone_Block.png")
 Pierre.__index = Pierre
-Pierre.__type = "Pierre"
 Pierre.hp = 5
 
 function Pierre:New()
@@ -14,7 +13,7 @@ function Pierre:New()
     this.draw = function (x, y)
         love.graphics.draw(Pierre.sprite, this.img, x, y)
     end
-
+    this.type = "Pierre"
     this.pdv = Pierre.hp
 
     setmetatable(this, Pierre)

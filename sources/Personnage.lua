@@ -1,6 +1,7 @@
 require('var')
 
 require(SRCDIR.."Terrain")
+require(SRCDIR.."Materiaux")
 
 Personnage = {}
 Personnage.__index = Personnage
@@ -24,7 +25,7 @@ local MAX_SPEED_FALLING = 3.4
 -- RANGE
 local RANGE = TILESIZE * 2
 
-function Personnage:New(t) -- Générer un Terrain à partir de 3 Tiles différentes
+function Personnage:New(t, e) -- Générer un Terrain à partir de 3 Tiles différentes
     -- Positions que peut prendre le personnage
     -- Killian : à mettre dans la class terrain en fonction qui renvoie une seul position donné
     -- + stocker le reste dans terrain : utiliset la séquence de Halton
@@ -45,7 +46,8 @@ function Personnage:New(t) -- Générer un Terrain à partir de 3 Tiles différe
         posY = (positionTab[1]-1)*TILESIZE, -- Position en pixel
         Xacc = 0,   -- Horizontal acceleration
         Yspeed = 0, -- Vertical Speed
-        Yacc = GRAVITY -- Vertical acceleration
+        Yacc = GRAVITY, -- Vertical acceleration
+        equipe = e
     }
 
     -- Modifie la position du personnage vers les nouveaux points x, y en vérifiant qu'on reste dans
@@ -108,6 +110,22 @@ function Personnage:New(t) -- Générer un Terrain à partir de 3 Tiles différe
         and (self.terrain.map_bloc[yPositionMax][xPositionMax]==nil) then
             self.posX = nextPositionX
             self.posY = nextPositionY
+        end
+
+        to_remove = {}
+        if self.terrain.materiaux[1] ~= nil then
+            for i=1, table.getn(self.terrain.materiaux) do
+                mat = self:ramasserMateriau(self.terrain.materiaux[i])
+                if mat~=nil then
+                    self.equipe.materiaux[mat.type] = self.equipe.materiaux[mat.type] + 1
+                    table.insert(to_remove, i)
+                end
+            end
+        end
+        if to_remove[1]~=nil then
+            for i=1, table.getn(to_remove) do
+                table.remove(self.terrain.materiaux, to_remove[i])
+            end
         end
     end
 
@@ -264,6 +282,8 @@ function Personnage:New(t) -- Générer un Terrain à partir de 3 Tiles différe
                 if(self.terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
                     self.terrain.map_bloc[nb_tileY][nb_tileX]:ChangeQuad(nil, self.terrain.map_bloc[nb_tileY][nb_tileX].pdv - 1)
                     if(self.terrain.map_bloc[nb_tileY][nb_tileX].pdv == 0) then
+                        type_of_mat = self.terrain.map_bloc[nb_tileY][nb_tileX].type
+                        table.insert(self.terrain.materiaux, Materiaux:New(type_of_mat, nb_tileX, nb_tileY))
                         self.terrain.map_bloc[nb_tileY][nb_tileX] = nil
                     end
                     break
@@ -284,12 +304,26 @@ function Personnage:New(t) -- Générer un Terrain à partir de 3 Tiles différe
             if(self.terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
                 self.terrain.map_bloc[nb_tileY][nb_tileX]:ChangeQuad(nil, self.terrain.map_bloc[nb_tileY][nb_tileX].pdv - 1)
                 if(self.terrain.map_bloc[nb_tileY][nb_tileX].pdv == 0) then
+                    type_of_mat = self.terrain.map_bloc[nb_tileY][nb_tileX].type
+                    table.insert(self.terrain.materiaux, Materiaux:New(type_of_mat, nb_tileX, nb_tileY))
                     self.terrain.map_bloc[nb_tileY][nb_tileX] = nil
                 end
                 break
             end
         end
+    end
 
+    function Personnage:ramasserMateriau(materiau)
+        positionMatMinX = (materiau.x_index-1)*TILESIZE
+        positionMatMaxX = (materiau.x_index-1)*TILESIZE+TILESIZE
+        positionMatMinY = (materiau.y_index-1)*TILESIZE
+        positionMatMaxY = (materiau.y_index-1)*TILESIZE+TILESIZE
+        HALF_TILESIZE = TILESIZE/2
+        if self.posX+HALF_TILESIZE<positionMatMaxX and self.posX+HALF_TILESIZE>positionMatMinX and self.posY+HALF_TILESIZE<positionMatMaxY and self.posY+HALF_TILESIZE>positionMatMinY then
+            return materiau
+        else
+            return nil
+        end
     end
 
     -- Affiche le cursor en fonction de l'angle du personnage
@@ -309,6 +343,8 @@ function Personnage:New(t) -- Générer un Terrain à partir de 3 Tiles différe
         love.graphics.print((grounded and "Grounded" or "Not Grounded"), 0, 60)
         love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 0, 100)
         love.graphics.print("Angle : "..self.angle, 0, 120)
+        love.graphics.print("Materiaux Array : "..table.getn(self.terrain.materiaux), 0, 140)
+        love.graphics.print("Materiaux of Team : "..self.equipe.materiaux["Terre"].." ; "..self.equipe.materiaux["Pierre"].." ; "..self.equipe.materiaux["Fer"].." ; "..self.equipe.materiaux["Souffre"].." ; "..self.equipe.materiaux["Gold"], 0, 160)
     end
 
     -- Getter pour la position
@@ -340,6 +376,7 @@ function Personnage:New(t) -- Générer un Terrain à partir de 3 Tiles différe
         DestroyBlock = DestroyBlock,
         DrawCursor = DrawCursor,
         getRange = getRange,
+        equipe
     }
 
 end -- End Personnage:New

@@ -16,6 +16,7 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
     this.width = width
     this.background = love.graphics.newImage(ASSETSDIR.."sky_background.jpg")
     this.map_bloc = {}
+    this.materiaux = {}
 
     this.draw = function () 
         for y=1, this.height do
@@ -23,6 +24,11 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
                 if nil~=this.map_bloc[y][x] then
                     this.map_bloc[y][x].draw(((x-1)*TILESIZE), ((y-1)*TILESIZE))
                 end
+            end
+        end
+        if this.materiaux[1] ~= nil then
+            for i=1, table.getn(this.materiaux) do
+                this.materiaux[i].draw()
             end
         end
     end

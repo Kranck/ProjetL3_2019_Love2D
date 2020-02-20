@@ -131,6 +131,7 @@ function love.draw()
     function love.keypressed(key)
         if key == 'f' then
             perso.DestroyBlock()
+            
         end
     end
 

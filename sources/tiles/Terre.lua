@@ -14,7 +14,7 @@ function Terre:New(num)
     -- choosing base eath representation in the sprite
     this.dx = num or 0
     this.img = love.graphics.newQuad(this.dx * TILESIZE, 0, TILESIZE, TILESIZE, Terre.sprite:getDimensions())
-
+    this.type = "Terre"
     this.pdv = Terre.hp
 
     this.draw = function (x, y)

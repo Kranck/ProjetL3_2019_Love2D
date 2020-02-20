@@ -10,7 +10,7 @@ Soufre.hp = 7
 function Soufre:New()
     local this = {}
     this.img = love.graphics.newQuad(0, 0, TILESIZE, TILESIZE, Soufre.sprite:getDimensions())
-
+    this.type = "Souffre"
     this.draw = function (x, y)
         love.graphics.draw(Soufre.sprite, this.img, x, y)
     end

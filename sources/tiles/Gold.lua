@@ -11,7 +11,7 @@ Gold.hp = 7
 function Gold:New()
     local this = {}
     this.img = love.graphics.newQuad(0, 0, TILESIZE, TILESIZE, Gold.sprite:getDimensions())
-
+    this.type = "Gold"
     this.draw = function (x, y)
         love.graphics.draw(Gold.sprite, this.img, x, y)
     end
