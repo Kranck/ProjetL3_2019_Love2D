@@ -117,13 +117,16 @@ function Personnage:New(t, e) -- Générer un Terrain à partir de 3 Tiles diff�
             for i=1, table.getn(self.terrain.materiaux) do
                 mat = self:ramasserMateriau(self.terrain.materiaux[i])
                 if mat~=nil then
-                    self.equipe.materiaux[mat.type] = self.equipe.materiaux[mat.type] + 1
                     table.insert(to_remove, i)
                 end
             end
         end
         if to_remove[1]~=nil then
             for i=1, table.getn(to_remove) do
+                mat_to_remove = self.terrain.materiaux[i]
+                if mat_to_remove ~= nil then
+                    self.equipe.materiaux[mat_to_remove.type] = self.equipe.materiaux[mat_to_remove.type] + 1
+                end
                 table.remove(self.terrain.materiaux, to_remove[i])
             end
         end
@@ -285,12 +288,6 @@ function Personnage:New(t, e) -- Générer un Terrain à partir de 3 Tiles diff�
                         type_of_mat = self.terrain.map_bloc[nb_tileY][nb_tileX].type
                         table.insert(self.terrain.materiaux, Materiaux:New(type_of_mat, nb_tileX, nb_tileY, self.terrain))
                         self.terrain.map_bloc[nb_tileY][nb_tileX] = nil
-                        if self.terrain.materiaux[1]~=nil then
-                            last_mat = self.terrain.materiaux[table.getn(self.terrain.materiaux)] 
-                            while not(last_mat.isGrounded()) do
-                                last_mat.posY = last_mat.posY+4
-                            end
-                        end
                     end
                     break
                 end
@@ -313,12 +310,6 @@ function Personnage:New(t, e) -- Générer un Terrain à partir de 3 Tiles diff�
                     type_of_mat = self.terrain.map_bloc[nb_tileY][nb_tileX].type
                     table.insert(self.terrain.materiaux, Materiaux:New(type_of_mat, nb_tileX, nb_tileY, self.terrain))
                     self.terrain.map_bloc[nb_tileY][nb_tileX] = nil
-                    if self.terrain.materiaux[1]~=nil then
-                        last_mat = self.terrain.materiaux[table.getn(self.terrain.materiaux)] 
-                        while last_mat.isGrounded()==false do
-                            last_mat.posY = last_mat.posY+4
-                        end
-                    end
                 end
                 break
             end

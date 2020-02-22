@@ -28,12 +28,8 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
         end
         if this.materiaux[1] ~= nil then
             for i=1, table.getn(this.materiaux) do
-                    mat = this.materiaux[i] 
-                    while mat.isGrounded()==false do
-                        mat.posY = last_mat.posY+4
-                        this.materiaux[i].draw()
-                    end
-                    this.materiaux[i].draw()
+                    grounded = this.materiaux[i].isGrounded()
+                    this.materiaux[i].Move(grounded)
                 end
             end
         end
