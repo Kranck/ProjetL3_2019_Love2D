@@ -283,8 +283,14 @@ function Personnage:New(t, e) -- Générer un Terrain à partir de 3 Tiles diff�
                     self.terrain.map_bloc[nb_tileY][nb_tileX]:ChangeQuad(nil, self.terrain.map_bloc[nb_tileY][nb_tileX].pdv - 1)
                     if(self.terrain.map_bloc[nb_tileY][nb_tileX].pdv == 0) then
                         type_of_mat = self.terrain.map_bloc[nb_tileY][nb_tileX].type
-                        table.insert(self.terrain.materiaux, Materiaux:New(type_of_mat, nb_tileX, nb_tileY))
+                        table.insert(self.terrain.materiaux, Materiaux:New(type_of_mat, nb_tileX, nb_tileY, self.terrain))
                         self.terrain.map_bloc[nb_tileY][nb_tileX] = nil
+                        if self.terrain.materiaux[1]~=nil then
+                            last_mat = self.terrain.materiaux[table.getn(self.terrain.materiaux)] 
+                            while not(last_mat.isGrounded()) do
+                                last_mat.posY = last_mat.posY+4
+                            end
+                        end
                     end
                     break
                 end
@@ -305,8 +311,14 @@ function Personnage:New(t, e) -- Générer un Terrain à partir de 3 Tiles diff�
                 self.terrain.map_bloc[nb_tileY][nb_tileX]:ChangeQuad(nil, self.terrain.map_bloc[nb_tileY][nb_tileX].pdv - 1)
                 if(self.terrain.map_bloc[nb_tileY][nb_tileX].pdv == 0) then
                     type_of_mat = self.terrain.map_bloc[nb_tileY][nb_tileX].type
-                    table.insert(self.terrain.materiaux, Materiaux:New(type_of_mat, nb_tileX, nb_tileY))
+                    table.insert(self.terrain.materiaux, Materiaux:New(type_of_mat, nb_tileX, nb_tileY, self.terrain))
                     self.terrain.map_bloc[nb_tileY][nb_tileX] = nil
+                    if self.terrain.materiaux[1]~=nil then
+                        last_mat = self.terrain.materiaux[table.getn(self.terrain.materiaux)] 
+                        while last_mat.isGrounded()==false do
+                            last_mat.posY = last_mat.posY+4
+                        end
+                    end
                 end
                 break
             end
@@ -314,10 +326,10 @@ function Personnage:New(t, e) -- Générer un Terrain à partir de 3 Tiles diff�
     end
 
     function Personnage:ramasserMateriau(materiau)
-        positionMatMinX = (materiau.x_index-1)*TILESIZE
-        positionMatMaxX = (materiau.x_index-1)*TILESIZE+TILESIZE
-        positionMatMinY = (materiau.y_index-1)*TILESIZE
-        positionMatMaxY = (materiau.y_index-1)*TILESIZE+TILESIZE
+        positionMatMinX = materiau.posX
+        positionMatMaxX = materiau.posX+TILESIZE
+        positionMatMinY = materiau.posY
+        positionMatMaxY = materiau.posY+TILESIZE
         HALF_TILESIZE = TILESIZE/2
         if self.posX+HALF_TILESIZE<positionMatMaxX and self.posX+HALF_TILESIZE>positionMatMinX and self.posY+HALF_TILESIZE<positionMatMaxY and self.posY+HALF_TILESIZE>positionMatMinY then
             return materiau
