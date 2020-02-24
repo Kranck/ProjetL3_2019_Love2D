@@ -343,6 +343,15 @@ function Personnage:New(e) -- Générer un Terrain à partir de 3 Tiles différe
         local cursor_posY = self.posY- self.range *math.sin(angle_in_radian)
         love.graphics.draw(cursor_img, cursor_posX, cursor_posY)
     end
+
+    -- Récupère un object contenant les quantités de chaque matériaux
+    local getItems = function ()
+        return {earth   = self.equipe.materiaux["Terre"],
+                stone   = self.equipe.materiaux["Pierre"],
+                iron    = self.equipe.materiaux["Fer"],
+                sulfure = self.equipe.materiaux["Souffre"],
+                gold    = self.equipe.materiaux["Gold"],}
+    end
     
     -- Affiche les informations de débugages liés au personnage
     local Debug = function (grounded)
@@ -385,6 +394,7 @@ function Personnage:New(e) -- Générer un Terrain à partir de 3 Tiles différe
         DestroyBlock = DestroyBlock,
         DrawCursor = DrawCursor,
         getRange = getRange,
+        getItems = getItems,
         equipe
     }
 

@@ -33,7 +33,9 @@ end
 -- update func to correctly set up UIs
 function love.update()
     uiMenu:frame(Menu)
-    uiInGame:frame(InGame)
+    uiInGame:frameBegin()
+        InGame(uiInGame, perso.getItems())
+    uiInGame:frameEnd()
     uiPause:frame(Pause)
 end
 
