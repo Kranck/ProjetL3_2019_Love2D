@@ -110,6 +110,10 @@ function Materiaux:New(type, x_index, y_index, terrain)
         xPositionMin = math.floor(((this.posX+1)/TILESIZE)+1)
         xPositionMax = math.floor(((this.posX+(TILESIZE-1))/TILESIZE)+1)
         yPositionMax = math.floor(((nextPositionY+(TILESIZE-1))/TILESIZE)+1)
+
+        if yPositionMax>44 then
+            return "outOfBounds"
+        end
         if (this.terrain.map_bloc[yPositionMax][xPositionMin])~=nil or (this.terrain.map_bloc[yPositionMax][xPositionMax])~=nil then
             return true
         end

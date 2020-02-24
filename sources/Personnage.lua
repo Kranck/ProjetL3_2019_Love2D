@@ -25,14 +25,14 @@ local MAX_SPEED_FALLING = 3.4
 -- RANGE
 local RANGE = TILESIZE * 2
 
-function Personnage:New(t, e) -- Générer un Terrain à partir de 3 Tiles différentes
+function Personnage:New(e) -- Générer un Terrain à partir de 3 Tiles différentes
     -- Positions que peut prendre le personnage
     -- Killian : à mettre dans la class terrain en fonction qui renvoie une seul position donné
     -- + stocker le reste dans terrain : utiliset la séquence de Halton
 
     -- Sprite où chercher les images
     local sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite.png")
-    local positionTab = t:EmptyPositionForPersonnage()
+    local positionTab = e.terrain:EmptyPositionForPersonnage()
     local self = {
         sprite  = sprite,
         terrain = t,
@@ -75,47 +75,43 @@ function Personnage:New(t, e) -- Générer un Terrain à partir de 3 Tiles diff�
             nextPositionY = 0
         end
 
-        if nextPositionY > 44*TILESIZE then
-            nextPositionY = 44*TILESIZE
-        end
-
         if yPositionMax > 45 or xPositionMax > 80 then
             return
         end
 
-        if (self.terrain.map_bloc[yPositionMin][xPositionMin]==nil)
-        and (self.terrain.map_bloc[yPositionMax][xPositionMin]==nil)
-        and (self.terrain.map_bloc[yPositionMin][xPositionMax]~=nil)
-        and (self.terrain.map_bloc[yPositionMax][xPositionMax]~=nil) then
+        if (self.equipe.terrain.map_bloc[yPositionMin][xPositionMin]==nil)
+        and (self.equipe.terrain.map_bloc[yPositionMax][xPositionMin]==nil)
+        and (self.equipe.terrain.map_bloc[yPositionMin][xPositionMax]~=nil)
+        and (self.equipe.terrain.map_bloc[yPositionMax][xPositionMax]~=nil) then
             self.posX = xPositionMin*TILESIZE-TILESIZE
         end
 
-        if (self.terrain.map_bloc[yPositionMin][xPositionMin]~=nil)
-        and (self.terrain.map_bloc[yPositionMax][xPositionMin]~=nil)
-        and (self.terrain.map_bloc[yPositionMin][xPositionMax]==nil)
-        and (self.terrain.map_bloc[yPositionMax][xPositionMax]==nil) then
+        if (self.equipe.terrain.map_bloc[yPositionMin][xPositionMin]~=nil)
+        and (self.equipe.terrain.map_bloc[yPositionMax][xPositionMin]~=nil)
+        and (self.equipe.terrain.map_bloc[yPositionMin][xPositionMax]==nil)
+        and (self.equipe.terrain.map_bloc[yPositionMax][xPositionMax]==nil) then
             self.posX = xPositionMax*TILESIZE-TILESIZE
         end
 
-        if (self.terrain.map_bloc[yPositionMax][xPositionMin]~=nil)
-        and (self.terrain.map_bloc[yPositionMax][xPositionMax]~=nil)
-        and (self.terrain.map_bloc[yPositionMin][xPositionMax]==nil)
-        and (self.terrain.map_bloc[yPositionMin][xPositionMin]==nil) then
+        if (self.equipe.terrain.map_bloc[yPositionMax][xPositionMin]~=nil)
+        and (self.equipe.terrain.map_bloc[yPositionMax][xPositionMax]~=nil)
+        and (self.equipe.terrain.map_bloc[yPositionMin][xPositionMax]==nil)
+        and (self.equipe.terrain.map_bloc[yPositionMin][xPositionMin]==nil) then
             self.posY = yPositionMin*TILESIZE-TILESIZE
         end
 
-        if (self.terrain.map_bloc[yPositionMin][xPositionMin]==nil)
-        and (self.terrain.map_bloc[yPositionMax][xPositionMin]==nil)
-        and (self.terrain.map_bloc[yPositionMin][xPositionMax]==nil)
-        and (self.terrain.map_bloc[yPositionMax][xPositionMax]==nil) then
+        if (self.equipe.terrain.map_bloc[yPositionMin][xPositionMin]==nil)
+        and (self.equipe.terrain.map_bloc[yPositionMax][xPositionMin]==nil)
+        and (self.equipe.terrain.map_bloc[yPositionMin][xPositionMax]==nil)
+        and (self.equipe.terrain.map_bloc[yPositionMax][xPositionMax]==nil) then
             self.posX = nextPositionX
             self.posY = nextPositionY
         end
 
         to_remove = {}
-        if self.terrain.materiaux[1] ~= nil then
-            for i=1, table.getn(self.terrain.materiaux) do
-                mat = self:ramasserMateriau(self.terrain.materiaux[i])
+        if self.equipe.terrain.materiaux[1] ~= nil then
+            for i=1, table.getn(self.equipe.terrain.materiaux) do
+                mat = self:ramasserMateriau(self.equipe.terrain.materiaux[i])
                 if mat~=nil then
                     table.insert(to_remove, i)
                 end
@@ -123,11 +119,11 @@ function Personnage:New(t, e) -- Générer un Terrain à partir de 3 Tiles diff�
         end
         if to_remove[1]~=nil then
             for i=1, table.getn(to_remove) do
-                mat_to_remove = self.terrain.materiaux[i]
+                mat_to_remove = self.equipe.terrain.materiaux[i]
                 if mat_to_remove ~= nil then
                     self.equipe.materiaux[mat_to_remove.type] = self.equipe.materiaux[mat_to_remove.type] + 1
                 end
-                table.remove(self.terrain.materiaux, to_remove[i])
+                table.remove(self.equipe.terrain.materiaux, to_remove[i])
             end
         end
     end
@@ -141,7 +137,17 @@ function Personnage:New(t, e) -- Générer un Terrain à partir de 3 Tiles diff�
         xPositionMax = math.floor(((self.posX+(TILESIZE-1))/TILESIZE)+1)
         yPositionMax = math.floor(((nextPositionY+(TILESIZE-1))/TILESIZE)+1)
 
-        if (self.terrain.map_bloc[yPositionMax][xPositionMin])~=nil or (self.terrain.map_bloc[yPositionMax][xPositionMax])~=nil then
+        if yPositionMax>44 then
+        --self.pointDeVie=0
+            for i=1, table.getn(self.equipe.personnages) do
+                if self==self.equipe.personnages[i] then
+                    table.remove(self.equipe.personnages, i)
+                end
+            end
+            return "outOfBounds"
+        end
+
+        if (self.equipe.terrain.map_bloc[yPositionMax][xPositionMin])~=nil or (self.equipe.terrain.map_bloc[yPositionMax][xPositionMax])~=nil then
             return true
         end
 
@@ -282,12 +288,12 @@ function Personnage:New(t, e) -- Générer un Terrain à partir de 3 Tiles diff�
             for j = startY, end_Y, signe_pas do
                 local nb_tileX =  math.floor(startX/TILESIZE) + 1
                 local nb_tileY = math.floor(j/TILESIZE) + 1
-                if(self.terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
-                    self.terrain.map_bloc[nb_tileY][nb_tileX]:ChangeQuad(nil, self.terrain.map_bloc[nb_tileY][nb_tileX].pdv - 1)
-                    if(self.terrain.map_bloc[nb_tileY][nb_tileX].pdv == 0) then
-                        type_of_mat = self.terrain.map_bloc[nb_tileY][nb_tileX].type
-                        table.insert(self.terrain.materiaux, Materiaux:New(type_of_mat, nb_tileX, nb_tileY, self.terrain))
-                        self.terrain.map_bloc[nb_tileY][nb_tileX] = nil
+                if(self.equipe.terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
+                    self.equipe.terrain.map_bloc[nb_tileY][nb_tileX]:ChangeQuad(nil, self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].pdv - 1)
+                    if(self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].pdv == 0) then
+                        type_of_mat = self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].type
+                        table.insert(self.equipe.terrain.materiaux, Materiaux:New(type_of_mat, nb_tileX, nb_tileY, self.equipe.terrain))
+                        self.equipe.terrain.map_bloc[nb_tileY][nb_tileX] = nil
                     end
                     break
                 end
@@ -304,12 +310,12 @@ function Personnage:New(t, e) -- Générer un Terrain à partir de 3 Tiles diff�
             local img_i = coeff_droite * i + ordonne_origin
             nb_tileX =  math.floor(i/TILESIZE) + 1
             nb_tileY = math.floor(img_i/TILESIZE) + 1
-            if(self.terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
-                self.terrain.map_bloc[nb_tileY][nb_tileX]:ChangeQuad(nil, self.terrain.map_bloc[nb_tileY][nb_tileX].pdv - 1)
-                if(self.terrain.map_bloc[nb_tileY][nb_tileX].pdv == 0) then
-                    type_of_mat = self.terrain.map_bloc[nb_tileY][nb_tileX].type
-                    table.insert(self.terrain.materiaux, Materiaux:New(type_of_mat, nb_tileX, nb_tileY, self.terrain))
-                    self.terrain.map_bloc[nb_tileY][nb_tileX] = nil
+            if(self.equipe.terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
+                self.equipe.terrain.map_bloc[nb_tileY][nb_tileX]:ChangeQuad(nil, self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].pdv - 1)
+                if(self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].pdv == 0) then
+                    type_of_mat = self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].type
+                    table.insert(self.equipe.terrain.materiaux, Materiaux:New(type_of_mat, nb_tileX, nb_tileY, self.equipe.terrain))
+                    self.equipe.terrain.map_bloc[nb_tileY][nb_tileX] = nil
                 end
                 break
             end
@@ -346,7 +352,7 @@ function Personnage:New(t, e) -- Générer un Terrain à partir de 3 Tiles diff�
         love.graphics.print((grounded and "Grounded" or "Not Grounded"), 0, 60)
         love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 0, 100)
         love.graphics.print("Angle : "..self.angle, 0, 120)
-        love.graphics.print("Materiaux Array : "..table.getn(self.terrain.materiaux), 0, 140)
+        love.graphics.print("Materiaux Array : "..table.getn(self.equipe.terrain.materiaux), 0, 140)
         love.graphics.print("Materiaux of Team : "..self.equipe.materiaux["Terre"].." ; "..self.equipe.materiaux["Pierre"].." ; "..self.equipe.materiaux["Fer"].." ; "..self.equipe.materiaux["Souffre"].." ; "..self.equipe.materiaux["Gold"], 0, 160)
     end
 
@@ -383,3 +389,11 @@ function Personnage:New(t, e) -- Générer un Terrain à partir de 3 Tiles diff�
     }
 
 end -- End Personnage:New
+
+function Personnage:isDead()
+    if(self.pointDeVie<=0) then
+        return true
+    else
+        return false
+    end
+end

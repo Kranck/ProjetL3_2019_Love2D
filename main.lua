@@ -14,12 +14,9 @@ local InGame  = require(UIDIR..'uiInGame')
 local Pause   = require(UIDIR..'uiPause')
 
 terrain = Terrain:New(HEIGHT, WIDTH)
-equipe1 = Equipe:New(terrain)
-equipe1.personnages["perso1"]:Move(true, false)
-equipe1.personnages["perso2"]:Move(true, false)
-equipe1.personnages["perso3"]:Move(true, false)
-equipe1.personnages["perso4"]:Move(true, false)
-perso = equipe1.personnages["perso1"]
+terrain.equipe1 = Equipe:New(terrain)
+--terrain.equipe2 = Equipe:New(terrain)
+perso = terrain.equipe1.personnages[1]
 
 -- option de debug
 DEBUG = true
@@ -49,41 +46,56 @@ function love.draw()
         -- Dès qu'on appuie sur entrée génère une nouvelle map et la redessine
         if key == "return" then
             terrain = Terrain:New(HEIGHT, WIDTH)
-            equipe1 = Equipe:New(terrain)
-            equipe1.personnages["perso1"]:Move(true, false)
-            equipe1.personnages["perso2"]:Move(true, false)
-            equipe1.personnages["perso3"]:Move(true, false)
-            equipe1.personnages["perso4"]:Move(true, false)
-            perso = equipe1.personnages["perso1"]
+            terrain.equipe1 = Equipe:New(terrain)
+            --terrain.equipe1 = Equipe:New(terrain)
+            perso = terrain.equipe1.personnages[1]
         end
 
         if key == "1" then
-            perso = equipe1.personnages["perso1"]
+            if terrain.equipe1.personnages[1] ~= nil then
+                perso = terrain.equipe1.personnages[1]
+            end
         end 
 
         if key == "2" then
-            perso = equipe1.personnages["perso2"]
+            if terrain.equipe1.personnages[2] ~= nil then
+                perso = terrain.equipe1.personnages[2]
+            end
         end
 
         if key == "3" then
-            perso = equipe1.personnages["perso3"]
+            if terrain.equipe1.personnages[3] ~= nil then
+                perso = terrain.equipe1.personnages[3]
+            end
         end
 
         if key == "4" then
-            perso = equipe1.personnages["perso4"]
+            if terrain.equipe1.personnages[4] ~= nil then
+                perso = terrain.equipe1.personnages[4]
+            end
         end
     end
 
     -- On affiche un terrain dès qu'on lance le programme
     terrain.draw()
-    -- On affiche les personnages de l'équipe dès qu'on lance le programme
-    
     
     window_width, window_height = love.graphics.getDimensions()
     Camera:setPosition(perso)
 
     -- Reset info before movement
     local grounded = perso.isGrounded()
+    if grounded == "outOfBounds" then
+        for i=1, table.getn(terrain.equipe1.personnages) do
+            if perso==terrain.equipe1.personnages[i] then
+                table.remove(terrain.equipe1.personnages,i)
+            end
+        end
+        for i=1, table.getn(terrain.equipe1.personnages) do
+            perso = terrain.equipe1.personnages[i]
+        end
+    end
+    
+
     local moved = false -- Reset : le personnage ne s'est pas déplacer pendant cette frame
 
     if love.keyboard.isScancodeDown("left") or love.keyboard.isScancodeDown("a") then
@@ -107,9 +119,6 @@ function love.draw()
     if love.keyboard.isScancodeDown("space") then
         perso.Jump(grounded)
     end
-
-    -- On applique les modifications dues aux inputs
-    perso.Move(grounded, moved)
 
     -- On affiche le curseur pour la visée
     perso.DrawCursor()

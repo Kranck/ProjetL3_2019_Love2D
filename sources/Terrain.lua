@@ -17,6 +17,8 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
     this.background = love.graphics.newImage(ASSETSDIR.."sky_background.jpg")
     this.map_bloc = {}
     this.materiaux = {}
+    this.equipe1 = nil
+    --this.equipe2 = nil
 
     this.draw = function () 
         for y=1, this.height do
@@ -26,14 +28,25 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
                 end
             end
         end
+        to_remove = {}
         if this.materiaux[1] ~= nil then
             for i=1, table.getn(this.materiaux) do
-                    grounded = this.materiaux[i].isGrounded()
+                grounded = this.materiaux[i].isGrounded()
+                if grounded=="outOfBounds" then
+                    table.insert(to_remove, i)
+                else
                     this.materiaux[i].Move(grounded)
                 end
             end
         end
-    
+        for i=1, table.getn(to_remove) do
+            table.remove(this.materiaux, to_remove[i])
+        end
+        for i=1, table.getn(this.equipe1.personnages) do
+            grounded = this.equipe1.personnages[i].isGrounded()
+            this.equipe1.personnages[i].Move(grounded, false)
+        end
+    end
 
     function generateMap()
         -- Initialisation d'un terrain de tout le terrain à nil
@@ -159,8 +172,8 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
                 end
             end
         end
-
     end
+
     generateMap()
     return this
 end
@@ -177,8 +190,4 @@ function Terrain:EmptyPositionForPersonnage()
     local value = table.getn(positionAvailable)
     local randomPosition = love.math.random(1, value)
     return positionAvailable[randomPosition]
-end
-
-function Terrain:DestroyTile(x, y)
-    self.map_bloc[y][x] = nil
 end
