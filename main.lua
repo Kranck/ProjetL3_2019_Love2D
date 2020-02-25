@@ -96,6 +96,20 @@ function love.draw()
             perso = terrain.equipe1.personnages[i]
         end
     end
+
+    to_remove = {}
+    for i=1, table.getn(terrain.equipe1.personnages) do
+        if perso~=terrain.equipe1.personnages[i] then
+            persoCheckedGrounded = terrain.equipe1.personnages[i].isGrounded()
+            if persoCheckedGrounded == "outOfBounds" then
+                table.insert(to_remove, i)
+            end
+        end
+    end
+
+    for i=1, table.getn(to_remove) do
+        table.remove(terrain.equipe1.personnages, to_remove[i])
+    end
     
 
     local moved = false -- Reset : le personnage ne s'est pas déplacer pendant cette frame
