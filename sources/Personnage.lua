@@ -137,7 +137,7 @@ function Personnage:New(e) -- Générer un Terrain à partir de 3 Tiles différe
         xPositionMax = math.floor(((self.posX+(TILESIZE-1))/TILESIZE)+1)
         yPositionMax = math.floor(((nextPositionY+(TILESIZE-1))/TILESIZE)+1)
 
-        if yPositionMax>44 then
+        if yPositionMax>45 then
         --self.pointDeVie=0
             for i=1, table.getn(self.equipe.personnages) do
                 if self==self.equipe.personnages[i] then

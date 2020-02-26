@@ -21,6 +21,64 @@ perso = terrain.equipe1.personnages[1]
 -- option de debug
 DEBUG = true
 
+-- Changer de perso
+function love.keyreleased(key)
+    -- Dès qu'on appuie sur entrée génère une nouvelle map et la redessine
+    if key == "return" then
+        terrain = Terrain:New(HEIGHT, WIDTH)
+        terrain.equipe1 = Equipe:New(terrain)
+        --terrain.equipe1 = Equipe:New(terrain)
+        perso = terrain.equipe1.personnages[1]
+    end
+
+    if key == "1" then
+        if terrain.equipe1.personnages[1] ~= nil then
+            perso = terrain.equipe1.personnages[1]
+        end
+    end 
+
+    if key == "2" then
+        if terrain.equipe1.personnages[2] ~= nil then
+            perso = terrain.equipe1.personnages[2]
+        end
+    end
+
+    if key == "3" then
+        if terrain.equipe1.personnages[3] ~= nil then
+            perso = terrain.equipe1.personnages[3]
+        end
+    end
+
+    if key == "4" then
+        if terrain.equipe1.personnages[4] ~= nil then
+            perso = terrain.equipe1.personnages[4]
+        end
+    end
+end
+
+
+-- Casser un bloc
+function love.keypressed(key)
+    if key == 'f' then
+        perso.DestroyBlock()
+    end
+end
+
+-- Zoom avec la molette
+function love.wheelmoved(x, y)
+    if y<0 then
+        --Camera.x, Camera.y = Camera:mousePosition()
+        for i=1, 50 do
+            Camera:scale(1.001, perso)
+        end
+    elseif y>0 then
+        --Camera.x, Camera.y = Camera:mousePosition()
+        for i=1, 50 do
+            Camera:scale(1/1.001, perso)
+        end
+    end    
+end
+
 -- HUDs
 local uiMenu, uiInGame, uiPause
 
@@ -34,55 +92,9 @@ end
 function love.update()
     uiMenu:frame(Menu)
     uiInGame:frameBegin()
-        InGame(uiInGame, perso.getItems())
+    InGame(uiInGame, perso.getItems())
     uiInGame:frameEnd()
     uiPause:frame(Pause)
-end
-
--- fonction d'affichage
-function love.draw()
-
-    Camera:set()
-
-    function love.keyreleased(key)
-        -- Dès qu'on appuie sur entrée génère une nouvelle map et la redessine
-        if key == "return" then
-            terrain = Terrain:New(HEIGHT, WIDTH)
-            terrain.equipe1 = Equipe:New(terrain)
-            --terrain.equipe1 = Equipe:New(terrain)
-            perso = terrain.equipe1.personnages[1]
-        end
-
-        if key == "1" then
-            if terrain.equipe1.personnages[1] ~= nil then
-                perso = terrain.equipe1.personnages[1]
-            end
-        end 
-
-        if key == "2" then
-            if terrain.equipe1.personnages[2] ~= nil then
-                perso = terrain.equipe1.personnages[2]
-            end
-        end
-
-        if key == "3" then
-            if terrain.equipe1.personnages[3] ~= nil then
-                perso = terrain.equipe1.personnages[3]
-            end
-        end
-
-        if key == "4" then
-            if terrain.equipe1.personnages[4] ~= nil then
-                perso = terrain.equipe1.personnages[4]
-            end
-        end
-    end
-
-    -- On affiche un terrain dès qu'on lance le programme
-    terrain.draw()
-    
-    window_width, window_height = love.graphics.getDimensions()
-    Camera:setPosition(perso)
 
     -- Reset info before movement
     local grounded = perso.isGrounded()
@@ -110,7 +122,6 @@ function love.draw()
     for i=1, table.getn(to_remove) do
         table.remove(terrain.equipe1.personnages, to_remove[i])
     end
-    
 
     local moved = false -- Reset : le personnage ne s'est pas déplacer pendant cette frame
 
@@ -136,39 +147,31 @@ function love.draw()
         perso.Jump(grounded)
     end
 
+    love.wheelmoved(0, 0)
+
+end
+
+
+-- fonction d'affichage
+function love.draw()
+    
+    Camera:set()
+
+    -- On affiche un terrain dès qu'on lance le programme
+    terrain.draw()
+    
+    window_width, window_height = love.graphics.getDimensions()
+    Camera:setPosition(perso)
+
     -- On affiche le curseur pour la visée
     perso.DrawCursor()
 
-    function love.wheelmoved(x, y)
-        if y<0 then
-            --Camera.x, Camera.y = Camera:mousePosition()
-            for i=1, 50 do
-                Camera:scale(1.001, perso)
-            end
-        elseif y>0 then
-            --Camera.x, Camera.y = Camera:mousePosition()
-            for i=1, 50 do
-                Camera:scale(1/1.001, perso)
-            end
-        end    
-    end
-
-    love.wheelmoved(0, 0)
+    uiInGame:draw()
 
     Camera:unset()
 
-    function love.keypressed(key)
-        if key == 'f' then
-            perso.DestroyBlock()
-        end
-    end
-
-    uiInGame:draw()
-    
     -- Affiche les informations de débuggage pour un personnage
     if DEBUG then
         perso.Debug(grounded)
     end
-
 end
-
