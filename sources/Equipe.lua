@@ -5,21 +5,22 @@ require(SRCDIR.."Personnage")
 Equipe = {}
 Equipe.__index = Equipe
 
-function Equipe:New(t)
+function Equipe:New(t, color, name)
     local this = {}
     setmetatable(this, Equipe)
-    this.terrain=t
+    this.terrain = t
+    this.color = color
+    this.name = name
     this.personnages = {}
-    table.insert(this.personnages, Personnage:New(this))
-    table.insert(this.personnages, Personnage:New(this))
-    table.insert(this.personnages, Personnage:New(this))
-    table.insert(this.personnages, Personnage:New(this))
-    this.materiaux = {} 
-    this.materiaux["Terre"]=0 
-    this.materiaux["Pierre"]=0
-    this.materiaux["Fer"]=0
-    this.materiaux["Souffre"]=0
-    this.materiaux["Gold"]=0-- Terre, Pierre, Fer, Souffre, Gold
+    for i=0, CHAR_NB do
+        table.insert(this.personnages, Personnage:New(this))
+    end
+    this.materiaux =   {Terre = 0, 
+                        Pierre = 0,
+                        Fer = 0,
+                        Souffre = 0,
+                        Gold = 0
+                        }
     --this.armePermanente = Pioche:New()
     this.armeCraft = {}
     return this
