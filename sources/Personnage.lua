@@ -39,7 +39,7 @@ function Personnage:New(e) -- Générer un Terrain à partir de 3 Tiles différe
         range   = RANGE,    -- Distance à laquelle le personnage peut casser des blocs
         img     = love.graphics.newQuad(0, 0, TILESIZE, TILESIZE, sprite:getDimensions()),
         angle   = 0,        -- angle 
-        pointDeVie = 100,
+        pointDeVie = CHAR_HP,
         posX = (positionTab[2]-1)*TILESIZE,  -- Position en pixel
         orientation = RIGHT,
         Xspeed = 0, -- Horizontal Speed
@@ -362,11 +362,14 @@ function Personnage:New(e) -- Générer un Terrain à partir de 3 Tiles différe
         love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 0, 100)
         love.graphics.print("Angle : "..self.angle, 0, 120)
         love.graphics.print("Materiaux Array : "..table.getn(self.equipe.terrain.materiaux), 0, 140)
-        love.graphics.print("Materiaux of Team : "..self.equipe.materiaux["Terre"].." ; "..self.equipe.materiaux["Pierre"].." ; "..self.equipe.materiaux["Fer"].." ; "..self.equipe.materiaux["Souffre"].." ; "..self.equipe.materiaux["Gold"], 0, 160)
+        -- love.graphics.print("Materiaux of Team : "..self.equipe.materiaux["Terre"].." ; "..self.equipe.materiaux["Pierre"].." ; "..self.equipe.materiaux["Fer"].." ; "..self.equipe.materiaux["Souffre"].." ; "..self.equipe.materiaux["Gold"], 0, 160)
     end
 
     -- Getter pour la position
     local getPos = function () return {posX = self.posX, posY = self.posY} end
+
+    -- Getter pour la vie du personnage
+    local getHP = function () return self.pointDeVie end
 
     -- Getter pour l'angle
     local getAngle = function () return self.angle end
@@ -395,7 +398,8 @@ function Personnage:New(e) -- Générer un Terrain à partir de 3 Tiles différe
         DrawCursor = DrawCursor,
         getRange = getRange,
         getItems = getItems,
-        equipe
+        getHP = getHP,
+        equipe,
     }
 
 end -- End Personnage:New

@@ -14,7 +14,7 @@ local InGame  = require(UIDIR..'uiInGame')
 local Pause   = require(UIDIR..'uiPause')
 
 terrain = Terrain:New(HEIGHT, WIDTH)
-terrain.equipe1 = Equipe:New(terrain)
+terrain.equipe1 = Equipe:New(terrain, TEAM_COLORS[1], "Equipe 1")
 --terrain.equipe2 = Equipe:New(terrain)
 perso = terrain.equipe1.personnages[1]
 
@@ -34,7 +34,7 @@ end
 function love.update()
     uiMenu:frame(Menu)
     uiInGame:frameBegin()
-        InGame(uiInGame, perso.getItems())
+        InGame(uiInGame, perso.getItems(), {terrain.equipe1})
     uiInGame:frameEnd()
     uiPause:frame(Pause)
 end
