@@ -18,7 +18,7 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
     if color=="#002B5C" then
         sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite_jm_bleu.png")        
     end
-    local positionTab = e.terrain:EmptyPositionForPersonnage()
+    local positionTab = e.terrain.EmptyPositionForPersonnage()
     local self = {
         sprite  = sprite,
         terrain = e.terrain,

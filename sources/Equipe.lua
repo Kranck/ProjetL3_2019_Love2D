@@ -15,12 +15,13 @@ function Equipe:New(t, color, name)
     for i=1, CHAR_NB do
         table.insert(this.personnages, Personnage:New(this, color))
     end
-    this.materiaux =   {Terre = 0, 
+    this.materiaux = {
+                        Terre = 0, 
                         Pierre = 0,
                         Fer = 0,
                         Souffre = 0,
                         Gold = 0
-                        }
+                    }
     --this.armePermanente = Pioche:New()
     this.armeCraft = {}
     return this

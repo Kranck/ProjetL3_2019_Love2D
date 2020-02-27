@@ -15,24 +15,12 @@ local Weapons = require(UIDIR..'uiWeapons')
 local Pause   = require(UIDIR..'uiPause')
 
 -- HUDs
-local uiMenu, uiInGame, uiPause
+local uiMenu, uiInGame, uiPause, uiWeapons
 
--- LOAD FUNCTION -> chargés au lancement de l'appli
-function love.load()
-    uiMenu   = nuklear.newUI()
-    uiInGame = nuklear.newUI()
-    uiWeapons= nuklear.newUI() 
-    uiPause  = nuklear.newUI()
-end
-
--- A DEPLACER PLUS TARD DANS LE LOAD ; d'ailleurs avec le menu il faudra différer
--- la génération du terrain et des équipes -> on ne connait pas le nb de teams et 
--- de persos
-
-local terrain = Terrain:New(HEIGHT, WIDTH)
-local current_team_nb = 2
+-- terrain ; équipe ; perso
+local terrain = nil
+local current_team_nb = 1
 local perso = nil
-
 
 
 ----------------------------------------------------------------------------------------------------------------
@@ -49,8 +37,24 @@ local init_game = function ()
     -- Premier personnage à jouer
     perso = terrain.teams[current_team_nb].personnages[current_team_nb]
 end
-init_game()
 
+
+-- LOAD FUNCTION -> chargés au lancement de l'appli
+function love.load()
+    uiMenu   = nuklear.newUI()
+    uiInGame = nuklear.newUI()
+    uiWeapons= nuklear.newUI() 
+    uiPause  = nuklear.newUI()
+
+    terrain = Terrain:New(HEIGHT, WIDTH)
+    terrain.generateMap()
+
+    current_team_nb = 1
+    perso = nil
+
+    init_game()
+
+end
 
 ----------------------------------------------------------------------------------------------------------------
 -----------------------------------------------  INPUT SECTION  ------------------------------------------------
