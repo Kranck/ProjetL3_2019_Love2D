@@ -13,7 +13,7 @@ function Equipe:New(t, color, name)
     this.name = name
     this.personnages = {}
     for i=1, CHAR_NB do
-        table.insert(this.personnages, Personnage:New(this))
+        table.insert(this.personnages, Personnage:New(this, color))
     end
     this.materiaux =   {Terre = 0, 
                         Pierre = 0,

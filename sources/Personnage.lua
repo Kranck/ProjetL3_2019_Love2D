@@ -25,13 +25,19 @@ local MAX_SPEED_FALLING = 3.4
 -- RANGE
 local RANGE = TILESIZE * 2
 
-function Personnage:New(e) -- Générer un Terrain à partir de 3 Tiles différentes
+function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles différentes
     -- Positions que peut prendre le personnage
     -- Killian : à mettre dans la class terrain en fonction qui renvoie une seul position donné
     -- + stocker le reste dans terrain : utiliset la séquence de Halton
 
     -- Sprite où chercher les images
-    local sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite.png")
+    local sprit = nil
+    if color=="#E03A3E" then
+        sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite_jm_rouge.png")
+    end
+    if color=="#002B5C" then
+        sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite_jm_bleu.png")        
+    end
     local positionTab = e.terrain:EmptyPositionForPersonnage()
     local self = {
         sprite  = sprite,
