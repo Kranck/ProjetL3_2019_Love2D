@@ -15,9 +15,26 @@ WIDTH  = WINDOW_WIDTH/16 -- 80
 -- Taille du pavage
 TILESIZE = 32
 
+----------------- Constantes ------------------
 -- Orientation values
 RIGHT = 1
 LEFT = -1
+
+JUMPSPEED = 4.6
+
+-- Vitesse en l'air
+AIRSPEED = 1.8
+
+-- Vitesse au sol
+GROUNDSPEED = 1.3 * AIRSPEED
+
+-- Accélération de chute
+GRAVITY = 0.15
+
+-- Vitesse de chute maximale
+MAX_SPEED_FALLING = 3.4
+
+RANGE = TILESIZE * 2
 
 --------------- Option de debug ---------------
 DEBUG = true

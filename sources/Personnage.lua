@@ -6,32 +6,12 @@ require(SRCDIR.."Materiaux")
 Personnage = {}
 Personnage.__index = Personnage
 
--- Vitesse du saut
-local JUMPSPEED = 4.6
-
--- Vitesse en l'air
-local AIRSPEED = 1.8
-
--- Vitesse au sol
-local GROUNDSPEED = 1.3 * AIRSPEED
-
--- Accélération de chute
-local GRAVITY = 0.15
-
--- Vitesse de chute maximale
-local MAX_SPEED_FALLING = 3.4
-
-
--- RANGE
-local RANGE = TILESIZE * 2
 
 function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles différentes
-    -- Positions que peut prendre le personnage
-    -- Killian : à mettre dans la class terrain en fonction qui renvoie une seul position donné
-    -- + stocker le reste dans terrain : utiliset la séquence de Halton
+    -- stocker le reste dans terrain : utiliset la séquence de Halton
 
     -- Sprite où chercher les images
-    local sprit = nil
+    local sprite = nil
     if color=="#E03A3E" then
         sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite_jm_rouge.png")
     end
@@ -358,10 +338,6 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
         love.graphics.draw(cursor_img, cursor_posX, cursor_posY)
     end
 
-    
-
-
-
     local verifTirer = function(x, y)
         local nb_tileX =  math.floor(x/TILESIZE) + 1
         local nb_tileY = math.floor(y/TILESIZE) + 1
@@ -439,7 +415,7 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
         love.graphics.print((grounded and "Grounded" or "Not Grounded"), 0, 60)
         love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 0, 100)
         love.graphics.print("Angle : "..self.angle, 0, 120)
-        love.graphics.print("Materiaux Array : "..table.getn(self.equipe.terrain.materiaux), 0, 140)
+        -- love.graphics.print("Materiaux Array : "..table.getn(self.equipe.terrain.materiaux), 0, 140)
         -- love.graphics.print("Materiaux of Team : "..self.equipe.materiaux["Terre"].." ; "..self.equipe.materiaux["Pierre"].." ; "..self.equipe.materiaux["Fer"].." ; "..self.equipe.materiaux["Souffre"].." ; "..self.equipe.materiaux["Gold"], 0, 160)
     end
 
@@ -461,10 +437,27 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
     -- Getter Range
     local getRange = function () return self.range end
 
+    
+    -- Vérifie la vie d'un personnage
+    local isDead = function ()
+        if(self.pointDeVie<=0) then
+            return true
+        else
+            return false
+        end
+    end
+
+
     setmetatable(self, Personnage)
 
+
+
+    ----------------------------------------------------------------------------------------------------------
+    ----------------------------------------  Interface Extérieure  ------------------------------------------
+    ----------------------------------------------------------------------------------------------------------
     return {
         isGrounded = isGrounded,
+        isDead = isDead,
         Jump = Jump,
         MoveRight = MoveRight,
         MoveLeft = MoveLeft,
@@ -481,16 +474,8 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
         getItems = getItems,
         getHP = getHP,
         setHP = setHP,
-        equipe,
+        equipe = equipe,
         Tirer = Tirer,
     }
 
 end -- End Personnage:New
-
-function Personnage:isDead()
-    if(self.pointDeVie<=0) then
-        return true
-    else
-        return false
-    end
-end
