@@ -288,6 +288,9 @@ function Personnage:New(e) -- Générer un Terrain à partir de 3 Tiles différe
             for j = startY, end_Y, signe_pas do
                 local nb_tileX =  math.floor(startX/TILESIZE) + 1
                 local nb_tileY = math.floor(j/TILESIZE) + 1
+                if(nb_tileY > 45) then
+                    break
+                end
                 if(self.equipe.terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
                     self.equipe.terrain.map_bloc[nb_tileY][nb_tileX]:ChangeQuad(nil, self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].pdv - 1)
                     if(self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].pdv == 0) then
@@ -310,6 +313,9 @@ function Personnage:New(e) -- Générer un Terrain à partir de 3 Tiles différe
             local img_i = coeff_droite * i + ordonne_origin
             nb_tileX =  math.floor(i/TILESIZE) + 1
             nb_tileY = math.floor(img_i/TILESIZE) + 1
+            if(nb_tileY > 45) then
+                break
+            end
             if(self.equipe.terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
                 self.equipe.terrain.map_bloc[nb_tileY][nb_tileX]:ChangeQuad(nil, self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].pdv - 1)
                 if(self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].pdv == 0) then
