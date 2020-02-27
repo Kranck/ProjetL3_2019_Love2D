@@ -266,23 +266,47 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
         end
     end
     
-    -- Destruction du block par le personnage
-    -- Alexy : Ce serait bien de merge le code dupliqué
-    local DestroyBlock = function ()
-        local angle_in_radian = self.angle * math.pi/180
+    local getEqDroite = function(posX, posY, angle, orientation, range)
+        local angle_in_radian = angle * math.pi/180
 
-        local startX = self.posX + TILESIZE/2
-        local startY = self.posY + TILESIZE/2
-        if self.orientation < 0 then
+        local startX = posX + TILESIZE/2
+        local startY = posY + TILESIZE/2
+        if orientation < 0 then
             startX = startX -1
         end
-        if self.angle > 0 then 
+        if angle > 0 then 
             startY = startY - 1
         end
-        local tile_to_destroyX = startX + self.range *math.cos(angle_in_radian) * self.orientation
-        local tile_to_destroyY = startY - self.range *math.sin(angle_in_radian)
+        local tile_to_destroyX = startX + range *math.cos(angle_in_radian) * self.orientation
+        local tile_to_destroyY = startY - range *math.sin(angle_in_radian)
         local coeff_droite = (tile_to_destroyY - startY) / (tile_to_destroyX - startX)
         local ordonne_origin = startY - coeff_droite * startX
+
+        return coeff_droite, ordonne_origin, tile_to_destroyX, startX, startY
+
+    end
+    
+    local verifDestroyBlock = function(x, y)
+        nb_tileX =  math.floor(x/TILESIZE) + 1
+        nb_tileY = math.floor(y/TILESIZE) + 1
+        if(nb_tileY > HEIGHT) then
+            return true
+        end
+        if(self.equipe.terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
+            self.equipe.terrain.map_bloc[nb_tileY][nb_tileX]:ChangeQuad(nil, self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].pdv - 1)
+            if(self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].pdv == 0) then
+                type_of_mat = self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].type
+                table.insert(self.equipe.terrain.materiaux, Materiaux:New(type_of_mat, nb_tileX, nb_tileY, self.equipe.terrain))
+                self.equipe.terrain.map_bloc[nb_tileY][nb_tileX] = nil
+            end
+            return true
+        end
+        return false
+    end
+
+    -- Destruction du block par le personnage
+    local DestroyBlock = function ()
+        coeff_droite, ordonne_origin, tile_to_destroyX, startX, startY = getEqDroite(self.posX, self.posY, self.angle, self.orientation, self.range)
 
         -- Si l'angle est trop élevé, on casse le bloc du haut
         local signe_pas = 1
@@ -292,19 +316,8 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
             end
             local end_Y = startY + self.range * signe_pas
             for j = startY, end_Y, signe_pas do
-                local nb_tileX =  math.floor(startX/TILESIZE) + 1
-                local nb_tileY = math.floor(j/TILESIZE) + 1
-                if(nb_tileY > HEIGHT) then
-                    break
-                end
-                if(self.equipe.terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
-                    self.equipe.terrain.map_bloc[nb_tileY][nb_tileX]:ChangeQuad(nil, self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].pdv - 1)
-                    if(self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].pdv == 0) then
-                        type_of_mat = self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].type
-                        table.insert(self.equipe.terrain.materiaux, Materiaux:New(type_of_mat, nb_tileX, nb_tileY, self.equipe.terrain))
-                        self.equipe.terrain.map_bloc[nb_tileY][nb_tileX] = nil
-                    end
-                    break
+                if(verifDestroyBlock(startX, j)) then
+                    return
                 end
             end
         return
@@ -317,19 +330,8 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
         local pas = 1 * signe_pas
         for i = startX, tile_to_destroyX, pas do
             local img_i = coeff_droite * i + ordonne_origin
-            nb_tileX =  math.floor(i/TILESIZE) + 1
-            nb_tileY = math.floor(img_i/TILESIZE) + 1
-            if(nb_tileY > HEIGHT) then
-                break
-            end
-            if(self.equipe.terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
-                self.equipe.terrain.map_bloc[nb_tileY][nb_tileX]:ChangeQuad(nil, self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].pdv - 1)
-                if(self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].pdv == 0) then
-                    type_of_mat = self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].type
-                    table.insert(self.equipe.terrain.materiaux, Materiaux:New(type_of_mat, nb_tileX, nb_tileY, self.equipe.terrain))
-                    self.equipe.terrain.map_bloc[nb_tileY][nb_tileX] = nil
-                end
-                break
+            if(verifDestroyBlock(i, img_i)) then
+                return
             end
         end
     end
@@ -355,6 +357,70 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
         local cursor_posY = self.posY- self.range *math.sin(angle_in_radian)
         love.graphics.draw(cursor_img, cursor_posX, cursor_posY)
     end
+
+    
+
+
+
+    local verifTirer = function(x, y)
+        local nb_tileX =  math.floor(x/TILESIZE) + 1
+        local nb_tileY = math.floor(y/TILESIZE) + 1
+        if(nb_tileY > HEIGHT) then
+            return true
+        end
+        -- Toucher un bloc
+        if(self.equipe.terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
+            return true
+        end
+        --Toucher un autre personnage
+
+        for n_equipe=1 , table.getn(self.terrain.teams) do
+            for n_perso=1 , table.getn(self.terrain.teams[n_equipe].personnages) do
+                local other = self.terrain.teams[n_equipe].personnages[n_perso]
+                local pos = other.getPos()
+                if(pos.posX ~= self.posX or pos.posY ~= self.posY) then
+                    if(x >= pos.posX and x <= pos.posX + TILESIZE and y >= pos.posY and y <= pos.posY + TILESIZE) then
+                        other.setHP(other.getHP() - 20)
+                        print(other.getHP())
+                        return true
+                    end
+                end
+            end
+        end
+        return false
+    end
+
+    -- Tirer
+    local Tirer = function()
+        coeff_droite, ordonne_origin, tile_to_destroyX, startX, startY = getEqDroite(self.posX, self.posY, self.angle, self.orientation, self.range)
+        local signe_pas = 1
+
+        if(math.abs(self.angle) > 86) then
+            if(self.angle > 0) then
+                signe_pas = -1
+            end
+            local end_Y = startY + self.range * signe_pas
+            for j = startY, end_Y, signe_pas do
+                if(verifTirer(startX, j)) then
+                    return
+                end
+            end
+        return
+        end
+
+        if(tile_to_destroyX < startX) then
+            signe_pas = -1
+        end
+
+        local pas = 1 * signe_pas
+        for i = startX, tile_to_destroyX, pas do
+            local img_i = coeff_droite * i + ordonne_origin
+            if(verifTirer(i, img_i)) then
+                return
+            end
+        end
+    end
+
 
     -- Récupère un object contenant les quantités de chaque matériaux
     local getItems = function ()
@@ -382,6 +448,9 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
 
     -- Getter pour la vie du personnage
     local getHP = function () return self.pointDeVie end
+
+    -- Setter pour la vie du personnage
+    local setHP = function (newHP) self.pointDeVie = newHP end 
 
     -- Getter pour l'angle
     local getAngle = function () return self.angle end
@@ -411,7 +480,9 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
         getRange = getRange,
         getItems = getItems,
         getHP = getHP,
+        setHP = setHP,
         equipe,
+        Tirer = Tirer,
     }
 
 end -- End Personnage:New

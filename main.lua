@@ -59,8 +59,13 @@ end
 
 -- Casser un bloc
 function love.keypressed(key)
+    -- Casser un bloc
     if key == 'f' then
         perso.DestroyBlock()
+    end
+    -- Tirer
+    if key == 'e' then
+        perso.Tirer()
     end
 end
 
