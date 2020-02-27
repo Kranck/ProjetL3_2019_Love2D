@@ -288,7 +288,7 @@ function Personnage:New(e) -- Générer un Terrain à partir de 3 Tiles différe
             for j = startY, end_Y, signe_pas do
                 local nb_tileX =  math.floor(startX/TILESIZE) + 1
                 local nb_tileY = math.floor(j/TILESIZE) + 1
-                if(nb_tileY > 45) then
+                if(nb_tileY > HEIGHT) then
                     break
                 end
                 if(self.equipe.terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
@@ -313,7 +313,7 @@ function Personnage:New(e) -- Générer un Terrain à partir de 3 Tiles différe
             local img_i = coeff_droite * i + ordonne_origin
             nb_tileX =  math.floor(i/TILESIZE) + 1
             nb_tileY = math.floor(img_i/TILESIZE) + 1
-            if(nb_tileY > 45) then
+            if(nb_tileY > HEIGHT) then
                 break
             end
             if(self.equipe.terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
