@@ -11,8 +11,19 @@ require(SRCDIR.."Equipe")
 local nuklear = require 'nuklear'
 local Menu    = require(UIDIR..'uiMenu')
 local InGame  = require(UIDIR..'uiInGame')
+local Weapons = require(UIDIR..'uiWeapons')
 local Pause   = require(UIDIR..'uiPause')
 
+-- HUDs
+local uiMenu, uiInGame, uiPause
+
+-- LOAD FUNCTION -> chargés au lancement de l'appli
+function love.load()
+    uiMenu   = nuklear.newUI()
+    uiInGame = nuklear.newUI()
+    uiWeapons= nuklear.newUI() 
+    uiPause  = nuklear.newUI()
+end
 
 -- A DEPLACER PLUS TARD DANS LE LOAD ; d'ailleurs avec le menu il faudra différer
 -- la génération du terrain et des équipes -> on ne connait pas le nb de teams et 
@@ -23,155 +34,193 @@ local current_team_nb = 2
 local perso = nil
 
 
--- On instancie les équipes et les personnages
-for i=1, TEAM_NB do
-    table.insert(terrain.teams, Equipe:New(terrain, TEAM_COLORS[i], "Equipe "..i))
+
+----------------------------------------------------------------------------------------------------------------
+-----------------------------------------------  UTILITY SECTION  ----------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+
+--- Initialise un nouveau tableau
+local init_game = function ()
+    -- On instancie les équipes et les personnages
+    for i=1, TEAM_NB do
+        table.insert(terrain.teams, Equipe:New(terrain, TEAM_COLORS[i], "Equipe "..i))
+    end
+
+    -- Premier personnage à jouer
+    perso = terrain.teams[current_team_nb].personnages[current_team_nb]
 end
-
--- Premier personnage à jouer
-perso = terrain.teams[current_team_nb].personnages[current_team_nb]
+init_game()
 
 
--- Changer de perso
+----------------------------------------------------------------------------------------------------------------
+-----------------------------------------------  INPUT SECTION  ------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+-- ! INFOS : On fait les modif uniqement si on se trouve dans le bon "PLAY" cf var.lua
+
 function love.keyreleased(key)
     -- Dès qu'on appuie sur entrée génère une nouvelle map et la redessine
-    if key == "return" then
-        terrain = Terrain:New(HEIGHT, WIDTH)
-        -- On instancie les équipes et les personnages
-        for i=1, TEAM_NB do
-            table.insert(terrain.teams, Equipe:New(terrain, TEAM_COLORS[i], "Equipe "..i))
+    if PLAY == PLAY_TYPE_TABLE.normal and key == "return" then
+        init_game()        
+        for i=1, CHAR_NB do
+            if key == ""..i then
+                if terrain.teams[current_team_nb].personnages[i] ~= nil then
+                    perso = terrain.teams[current_team_nb].personnages[i]
+                end
+            end 
         end
-        -- Premier personnage à jouer
-        perso = terrain.teams[current_team_nb].personnages[1]
-    end
-
-    
-
-    for i=1, CHAR_NB do
-        if key == ""..i then
-            if terrain.teams[current_team_nb].personnages[i] ~= nil then
-                perso = terrain.teams[current_team_nb].personnages[i]
-            end
-        end 
     end
 end
 
-
--- Casser un bloc
 function love.keypressed(key)
-    -- Casser un bloc
-    if key == 'f' then
-        perso.DestroyBlock()
-    end
-    -- Tirer
-    if key == 'e' then
-        perso.Tirer()
+    if PLAY == PLAY_TYPE_TABLE.normal then
+        -- Casser un bloc
+        if key == 'f' then
+            perso.DestroyBlock()
+        end
+        -- Tirer
+        if key == 'e' then
+            perso.Tirer()
+        end
     end
 end
 
--- Zoom avec la molette
 function love.wheelmoved(x, y)
-    if y<0 then
-        --Camera.x, Camera.y = Camera:mousePosition()
-        for i=1, 50 do
-            Camera:scale(1.001, perso)
-        end
-    elseif y>0 then
-        --Camera.x, Camera.y = Camera:mousePosition()
-        for i=1, 50 do
-            Camera:scale(1/1.001, perso)
-        end
-    end    
+    -- Zoom avec la molette
+    if PLAY == PLAY_TYPE_TABLE.normal then
+        if y < 0 then
+            --Camera.x, Camera.y = Camera:mousePosition()
+            for i=1, 50 do
+                Camera:scale(1.001, perso)
+            end
+        elseif y > 0 then
+            --Camera.x, Camera.y = Camera:mousePosition()
+            for i=1, 50 do
+                Camera:scale(1/1.001, perso)
+            end
+        end    
+    end
 end
 
--- HUDs
-local uiMenu, uiInGame, uiPause
 
-function love.load()
-    uiMenu   = nuklear.newUI()
-    uiInGame = nuklear.newUI()
-    uiPause  = nuklear.newUI()
-end
 
--- update func
+
+----------------------------------------------------------------------------------------------------------------
+-----------------------------------------------  UPDATE SECTION  -----------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+
 function love.update()
-    uiMenu:frame(Menu)
-    uiInGame:frameBegin()
-    InGame(uiInGame, perso.getItems(), terrain.teams)
-    uiInGame:frameEnd()
-    uiPause:frame(Pause)
+    if PLAY == PLAY_TYPE_TABLE.normal or PLAY == PLAY_TYPE_TABLE.weapons then
+        uiInGame:frameBegin()
+            InGame(uiInGame, perso.getItems(), terrain.teams)
+        uiInGame:frameEnd()
+        if PLAY == PLAY_TYPE_TABLE.weapons then
+            uiWeapons:frameBegin()
+                Weapons(uiWeapons)
+            uiWeapons:frameEnd()
+        end
 
-    -- Reset info before movement
-    
-    local grounded = perso.isGrounded()
-    
-    -- check if a personnage has been knocked out of the map or is dead
-    for i, t in ipairs(terrain.teams) do
-        to_remove = {}
-        for j, p in ipairs(t.personnages) do
-            local persoCheckedGrounded = p.isGrounded()
-            if persoCheckedGrounded == "outOfBounds" or p.getHP()<=0 then
-                table.insert(to_remove, j)
+        -- Reset info before movement
+        local grounded = perso.isGrounded()
+        
+        -- check if a personnage has been knocked out of the map or is dead
+        for i, t in ipairs(terrain.teams) do
+            to_remove = {}
+            for j, p in ipairs(t.personnages) do
+                local persoCheckedGrounded = p.isGrounded()
+                if persoCheckedGrounded == "outOfBounds" or p.getHP()<=0 then
+                    table.insert(to_remove, j)
+                end
+            end
+            for j=1, table.getn(to_remove) do
+                table.remove(t.personnages, to_remove[j])
             end
         end
-        for j=1, table.getn(to_remove) do
-            table.remove(t.personnages, to_remove[j])
+
+        if grounded == "outOfBounds" or perso.getHP()<=0 then
+            perso = terrain.nextPerso(current_team_nb)
+        end
+
+        local moved = false -- Reset : le personnage ne s'est pas déplacer pendant cette frame
+        
+        --------------------------------------------------
+        ------  Bindings des touche en mode normal  ------
+        --------------------------------------------------
+        if PLAY == PLAY_TYPE_TABLE.normal then
+            if love.keyboard.isScancodeDown("left") or love.keyboard.isScancodeDown("a") then
+                perso.MoveLeft(grounded)
+                moved = true -- a bougé
+            end
+            
+            if love.keyboard.isScancodeDown("right") or love.keyboard.isScancodeDown("d") then
+                perso.MoveRight(grounded);
+                moved = true -- a bougé
+            end
+            
+            if love.keyboard.isScancodeDown("up") or love.keyboard.isScancodeDown("w") then
+                perso.changeAngleUp()
+            end
+            
+            if love.keyboard.isScancodeDown("down") or love.keyboard.isScancodeDown("s") then
+                perso.changeAngleDown()
+            end
+            
+            if love.keyboard.isScancodeDown("space") then
+                perso.Jump(grounded)
+            end
+            
+            love.wheelmoved(0, 0)
+        end
+        
+        -------------------------------------------------------------------
+        ------  Binding des touches en mode Choix des armes / Craft  ------
+        -------------------------------------------------------------------
+        if PLAY == PLAY_TYPE_TABLE.weapons then
         end
     end
-
-    if grounded == "outOfBounds" or perso.getHP()<=0 then
-        perso = terrain.nextPerso(current_team_nb)
+        
+    ------------------------------------------------------
+    ------  Binding des touches en mode Menu pause  ------
+    ------------------------------------------------------
+    if PLAY == PLAY_TYPE_TABLE.pause then
+        uiMenu:frame(Pause)
     end
 
-    local moved = false -- Reset : le personnage ne s'est pas déplacer pendant cette frame
-
-    if love.keyboard.isScancodeDown("left") or love.keyboard.isScancodeDown("a") then
-        perso.MoveLeft(grounded)
-        moved = true -- a bougé
+    -----------------------------------------------------
+    ------  Binding des touches en mode Main Menu  ------
+    -----------------------------------------------------
+    if PLAY == PLAY_TYPE_TABLE.menu then
+        uiMenu:frame(Menu)
     end
-
-    if love.keyboard.isScancodeDown("right") or love.keyboard.isScancodeDown("d") then
-        perso.MoveRight(grounded);
-        moved = true -- a bougé
-    end
-
-    if love.keyboard.isScancodeDown("up") or love.keyboard.isScancodeDown("w") then
-        perso.changeAngleUp()
-    end
-
-    if love.keyboard.isScancodeDown("down") or love.keyboard.isScancodeDown("s") then
-        perso.changeAngleDown()
-    end
-
-    if love.keyboard.isScancodeDown("space") then
-        perso.Jump(grounded)
-    end
-
-    love.wheelmoved(0, 0)
 
 end
 
 
--- fonction d'affichage
+
+----------------------------------------------------------------------------------------------------------------
+------------------------------------------------  DRAW SECTION  ------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+
 function love.draw()
-    
-    Camera:set()
-
-    -- On affiche un terrain dès qu'on lance le programme
-    terrain.draw()
-    
-    window_width, window_height = love.graphics.getDimensions()
-    Camera:setPosition(perso)
-
-    -- On affiche le curseur pour la visée
-    perso.DrawCursor()
-
-    uiInGame:draw()
-
-    Camera:unset()
-
-    -- Affiche les informations de débuggage pour un personnage
-    if DEBUG then
-        perso.Debug(grounded)
+    if(PLAY == PLAY_TYPE_TABLE.normal or PLAY == PLAY_TYPE_TABLE.weapons or PLAY == PLAY_TYPE_TABLE.pause) then
+        Camera:set()
+        -- draw order -> terrain -> equipe -> personnages
+        terrain.draw()
+        Camera:setPosition(perso)
+        -- On affiche le curseur pour la visée
+        perso.DrawCursor()
+        --Affichage de la Graphic user Interface d'infos InGame
+        uiInGame:draw()
+        Camera:unset()
+        -- Affiche les informations de débuggage pour un personnage
+        if DEBUG then
+            perso.Debug(grounded)
+        end
+        if(PLAY == PLAY_TYPE_TABLE.weapons) then
+            uiWeapons:draw()
+        elseif(PLAY == PLAY_TYPE_TABLE.pause) then
+            uiPause:draw()
+        end
+    elseif(PLAY == PLAY_TYPE_TABLE.main) then
+        uiMenu:draw()
     end
 end

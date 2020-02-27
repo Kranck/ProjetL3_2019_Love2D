@@ -25,19 +25,19 @@ end
 
 function Camera:setPosition(p)
     position = p.getPos()
-    self.x = position.posX - (window_width / 2 * self.scaleX) or self.x
+    self.x = position.posX - (WINDOW_WIDTH / 2 * self.scaleX) or self.x
     if self.x < 0 then
         self.x = 0
     end
-    xMax = 80 * TILESIZE - (window_width*self.scaleX)
+    xMax = 80 * TILESIZE - (WINDOW_WIDTH*self.scaleX)
     if self.x > xMax then
         self.x = xMax
     end
-    self.y = position.posY-(window_height / 2  * self.scaleY) or self.y
+    self.y = position.posY-(WINDOW_HEIGHT / 2  * self.scaleY) or self.y
     if self.y<0 then
         self.y=0
     end
-    yMax = 45 * TILESIZE - (window_height * self.scaleY)
+    yMax = 45 * TILESIZE - (WINDOW_HEIGHT * self.scaleY)
     if self.y>yMax then
         self.y=yMax
     end

@@ -23,7 +23,12 @@ LEFT = -1
 DEBUG = true
 
 --------------- Game Parameters ---------------
-PLAY = true
+PLAY_TYPE_TABLE = { ['normal']  = 1, --> normal
+                    ['weapons'] = 2, --> menu arme/craft
+                    ['pause']   = 3, --> menu pause
+                    ['main']    = 4, --> mnu principal
+                    }
+PLAY = PLAY_TYPE_TABLE.normal
 
 CHAR_HP = 100
 CHAR_NB = 4
