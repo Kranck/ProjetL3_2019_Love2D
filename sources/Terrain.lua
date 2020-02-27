@@ -48,6 +48,7 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
                 p.Move(grounded, false)
             end
         end
+    end
 
         -- Choix du perso suivant pour le prochain tour
         local nextPerso = function(team_nb)
@@ -187,7 +188,6 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
                 end
             end
         end
-    end
 
     local EmptyPositionForPersonnage = function ()
         local positionAvailable = {}
