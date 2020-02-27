@@ -33,8 +33,8 @@ TEAM_NB = 2
 
 TEAM_COLORS = {
 	'#E03A3E',
-	'#00471B',
 	'#002B5C',
+	'#00471B',
 	'#FFCD00',
 	'#5A2D81',
 	'#C4CED4',
