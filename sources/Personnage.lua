@@ -41,7 +41,7 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
     local positionTab = e.terrain:EmptyPositionForPersonnage()
     local self = {
         sprite  = sprite,
-        terrain = t,
+        terrain = e.terrain,
         range   = RANGE,    -- Distance à laquelle le personnage peut casser des blocs
         img     = love.graphics.newQuad(0, 0, TILESIZE, TILESIZE, sprite:getDimensions()),
         angle   = 0,        -- angle 
