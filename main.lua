@@ -100,12 +100,12 @@ function love.update()
     
     local grounded = perso.isGrounded()
     
-    -- check if a personnage has been knocked out of the map
+    -- check if a personnage has been knocked out of the map or is dead
     for i, t in ipairs(terrain.teams) do
         to_remove = {}
         for j, p in ipairs(t.personnages) do
             local persoCheckedGrounded = p.isGrounded()
-            if persoCheckedGrounded == "outOfBounds" then
+            if persoCheckedGrounded == "outOfBounds" or p.getHP()<=0 then
                 table.insert(to_remove, j)
             end
         end
@@ -114,7 +114,7 @@ function love.update()
         end
     end
 
-    if grounded == "outOfBounds" then
+    if grounded == "outOfBounds" or perso.getHP()<=0 then
         perso = terrain.nextPerso(current_team_nb)
     end
 
