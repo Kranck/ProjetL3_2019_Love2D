@@ -17,8 +17,7 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
     this.background = love.graphics.newImage(ASSETSDIR.."sky_background.jpg")
     this.map_bloc = {}
     this.materiaux = {}
-    this.equipe1 = nil
-    --this.equipe2 = nil
+    this.teams = {}
 
     this.draw = function () 
         for y=1, this.height do
@@ -42,10 +41,24 @@ function Terrain:New(height, width) --Générer une Terrain à  partir de 3 Tile
         for i=1, table.getn(to_remove) do
             table.remove(this.materiaux, to_remove[i])
         end
-        for i=1, table.getn(this.equipe1.personnages) do
-            grounded = this.equipe1.personnages[i].isGrounded()
-            this.equipe1.personnages[i].Move(grounded, false)
+        for i, t in ipairs(this.teams) do
+            for j, p in ipairs(t.personnages) do
+                grounded = p.isGrounded()
+                p.Move(grounded, false)
+            end
         end
+    end
+
+    this.nextPerso = function(team_nb)
+        return this.teams[team_nb].personnages[1]
+        --debut implem pour multi-team
+        --local next_team = 1
+        --if(team_nb ~= TEAM_NB) then
+        --    next_team = team_nb + 1
+        --end
+        --while(table.getn(this.teams[next_team]) == 0 and next_team ~= team_nb) do
+        --    next_team = next_team + 1
+        --end
     end
 
     function generateMap()

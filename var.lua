@@ -19,12 +19,15 @@ TILESIZE = 32
 RIGHT = 1
 LEFT = -1
 
+--------------- Option de debug ---------------
+DEBUG = true
+
 --------------- Game Parameters ---------------
 CHAR_HP = 100
 CHAR_NB = 4
-TEAM_NB = 4
+TEAM_NB = 1
 
--------------------- DESIGN -------------------
+------------------- DESIGN --------------------
 
 TEAM_COLORS = {
 	'#E03A3E',

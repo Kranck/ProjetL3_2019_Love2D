@@ -13,46 +13,46 @@ local Menu    = require(UIDIR..'uiMenu')
 local InGame  = require(UIDIR..'uiInGame')
 local Pause   = require(UIDIR..'uiPause')
 
-terrain = Terrain:New(HEIGHT, WIDTH)
-terrain.equipe1 = Equipe:New(terrain, TEAM_COLORS[1], "Equipe 1")
---terrain.equipe2 = Equipe:New(terrain)
-perso = terrain.equipe1.personnages[1]
 
--- option de debug
-DEBUG = true
+-- A DEPLACER PLUS TARD DANS LE LOAD ; d'ailleurs avec le menu il faudra différer
+-- la génération du terrain et des équipes -> on ne connait pas le nb de teams et 
+-- de persos
+
+local terrain = Terrain:New(HEIGHT, WIDTH)
+local current_team_nb = 1
+local perso = nil
+
+
+-- On instancie les équipes et les personnages
+for i=1, TEAM_NB do
+    table.insert(terrain.teams, Equipe:New(terrain, TEAM_COLORS[i], "Equipe "..i))
+end
+
+-- Premier personnage à jouer
+perso = terrain.teams[current_team_nb].personnages[current_team_nb]
+
 
 -- Changer de perso
 function love.keyreleased(key)
     -- Dès qu'on appuie sur entrée génère une nouvelle map et la redessine
     if key == "return" then
         terrain = Terrain:New(HEIGHT, WIDTH)
-        terrain.equipe1 = Equipe:New(terrain)
-        --terrain.equipe1 = Equipe:New(terrain)
-        perso = terrain.equipe1.personnages[1]
+        -- On instancie les équipes et les personnages
+        for i=1, TEAM_NB do
+            table.insert(terrain.teams, Equipe:New(terrain, TEAM_COLORS[i], "Equipe "..i))
+        end
+        -- Premier personnage à jouer
+        perso = terrain.teams[current_team_nb].personnages[1]
     end
 
-    if key == "1" then
-        if terrain.equipe1.personnages[1] ~= nil then
-            perso = terrain.equipe1.personnages[1]
-        end
-    end 
+    
 
-    if key == "2" then
-        if terrain.equipe1.personnages[2] ~= nil then
-            perso = terrain.equipe1.personnages[2]
-        end
-    end
-
-    if key == "3" then
-        if terrain.equipe1.personnages[3] ~= nil then
-            perso = terrain.equipe1.personnages[3]
-        end
-    end
-
-    if key == "4" then
-        if terrain.equipe1.personnages[4] ~= nil then
-            perso = terrain.equipe1.personnages[4]
-        end
+    for i=1, CHAR_NB do
+        if key == ""..i then
+            if terrain.teams[current_team_nb].personnages[i] ~= nil then
+                perso = terrain.teams[current_team_nb].personnages[i]
+            end
+        end 
     end
 end
 
@@ -88,39 +88,30 @@ function love.load()
     uiPause  = nuklear.newUI()
 end
 
--- update func to correctly set up UIs
+-- update func
 function love.update()
     uiMenu:frame(Menu)
     uiInGame:frameBegin()
-    InGame(uiInGame, perso.getItems(), {terrain.equipe1})
+    InGame(uiInGame, perso.getItems(), terrain.teams)
     uiInGame:frameEnd()
     uiPause:frame(Pause)
 
     -- Reset info before movement
+    
     local grounded = perso.isGrounded()
-    if grounded == "outOfBounds" then
-        for i=1, table.getn(terrain.equipe1.personnages) do
-            if perso==terrain.equipe1.personnages[i] then
-                table.remove(terrain.equipe1.personnages,i)
-            end
-        end
-        for i=1, table.getn(terrain.equipe1.personnages) do
-            perso = terrain.equipe1.personnages[i]
-        end
-    end
-
-    to_remove = {}
-    for i=1, table.getn(terrain.equipe1.personnages) do
-        if perso~=terrain.equipe1.personnages[i] then
-            persoCheckedGrounded = terrain.equipe1.personnages[i].isGrounded()
+    
+    -- check if a personnage has been knocked out of the map
+    for i, t in ipairs(terrain.teams) do
+        for j, p in ipairs(t.personnages) do
+            local persoCheckedGrounded = p.isGrounded()
             if persoCheckedGrounded == "outOfBounds" then
-                table.insert(to_remove, i)
+                table.remove(t, j)
             end
         end
     end
 
-    for i=1, table.getn(to_remove) do
-        table.remove(terrain.equipe1.personnages, to_remove[i])
+    if grounded == "outOfBounds" then
+        perso = terrain.nextPerso(current_team_nb)
     end
 
     local moved = false -- Reset : le personnage ne s'est pas déplacer pendant cette frame
