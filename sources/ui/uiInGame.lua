@@ -10,9 +10,8 @@ local progress_style = {
 		['cursor hover'] = nil,
 		['cursor active'] = nil,
 		['padding'] = {x = 0, y = 0},
-	},
-	['selectable'] = {
-		['text background'] = nil,
+		['border'] = 1,
+		['border color'] = '#2d2d2d' -- default window color
 	},
 
 }
@@ -39,7 +38,7 @@ return function (ui, blocks, teams)
 	ui:windowEnd()
 
 	-- variables pour l'affichage de la vie des équipes
-	local team_bar_height = (32+4) * TEAM_NB + 2
+	local team_bar_height = (32+4) * TEAM_NB
 
 	if ui:windowBegin('Teams', 40, 720 - team_bar_height -40, 200, team_bar_height) then
 		x, y, width, height = ui:windowGetContentRegion()
@@ -58,7 +57,7 @@ return function (ui, blocks, teams)
 				ui:progress(team_life, CHAR_NB * CHAR_HP, false)
 			ui:stylePop()
 			-- Debug draw info about team life
-			ui:text(team_life.." / "..CHAR_NB * CHAR_HP, x + width/3 , y - 5 + 16*i, 100, 10)
+			ui:text(team_life.." / "..CHAR_NB * CHAR_HP, x + width/3 + 2 , y + 32*i - 20, 100, 10)
 		end
 	end
 	ui:windowEnd()
