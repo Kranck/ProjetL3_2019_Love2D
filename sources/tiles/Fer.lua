@@ -6,6 +6,7 @@ TILESIZE = 32
 
 Fer = Tile:New()
 Fer.sprite = love.graphics.newImage(TEXTUREDIR.."Iron_Block.png")
+Fer.fallen = love.graphics.newImage(TEXTUREDIR.."Iron_Block_Fallen.png")
 Fer.__index = Fer
 Fer.__type = "Fer"
 Fer.hp = 7

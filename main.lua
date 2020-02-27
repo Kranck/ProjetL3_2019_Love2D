@@ -2,9 +2,6 @@ require("var")
 
 require(SRCDIR.."Tile")
 require(SRCDIR.."Terrain")
-require(TILESDIR.."Terre")
-require(TILESDIR.."Pierre")
-require(SRCDIR.."Personnage")
 require(SRCDIR.."Camera")
 require(SRCDIR.."Equipe")
 
@@ -29,7 +26,10 @@ local perso = nil
 
 --- Initialise un nouveau tableau
 local init_game = function ()
+    current_team_nb = 1
     -- On instancie les équipes et les personnages
+    terrain = Terrain:New(HEIGHT, WIDTH)
+    terrain.generateMap()
     for i=1, TEAM_NB do
         table.insert(terrain.teams, Equipe:New(terrain, TEAM_COLORS[i], "Equipe "..i))
     end
@@ -46,14 +46,7 @@ function love.load()
     uiWeapons= nuklear.newUI() 
     uiPause  = nuklear.newUI()
 
-    terrain = Terrain:New(HEIGHT, WIDTH)
-    terrain.generateMap()
-
-    current_team_nb = 1
-    perso = nil
-
     init_game()
-
 end
 
 ----------------------------------------------------------------------------------------------------------------

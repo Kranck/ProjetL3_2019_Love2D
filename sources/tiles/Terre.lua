@@ -6,6 +6,7 @@ Terre = Tile:New()
 Terre.__index = Terre
 Terre.__type = "Terre"
 Terre.sprite = love.graphics.newImage(TEXTUREDIR.."Earth_Block.png")
+Terre.fallen = love.graphics.newImage(TEXTUREDIR.."Earth_Block_Fallen.png")
 Terre.hp = 3
 
 function Terre:New(num)

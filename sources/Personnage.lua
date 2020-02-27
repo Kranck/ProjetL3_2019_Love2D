@@ -65,31 +65,31 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
             return
         end
 
-        if (self.equipe.terrain.map_bloc[yPositionMin][xPositionMin]==nil)
-        and (self.equipe.terrain.map_bloc[yPositionMax][xPositionMin]==nil)
-        and (self.equipe.terrain.map_bloc[yPositionMin][xPositionMax]~=nil)
-        and (self.equipe.terrain.map_bloc[yPositionMax][xPositionMax]~=nil) then
+        if (self.equipe.terrain.getBlock(xPositionMin, yPositionMin) == nil)
+        and (self.equipe.terrain.getBlock(xPositionMin, yPositionMax) == nil)
+        and (self.equipe.terrain.getBlock(xPositionMax, yPositionMin) ~= nil)
+        and (self.equipe.terrain.getBlock(xPositionMax, yPositionMax) ~= nil) then
             self.posX = xPositionMin*TILESIZE-TILESIZE
         end
 
-        if (self.equipe.terrain.map_bloc[yPositionMin][xPositionMin]~=nil)
-        and (self.equipe.terrain.map_bloc[yPositionMax][xPositionMin]~=nil)
-        and (self.equipe.terrain.map_bloc[yPositionMin][xPositionMax]==nil)
-        and (self.equipe.terrain.map_bloc[yPositionMax][xPositionMax]==nil) then
+        if (self.equipe.terrain.getBlock(xPositionMin, yPositionMin) ~= nil)
+        and (self.equipe.terrain.getBlock(xPositionMin, yPositionMax) ~= nil)
+        and (self.equipe.terrain.getBlock(xPositionMax, yPositionMin) == nil)
+        and (self.equipe.terrain.getBlock(xPositionMax, yPositionMax) == nil) then
             self.posX = xPositionMax*TILESIZE-TILESIZE
         end
 
-        if (self.equipe.terrain.map_bloc[yPositionMax][xPositionMin]~=nil)
-        and (self.equipe.terrain.map_bloc[yPositionMax][xPositionMax]~=nil)
-        and (self.equipe.terrain.map_bloc[yPositionMin][xPositionMax]==nil)
-        and (self.equipe.terrain.map_bloc[yPositionMin][xPositionMin]==nil) then
+        if (self.equipe.terrain.getBlock(xPositionMin, yPositionMax) ~= nil)
+        and (self.equipe.terrain.getBlock(xPositionMax, yPositionMax) ~= nil)
+        and (self.equipe.terrain.getBlock(xPositionMax, yPositionMin) == nil)
+        and (self.equipe.terrain.getBlock(xPositionMin, yPositionMin) == nil) then
             self.posY = yPositionMin*TILESIZE-TILESIZE
         end
 
-        if (self.equipe.terrain.map_bloc[yPositionMin][xPositionMin]==nil)
-        and (self.equipe.terrain.map_bloc[yPositionMax][xPositionMin]==nil)
-        and (self.equipe.terrain.map_bloc[yPositionMin][xPositionMax]==nil)
-        and (self.equipe.terrain.map_bloc[yPositionMax][xPositionMax]==nil) then
+        if (self.equipe.terrain.getBlock(xPositionMin, yPositionMin) == nil)
+        and (self.equipe.terrain.getBlock(xPositionMin, yPositionMax) == nil)
+        and (self.equipe.terrain.getBlock(xPositionMax, yPositionMin) == nil)
+        and (self.equipe.terrain.getBlock(xPositionMax, yPositionMax) == nil) then
             self.posX = nextPositionX
             self.posY = nextPositionY
         end
@@ -123,7 +123,7 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
         xPositionMax = math.floor(((self.posX+(TILESIZE-1))/TILESIZE)+1)
         yPositionMax = math.floor(((nextPositionY+(TILESIZE-1))/TILESIZE)+1)
 
-        if yPositionMax>45 then
+        if yPositionMax > 45 then
         --self.pointDeVie=0
             for i=1, table.getn(self.equipe.personnages) do
                 if self==self.equipe.personnages[i] then
@@ -133,7 +133,8 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
             return "outOfBounds"
         end
 
-        if (self.equipe.terrain.map_bloc[yPositionMax][xPositionMin])~=nil or (self.equipe.terrain.map_bloc[yPositionMax][xPositionMax])~=nil then
+        if self.equipe.terrain.getBlock(xPositionMin, yPositionMax) ~= nil
+        or self.equipe.terrain.getBlock(xPositionMax, yPositionMax) ~= nil then
             return true
         end
 
@@ -272,12 +273,12 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
         if(nb_tileY > HEIGHT) then
             return true
         end
-        if(self.equipe.terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
-            self.equipe.terrain.map_bloc[nb_tileY][nb_tileX]:ChangeQuad(nil, self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].pdv - 1)
-            if(self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].pdv == 0) then
-                type_of_mat = self.equipe.terrain.map_bloc[nb_tileY][nb_tileX].type
+        if(self.equipe.terrain.getBlock(nb_tileX, nb_tileY) ~= nil) then
+            self.equipe.terrain.getBlock(nb_tileX, nb_tileY):ChangeQuad(nil, self.equipe.terrain.getBlock(nb_tileX, nb_tileY).pdv - 1)
+            if(self.equipe.terrain.getBlock(nb_tileX, nb_tileY).pdv == 0) then
+                type_of_mat = self.equipe.terrain.getBlock(nb_tileX, nb_tileY).type
                 table.insert(self.equipe.terrain.materiaux, Materiaux:New(type_of_mat, nb_tileX, nb_tileY, self.equipe.terrain))
-                self.equipe.terrain.map_bloc[nb_tileY][nb_tileX] = nil
+                self.equipe.terrain.destroy(nb_tileX, nb_tileY)
             end
             return true
         end
@@ -345,7 +346,7 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
             return true
         end
         -- Toucher un bloc
-        if(self.equipe.terrain.map_bloc[nb_tileY][nb_tileX] ~= nil) then
+        if(self.equipe.terrain.getBlock(nb_tileX, nb_tileY) ~= nil) then
             return true
         end
         --Toucher un autre personnage

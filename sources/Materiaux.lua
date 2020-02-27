@@ -3,14 +3,11 @@ require("var")
 Materiaux = {}
 Materiaux.__index = Materiaux
 
--- Vitesse en l'air
-local AIRSPEED = 1.8
-
--- Accélération de chute
-local GRAVITY = 0.15
-
--- Vitesse de chute maximale
-local MAX_SPEED_FALLING = 3.4
+require(TILESDIR.."Terre")
+require(TILESDIR.."Pierre")
+require(TILESDIR.."Fer")
+require(TILESDIR.."Soufre")
+require(TILESDIR.."Gold")
 
 function Materiaux:New(type, x_index, y_index, terrain)
     local this = {}
@@ -20,23 +17,19 @@ function Materiaux:New(type, x_index, y_index, terrain)
     this.type = type -- Terre, Pierre, Fer, Souffre, Gold
     this.terrain = terrain
     this.img = nil
-    this.Yspeed=0
-    this.Yacc=GRAVITY
+    this.Yspeed = 0
+    this.Yacc = GRAVITY
 
-    if this.type=="Terre" then
-        this.img = love.graphics.newImage(TEXTUREDIR.."Earth_Block_Fallen.png")
-    end
-    if this.type=="Pierre" then
-        this.img = love.graphics.newImage(TEXTUREDIR.."Stone_Block_Fallen.png") 
-    end
-    if this.type=="Fer" then
-        this.img = love.graphics.newImage(TEXTUREDIR.."Iron_Block_Fallen.png")
-    end
-    if this.type=="Souffre" then
-        this.img = love.graphics.newImage(TEXTUREDIR.."Sulfure_Block_Fallen.png")
-    end
-    if this.type=="Gold" then
-        this.img = love.graphics.newImage(TEXTUREDIR.."Gold_Block_Fallen.png")
+    if this.type == "Terre" then
+        this.img = Terre.fallen
+    elseif this.type == "Pierre" then
+        this.img = Pierre.fallen
+    elseif this.type == "Fer" then
+        this.img = Fer.fallen
+    elseif this.type == "Souffre" then
+        this.img = Soufre.fallen
+    elseif this.type == "Gold" then
+        this.img = Gold.fallen
     end
 
     this.draw = function ()
@@ -74,31 +67,31 @@ function Materiaux:New(type, x_index, y_index, terrain)
             return
         end
 
-        if (this.terrain.map_bloc[yPositionMin][xPositionMin]==nil)
-        and (this.terrain.map_bloc[yPositionMax][xPositionMin]==nil)
-        and (this.terrain.map_bloc[yPositionMin][xPositionMax]~=nil)
-        and (this.terrain.map_bloc[yPositionMax][xPositionMax]~=nil) then
+        if (this.terrain.getBlock(xPositionMin, yPositionMin) == nil)
+        and (this.terrain.getBlock(xPositionMin, yPositionMax) == nil)
+        and (this.terrain.getBlock(xPositionMax, yPositionMin) ~= nil)
+        and (this.terrain.getBlock(xPositionMax, yPositionMax) ~= nil) then
             this.posX = xPositionMin*TILESIZE-TILESIZE
         end
 
-        if (this.terrain.map_bloc[yPositionMin][xPositionMin]~=nil)
-        and (this.terrain.map_bloc[yPositionMax][xPositionMin]~=nil)
-        and (this.terrain.map_bloc[yPositionMin][xPositionMax]==nil)
-        and (this.terrain.map_bloc[yPositionMax][xPositionMax]==nil) then
+        if (this.terrain.getBlock(xPositionMin, yPositionMin) ~= nil)
+        and (this.terrain.getBlock(xPositionMin, yPositionMax) ~= nil)
+        and (this.terrain.getBlock(xPositionMax, yPositionMin) == nil)
+        and (this.terrain.getBlock(xPositionMax, yPositionMax) == nil) then
             this.posX = xPositionMax*TILESIZE-TILESIZE
         end
 
-        if (this.terrain.map_bloc[yPositionMax][xPositionMin]~=nil)
-        and (this.terrain.map_bloc[yPositionMax][xPositionMax]~=nil)
-        and (this.terrain.map_bloc[yPositionMin][xPositionMax]==nil)
-        and (this.terrain.map_bloc[yPositionMin][xPositionMin]==nil) then
+        if (this.terrain.getBlock(xPositionMin, yPositionMax) ~= nil)
+        and (this.terrain.getBlock(xPositionMax, yPositionMax) ~= nil)
+        and (this.terrain.getBlock(xPositionMax, yPositionMin) == nil)
+        and (this.terrain.getBlock(xPositionMin, yPositionMin) == nil) then
             this.posY = yPositionMin*TILESIZE-TILESIZE
         end
 
-        if (this.terrain.map_bloc[yPositionMin][xPositionMin]==nil)
-        and (this.terrain.map_bloc[yPositionMax][xPositionMin]==nil)
-        and (this.terrain.map_bloc[yPositionMin][xPositionMax]==nil)
-        and (this.terrain.map_bloc[yPositionMax][xPositionMax]==nil) then
+        if (this.terrain.getBlock(xPositionMin, yPositionMin) == nil)
+        and (this.terrain.getBlock(xPositionMin, yPositionMax) == nil)
+        and (this.terrain.getBlock(xPositionMax, yPositionMin) == nil)
+        and (this.terrain.getBlock(xPositionMax, yPositionMax) == nil) then
             this.posX = nextPositionX
             this.posY = nextPositionY
         end
@@ -114,7 +107,7 @@ function Materiaux:New(type, x_index, y_index, terrain)
         if yPositionMax>44 then
             return "outOfBounds"
         end
-        if (this.terrain.map_bloc[yPositionMax][xPositionMin])~=nil or (this.terrain.map_bloc[yPositionMax][xPositionMax])~=nil then
+        if (this.terrain.getBlock(xPositionMin, yPositionMax)) ~= nil or (this.terrain.getBlock(xPositionMax, yPositionMax)) ~= nil then
             return true
         end
         return false

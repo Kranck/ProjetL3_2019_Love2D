@@ -4,6 +4,7 @@ require(SRCDIR.."Tile")
 
 Gold = Tile:New()
 Gold.sprite = love.graphics.newImage(TEXTUREDIR.."Gold_Block.png")
+Gold.fallen = love.graphics.newImage(TEXTUREDIR.."Gold_Block_Fallen.png")
 Gold.__index = Gold
 Gold.__type = "Gold"
 Gold.hp = 7

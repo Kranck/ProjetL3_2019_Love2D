@@ -3,6 +3,7 @@ require(SRCDIR.."Tile")
 
 Pierre = Tile:New()
 Pierre.sprite = love.graphics.newImage(TEXTUREDIR.."Stone_Block.png")
+Pierre.fallen = love.graphics.newImage(TEXTUREDIR.."Stone_Block_Fallen.png")
 Pierre.__index = Pierre
 Pierre.hp = 5
 

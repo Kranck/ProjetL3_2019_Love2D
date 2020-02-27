@@ -3,6 +3,7 @@ require(SRCDIR.."Tile")
 
 Soufre = Tile:New()
 Soufre.sprite = love.graphics.newImage(TEXTUREDIR.."Sulfure_Block.png")
+Soufre.fallen = love.graphics.newImage(TEXTUREDIR.."Sulfure_Block_Fallen.png")
 Soufre.__index = Soufre
 Soufre.__type = "Soufre"
 Soufre.hp = 7
