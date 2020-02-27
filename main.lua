@@ -102,11 +102,15 @@ function love.update()
     
     -- check if a personnage has been knocked out of the map
     for i, t in ipairs(terrain.teams) do
+        to_remove = {}
         for j, p in ipairs(t.personnages) do
             local persoCheckedGrounded = p.isGrounded()
             if persoCheckedGrounded == "outOfBounds" then
-                table.remove(t, j)
+                table.insert(to_remove, j)
             end
+        end
+        for j=1, table.getn(to_remove) do
+            table.remove(t.personnages, to_remove[j])
         end
     end
 
