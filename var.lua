@@ -23,6 +23,8 @@ LEFT = -1
 DEBUG = true
 
 --------------- Game Parameters ---------------
+PLAY = true
+
 CHAR_HP = 100
 CHAR_NB = 4
 TEAM_NB = 2

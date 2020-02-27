@@ -22,11 +22,10 @@ local terrain = Terrain:New(HEIGHT, WIDTH)
 local current_team_nb = 2
 local perso = nil
 
-TEAM_COLOR_STR = {"#E03A3E", "#002B5C"}
 
 -- On instancie les équipes et les personnages
 for i=1, TEAM_NB do
-    table.insert(terrain.teams, Equipe:New(terrain, TEAM_COLOR_STR[i], "Equipe "..i))
+    table.insert(terrain.teams, Equipe:New(terrain, TEAM_COLORS[i], "Equipe "..i))
 end
 
 -- Premier personnage à jouer
