@@ -147,6 +147,23 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         end
     end
 
+    local isOnPersonnage = function()
+        for i=1, table.getn(self.terrain.teams) do
+            for j=1, table.getn(self.terrain.teams[i].personnages) do
+                if not(self.number == self.terrain.teams[i].personnages[j].getNumber() and self.equipe.color==self.terrain.teams[i].personnages[j].getEquipe().color) then
+                    pos = self.terrain.teams[i].personnages[j].getPos()
+                    if (pos.posY < self.posY+TILESIZE-1+4 and self.posY+TILESIZE-1+4 < pos.posY+TILESIZE-1) then
+                        if (self.posX < pos.posX and self.posX +TILESIZE-1 > pos.posX ) or (self.posX<pos.posX+TILESIZE-1 and self.posX+TILESIZE-1>pos.posX+TILESIZE-1) or (self.posX==pos.posX) then
+                            return true
+                        else
+                            return false
+                        end
+                    end
+                end
+            end
+        end
+    end
+
     -- Le personnage touche-t-il le sol ?
     local isGrounded = function ()
         actualPositionY = self.posY
@@ -167,7 +184,7 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         end
 
         if self.equipe.terrain.getBlock(xPositionMin, yPositionMax) ~= nil
-        or self.equipe.terrain.getBlock(xPositionMax, yPositionMax) ~= nil then
+        or self.equipe.terrain.getBlock(xPositionMax, yPositionMax) ~= nil or isOnPersonnage() then
             return true
         end
 
