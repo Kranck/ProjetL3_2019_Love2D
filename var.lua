@@ -52,7 +52,7 @@ PLAY = PLAY_TYPE_TABLE.normal
 
 CHAR_HP = 100
 CHAR_NB = 4
-TEAM_NB = 2
+TEAM_NB = 3
 
 ------------------- DESIGN --------------------
 
@@ -61,6 +61,6 @@ TEAM_COLORS = {
 	'#002B5C',
 	'#00471B',
 	'#FFCD00',
-	'#5A2D81',
+	'#692261',
 	'#C4CED4',
 }
