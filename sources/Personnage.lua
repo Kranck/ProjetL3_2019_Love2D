@@ -7,7 +7,7 @@ Personnage = {}
 Personnage.__index = Personnage
 
 
-function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles différentes
+function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Tiles différentes
     -- stocker le reste dans terrain : utiliset la séquence de Halton
 
     -- Sprite où chercher les images
@@ -33,7 +33,8 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
         Xacc = 0,   -- Horizontal acceleration
         Yspeed = 0, -- Vertical Speed
         Yacc = GRAVITY, -- Vertical acceleration
-        equipe = e
+        equipe = e,
+        number = nb
     }
 
     -- Modifie la position du personnage vers les nouveaux points x, y en vérifiant qu'on reste dans
@@ -63,6 +64,34 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
 
         if yPositionMax > 45 or xPositionMax > 80 then
             return
+        end
+
+        for i=1, table.getn(self.terrain.teams) do
+            for j=1, table.getn(self.terrain.teams[i].personnages) do
+                if not(self.number == self.terrain.teams[i].personnages[j].getNumber() and self.equipe.color==self.terrain.teams[i].personnages[j].getEquipe().color) then
+                    pos = self.terrain.teams[i].personnages[j].getPos()
+                    if(nextPositionX==pos.posX and nextPositionY==pos.posY) then
+                        return
+                    end
+                    c1 = ((pos.posX<nextPositionX+TILESIZE-1 and pos.posX+TILESIZE-1>nextPositionX+TILESIZE-1) and (pos.posY<nextPositionY+TILESIZE-1 and pos.posY+TILESIZE-1>nextPositionY+TILESIZE-1))
+                    c2 = ((pos.posX<nextPositionX and pos.posX+TILESIZE-1>nextPositionX) and (pos.posY<nextPositionY+TILESIZE-1 and pos.posY+TILESIZE-1>nextPositionY+TILESIZE-1))
+                    c3 = ((pos.posX<nextPositionX+TILESIZE-1 and pos.posX+TILESIZE-1>nextPositionX+TILESIZE-1) and (pos.posY<nextPositionY and pos.posY+TILESIZE-1>nextPositionY)) 
+                    c4 = ((pos.posX<nextPositionX and pos.posX+TILESIZE-1>nextPositionX) and (pos.posY<nextPositionY and pos.posY+TILESIZE-1>nextPositionY))
+                    if(nextPositionY==pos.posY) then
+                        if ((pos.posX<nextPositionX and nextPositionX<pos.posX+TILESIZE-1) or (pos.posX<nextPositionX+TILESIZE-1 and nextPositionX+TILESIZE-1<pos.posX+TILESIZE-1)) then
+                            return
+                        end
+                    end
+                    if(nextPositionX==pos.posX) then
+                        if ((pos.posY<nextPositionY and pos.posY+TILESIZE-1>nextPositionY) or (pos.posY<nextPositionY+TILESIZE-1 and pos.posY+TILESIZE-1>nextPositionY+TILESIZE-1)) then
+                            return
+                        end
+                    end
+                    if (c1 or c2 or c3 or c4) then
+                        return
+                    end
+                end
+            end
         end
 
         if (self.equipe.terrain.getBlock(xPositionMin, yPositionMin) == nil)
@@ -442,6 +471,10 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
     -- Getter Range
     local getRange = function () return self.range end
 
+    local getEquipe = function () return self.equipe end
+
+    local getNumber = function () return self.number end
+
     
     -- Vérifie la vie d'un personnage
     local isDead = function ()
@@ -481,6 +514,8 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
         setHP = setHP,
         equipe = equipe,
         Tirer = Tirer,
+        getEquipe = getEquipe,
+        getNumber = getNumber
     }
 
 end -- End Personnage:New
