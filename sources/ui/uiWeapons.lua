@@ -31,9 +31,22 @@ local colorTable = {
 	['tab header'] = '#fdf6e3'
 }
 
-local style_table = {
+local style_table_general = {
     ['window'] = {
-        ['rounding'] = 150, -- border-radius = 15px
+        ['padding'] = {x = 3, y = 4},
+        ['group padding'] = {x = 0, y = 0}
+    }
+}
+
+local style_table_inner_group_weapons = {
+    ['window'] = {
+        ['group padding'] = {x = 4, y = 8}
+    }
+}
+
+local style_table_inner_group_craft = {
+    ['window'] = {
+        ['group padding'] = {x = 4, y = 2}
     }
 }
 
@@ -65,20 +78,33 @@ local style = {}
 
 return function (ui)
     ui:styleLoadColors(colorTable)
-    ui:stylePush(style_table)
+    ui:stylePush(style_table_general)
 
     if ui:windowBegin('Weapons Menu', widget_width_padding,
     widget_height_padding, widget_width, widget_height) then
-        ui:layoutRow('dynamic', widget_height - 8, {0.63, 0.37})
-        if ui:groupBegin('Weapons', 'border') then
-            ui:layoutRow('static', TILESIZE, TILESIZE, 6)
-            for _, w in ipairs(weapons_imgs) do
-                ui:button(nil, w)
+        local weapon_selection_height = widget_height - 8
+        ui:layoutRow('dynamic', weapon_selection_height, {0.63, 0.37})
+        if ui:groupBegin('WeaponsAndCraft') then
+            ui:layoutRow('dynamic', weapon_selection_height*2/3 - 11, 1)
+            ui:stylePush(style_table_inner_group_weapons)
+            if ui:groupBegin('Weapons', 'border') then
+                ui:layoutRow('static', TILESIZE + 4, TILESIZE + 4, 5)
+                for _, w in ipairs(weapons_imgs) do
+                    ui:button(nil, w)
+                end
+                ui:groupEnd() -- End of 'Weapons'
             end
-            ui:groupEnd()
+            ui:stylePop()
+            ui:layoutRow('dynamic', weapon_selection_height/3 + 5, 1)
+            ui:stylePush(style_table_inner_group_craft)
+            if ui:groupBegin('Craft', 'border') then
+                ui:groupEnd() -- End of 'Craft'
+            end
+            ui:groupEnd() -- End of 'WeaponsAndCraft'
+            ui:stylePop()
         end
-        if ui:groupBegin('Craft', 'border') then
-            ui:groupEnd()
+        if ui:groupBegin('Info', 'border') then
+            ui:groupEnd() -- End of 'Info'
         end
 	end
     ui:windowEnd()
