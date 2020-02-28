@@ -41,6 +41,7 @@ end
 
 -- LOAD FUNCTION -> chargés au lancement de l'appli
 function love.load()
+    dt_destroyBlock = 0
     uiMenu   = nuklear.newUI()
     uiInGame = nuklear.newUI()
     uiWeapons= nuklear.newUI() 
@@ -117,10 +118,6 @@ end
 
 function love.keypressed(key)
     if PLAY == PLAY_TYPE_TABLE.normal then
-        -- Casser un bloc
-        if key == 'f' then
-            perso.DestroyBlock()
-        end
         -- Tirer
         if key == 'e' then
             perso.Tirer()
@@ -152,7 +149,8 @@ end
 -----------------------------------------------  UPDATE SECTION  -----------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
 
-function love.update()
+function love.update(dt)
+    dt_destroyBlock = dt_destroyBlock + dt
     if PLAY == PLAY_TYPE_TABLE.normal or PLAY == PLAY_TYPE_TABLE.weapons then
         uiInGame:frameBegin()
             InGame(uiInGame, perso.getItems(), terrain.teams)
@@ -212,6 +210,11 @@ function love.update()
                 perso.Jump(grounded)
             end
             
+            if love.keyboard.isScancodeDown("f") and dt_destroyBlock > CD_DESTROYBLOCK then
+                perso.DestroyBlock()
+                dt_destroyBlock = 0
+            end
+
             love.wheelmoved(0, 0)
         end
         

@@ -391,7 +391,6 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
                 if(pos.posX ~= self.posX or pos.posY ~= self.posY) then
                     if(x >= pos.posX and x <= pos.posX + TILESIZE and y >= pos.posY and y <= pos.posY + TILESIZE) then
                         other.setHP(other.getHP() - 20)
-                        print(other.getHP())
                         return true
                     end
                 end
