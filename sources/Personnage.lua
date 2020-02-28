@@ -374,7 +374,8 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
             for n_perso=1 , table.getn(self.terrain.teams[n_equipe].getPersonnages()) do
                 local other = self.terrain.teams[n_equipe].getPersonnages()[n_perso]
                 local pos = other.getPos()
-                if(pos.posX ~= self.posX or pos.posY ~= self.posY) then
+                -- On parcours tous les autres joueurs
+                if(self.equipe.name ~= other.getEquipe().name or self.number ~= other.getNumber()) then
                     if(x >= pos.posX and x <= pos.posX + TILESIZE and y >= pos.posY and y <= pos.posY + TILESIZE) then
                         other.setHP(other.getHP() - 20)
                         return true
