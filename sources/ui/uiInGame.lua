@@ -49,13 +49,13 @@ return function (ui, blocks, teams)
 		ui:layoutRow('dynamic', 30, 1)
 		for i, t in ipairs(teams) do
 			local team_life = 0
-			for _, perso in ipairs(t.personnages) do
+			for _, perso in ipairs(t.getPersonnages()) do
 				team_life = team_life + perso.getHP()
 			end
 			-- Change the style of thhe progress bar to adapt it to the team color
-			progress_style.progress['cursor normal'] = t.color
-			progress_style.progress['cursor hover'] = t.color
-			progress_style.progress['cursor active'] = t.color
+			progress_style.progress['cursor normal'] = t.getColor()
+			progress_style.progress['cursor hover'] = t.getColor()
+			progress_style.progress['cursor active'] = t.getColor()
 
 			ui:stylePush(progress_style)
 				ui:progress(team_life, CHAR_NB * CHAR_HP, false)

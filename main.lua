@@ -35,7 +35,7 @@ local init_game = function ()
     end
 
     -- Premier personnage à jouer
-    perso = terrain.teams[current_team_nb].personnages[current_team_nb]
+    perso = terrain.teams[current_team_nb].getPersonnages()[current_team_nb]
 end
 
 
@@ -167,20 +167,22 @@ function love.update(dt)
         -- check if a personnage has been knocked out of the map or is dead
         for i, t in ipairs(terrain.teams) do
             to_remove = {}
-            for j, p in ipairs(t.personnages) do
+            for j, p in ipairs(t.getPersonnages()) do
                 local persoCheckedGrounded = p.isGrounded()
                 if persoCheckedGrounded == "outOfBounds" or p.getHP()<=0 then
                     table.insert(to_remove, j)
                 end
             end
             for j=1, table.getn(to_remove) do
-                table.remove(t.personnages, to_remove[j])
+                table.remove(t.getPersonnages(), to_remove[j])
             end
         end
 
         if grounded == "outOfBounds" or perso.getHP()<=0 then
             perso = terrain.nextPerso(current_team_nb)
         end
+        
+        terrain.update()
 
         local moved = false -- Reset : le personnage ne s'est pas déplacer pendant cette frame
         

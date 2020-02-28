@@ -37,7 +37,7 @@ MAX_SPEED_FALLING = 3.4
 RANGE = TILESIZE * 2
 
 -- Délai pour les actions (en secondes)
-CD_DESTROYBLOCK = 1
+CD_DESTROYBLOCK = 0.3
 
 --------------- Option de debug ---------------
 DEBUG = true

@@ -19,6 +19,26 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
                     teams = {},
                 }
 
+    local update = function ()
+        local to_remove = {}
+        if self.materiaux[1] ~= nil then
+            for i=1, table.getn(self.materiaux) do
+                grounded = self.materiaux[i].isGrounded()
+                if grounded=="outOfBounds" then
+                    table.insert(to_remove, i)
+                end
+            end
+        end
+        for i=1, table.getn(to_remove) do
+            table.remove(self.materiaux, to_remove[i])
+        end
+        for i, m in ipairs(self.materiaux) do
+            m.update()
+        end
+        for i, t in ipairs(self.teams) do
+            t.update()
+        end
+    end
     -- fonction d'affichage pour love.draw
     local draw = function () 
         for y=1, self.height do
@@ -28,31 +48,17 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
                 end
             end
         end
-        local to_remove = {}
-        if self.materiaux[1] ~= nil then
-            for i=1, table.getn(self.materiaux) do
-                grounded = self.materiaux[i].isGrounded()
-                if grounded=="outOfBounds" then
-                    table.insert(to_remove, i)
-                else
-                    self.materiaux[i].Move(grounded)
-                end
-            end
-        end
-        for i=1, table.getn(to_remove) do
-            table.remove(self.materiaux, to_remove[i])
-        end
+        for i, m in ipairs(self.materiaux) do
+            m.draw()
+        end 
         for i, t in ipairs(self.teams) do
-            for j, p in ipairs(t.personnages) do
-                grounded = p.isGrounded()
-                p.Move(grounded, false)
-            end
+            t.draw()
         end
     end
 
     -- Choix du perso suivant pour le prochain tour
     local nextPerso = function(team_nb)
-        return self.teams[team_nb].personnages[1]
+        return self.teams[team_nb].getPersonnages()[1]
         --debut implem pour multi-team
         --local next_team = 1
         --if(team_nb ~= TEAM_NB) then
@@ -217,6 +223,7 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
         generateMap = generateMap,
         nextPerso = nextPerso,
         draw = draw,
+        update = update,
         getBlock = getBlock,
         destroy = destroy,
         teams = self.teams,
