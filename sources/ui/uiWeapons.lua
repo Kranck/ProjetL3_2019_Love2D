@@ -37,11 +37,29 @@ local style_table = {
     }
 }
 
-local widget_width  = 0.7 * WINDOW_WIDTH
-local widget_height = 0.8 * WINDOW_HEIGHT
+local weapons_imgs = {}
+table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'pistol.png'))
+table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'ammo.png'))
+table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'pistol.png'))
+table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'ammo.png'))
+table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'pistol.png'))
+table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'ammo.png'))
+table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'pistol.png'))
+table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'ammo.png'))
+table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'pistol.png'))
+table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'ammo.png'))
+table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'pistol.png'))
+table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'ammo.png'))
+table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'pistol.png'))
+table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'ammo.png'))
+table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'pistol.png'))
+table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'ammo.png'))
 
-local widget_width_padding  = 0.15 * WINDOW_WIDTH
-local widget_height_padding = 0.1  * WINDOW_HEIGHT 
+local widget_width  = 0.3 * WINDOW_WIDTH
+local widget_height = 0.4 * WINDOW_HEIGHT
+
+local widget_width_padding  = (WINDOW_WIDTH - widget_width)/2
+local widget_height_padding = (WINDOW_HEIGHT - widget_height)/2 
 
 local style = {}
 
@@ -51,8 +69,12 @@ return function (ui)
 
     if ui:windowBegin('Weapons Menu', widget_width_padding,
     widget_height_padding, widget_width, widget_height) then
-        ui:layoutRow('dynamic', widget_height - 8, {0.65, 0.35})
+        ui:layoutRow('dynamic', widget_height - 8, {0.63, 0.37})
         if ui:groupBegin('Weapons', 'border') then
+            ui:layoutRow('static', TILESIZE, TILESIZE, 6)
+            for _, w in ipairs(weapons_imgs) do
+                ui:button(nil, w)
+            end
             ui:groupEnd()
         end
         if ui:groupBegin('Craft', 'border') then

@@ -9,7 +9,7 @@ WEAPONDIR = "sources/weapons/"
 ------------------ Tailles --------------------
 WINDOW_HEIGHT = 720
 WINDOW_WIDTH  = 1280
-HEIGHT =  WINDOW_HEIGHT/16  -- 45
+HEIGHT = WINDOW_HEIGHT/16  -- 45
 WIDTH  = WINDOW_WIDTH/16 -- 80
 
 -- Taille du pavage
