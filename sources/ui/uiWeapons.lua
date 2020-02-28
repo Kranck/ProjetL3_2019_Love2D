@@ -158,7 +158,7 @@ local widget_height_padding = (WINDOW_HEIGHT - widget_height)/2
 
 local style = {}
 
-return function (ui)
+return function (ui, team)
     ui:styleLoadColors(colorTable)
     ui:stylePush(style_table_general)
 
@@ -182,6 +182,17 @@ return function (ui)
             ui:layoutRow('dynamic', weapon_selection_height/3 + 5, 1)
             ui:stylePush(style_table_inner_group_craft)
             if ui:groupBegin('Craft', 'border') then
+                ui:layoutRow('dynamic', 1 , 1)
+                ui:spacing(1)
+                ui:layoutRow('dynamic', 34 , {0.08, 0.84, 0.08})
+                ui:spacing(1)
+                if ui:button("Craft avec Or") then
+                    -- TODO ajouter arme current_weapon à team et enlever montant en or 
+                end
+                ui:spacing(2)
+                if ui:button("Craft avec Matériaux") then
+                    -- TODO ajouter arme current_weapon à team et enlever matériaux
+                end
                 ui:groupEnd() -- End of 'Craft'
             end
             ui:groupEnd() -- End of 'WeaponsAndCraft'
