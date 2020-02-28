@@ -13,7 +13,6 @@ local progress_style = {
 		['border'] = 1,
 		['border color'] = '#2d2d2d' -- default window color
 	},
-
 }
 
 
@@ -27,12 +26,15 @@ return function (ui, blocks, teams)
 		ui:image(love.graphics.newImage(TEXTUREDIR..'Iron_Block.png'))
 		ui:image(love.graphics.newImage(TEXTUREDIR..'Sulfure_Block.png'))
 		ui:image(love.graphics.newImage(TEXTUREDIR..'Gold_Block.png'))
-
-		ui:text(blocks.earth, x + 7, y + 22, 10, 10)
-		ui:text(blocks.stone, x + 7 + TILESIZE + 4, y + 22, 10, 10)
-		ui:text(blocks.iron, x + 7 + (TILESIZE + 4) * 2, y + 22, 10, 10)
-		ui:text(blocks.sulfure, x + 7 + (TILESIZE + 4) * 3, y + 22, 10, 10)
-		ui:text(blocks.gold, x + 7 + (TILESIZE + 4) * 4, y + 22, 10, 10)
+		
+		
+		love.graphics.setColor(0, 0, 0)
+			ui:text(blocks.earth, x + 7, y + 22, 10, 10)
+			ui:text(blocks.stone, x + 7 + TILESIZE + 4, y + 22, 10, 10)
+			ui:text(blocks.iron, x + 7 + (TILESIZE + 4) * 2, y + 22, 10, 10)
+			ui:text(blocks.sulfure, x + 7 + (TILESIZE + 4) * 3, y + 22, 10, 10)
+			ui:text(blocks.gold, x + 7 + (TILESIZE + 4) * 4, y + 22, 10, 10)
+		love.graphics.setColor(1, 1, 1) -- => white / default color
         
 	end
 	ui:windowEnd()

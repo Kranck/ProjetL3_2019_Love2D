@@ -43,7 +43,7 @@ DEBUG = true
 PLAY_TYPE_TABLE = { ['normal']  = 1, --> normal
                     ['weapons'] = 2, --> menu arme/craft
                     ['pause']   = 3, --> menu pause
-                    ['main']    = 4, --> mnu principal
+                    ['main']    = 4, --> menu principal
                     }
 PLAY = PLAY_TYPE_TABLE.normal
 

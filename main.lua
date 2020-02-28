@@ -55,17 +55,64 @@ end
 -- ! INFOS : On fait les modif uniqement si on se trouve dans le bon "PLAY" cf var.lua
 
 function love.keyreleased(key)
-    -- Dès qu'on appuie sur entrée génère une nouvelle map et la redessine
-    if PLAY == PLAY_TYPE_TABLE.normal and key == "return" then
-        init_game()        
-        for i=1, CHAR_NB do
-            if key == ""..i then
-                if terrain.teams[current_team_nb].personnages[i] ~= nil then
-                    perso = terrain.teams[current_team_nb].personnages[i]
-                end
-            end 
+    if PLAY == PLAY_TYPE_TABLE.normal then
+        -- Passe en mode craft
+        if key == "c" then
+            love.keyboard.setKeyRepeat(false) -- Deactivate repeat on keyboard keys
+            PLAY = PLAY_TYPE_TABLE.weapons
         end
+        -- Passe en mode menu pause
+        if key == "escape" then
+            love.keyboard.setKeyRepeat(false) -- Deactivate repeat on keyboard keys
+            PLAY = PLAY_TYPE_TABLE.pause
+        end
+
+        -- Regénère une nouvelle map et la redessine
+        if key == "return" then
+            init_game()        
+            for i=1, CHAR_NB do
+                if key == ""..i then
+                    if terrain.teams[current_team_nb].personnages[i] ~= nil then
+                        perso = terrain.teams[current_team_nb].personnages[i]
+                    end
+                end 
+            end
+        end
+
+        return
     end
+
+
+    if PLAY == PLAY_TYPE_TABLE.weapons then
+        -- Repasse en mode normal à partir du mode craft
+        if key == "c" then
+            love.keyboard.setKeyRepeat(true) -- Re-enable Key Repeat
+            PLAY = PLAY_TYPE_TABLE.normal
+        end
+        -- Passe en mode menu pause
+        if key == "escape" then
+            love.keyboard.setKeyRepeat(false) -- Deactivate repeat on keyboard keys
+            PLAY = PLAY_TYPE_TABLE.pause
+        end
+
+        return
+    end
+
+
+    if PLAY == PLAY_TYPE_TABLE.pause then 
+        -- Repasse en mode normal à partir du mode menu pause
+        if key == "escape" then
+            love.keyboard.setKeyRepeat(true) -- Re-enable Key Repeat
+            PLAY = PLAY_TYPE_TABLE.normal
+        end
+        
+        return
+    end
+
+    -- Main menu
+    if PLAY == PLAY_TYPE_TABLE.main then
+    end
+    
 end
 
 function love.keypressed(key)
@@ -172,6 +219,7 @@ function love.update()
         ------  Binding des touches en mode Choix des armes / Craft  ------
         -------------------------------------------------------------------
         if PLAY == PLAY_TYPE_TABLE.weapons then
+
         end
     end
         
