@@ -274,7 +274,7 @@ function love.draw()
             uiWeapons:draw()
         end
         if(PLAY == PLAY_TYPE_TABLE.pause) then
-            love.graphics.setColor(2/255, 2/255, 2/255, 0.5)
+            love.graphics.setColor(2/255, 2/255, 2/255, 0.7)
             love.graphics.rectangle("fill", 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
             love.graphics.setColor(1,1,1,1) -- default
             uiPause:draw()
