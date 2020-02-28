@@ -112,7 +112,7 @@ function love.keyreleased(key)
     -- Main menu
     if PLAY == PLAY_TYPE_TABLE.main then
     end
-    
+
 end
 
 function love.keypressed(key)
@@ -219,7 +219,9 @@ function love.update()
         ------  Binding des touches en mode Choix des armes / Craft  ------
         -------------------------------------------------------------------
         if PLAY == PLAY_TYPE_TABLE.weapons then
-
+            uiWeapons:frameBegin()
+                Weapons(uiWeapons)
+            uiWeapons:frameEnd()
         end
     end
         
@@ -227,6 +229,9 @@ function love.update()
     ------  Binding des touches en mode Menu pause  ------
     ------------------------------------------------------
     if PLAY == PLAY_TYPE_TABLE.pause then
+        uiInGame:frameBegin()
+            InGame(uiInGame, perso.getItems(), terrain.teams)
+        uiInGame:frameEnd()
         uiMenu:frame(Pause)
     end
 
@@ -246,10 +251,12 @@ end
 ----------------------------------------------------------------------------------------------------------------
 
 function love.draw()
-    if(PLAY == PLAY_TYPE_TABLE.normal or PLAY == PLAY_TYPE_TABLE.weapons or PLAY == PLAY_TYPE_TABLE.pause) then
+    if PLAY == PLAY_TYPE_TABLE.normal or PLAY == PLAY_TYPE_TABLE.weapons or PLAY == PLAY_TYPE_TABLE.pause then
         Camera:set()
-        -- draw order -> terrain -> equipe -> personnages
-        terrain.draw()
+        --if PLAY == PLAY_TYPE_TABLE.normal or PLAY == PLAY_TYPE_TABLE.weapons then
+            -- draw order -> terrain -> equipe -> personnages
+            terrain.draw()
+        --end
         Camera:setPosition(perso)
         -- On affiche le curseur pour la visée
         perso.DrawCursor()
@@ -262,7 +269,11 @@ function love.draw()
         end
         if(PLAY == PLAY_TYPE_TABLE.weapons) then
             uiWeapons:draw()
-        elseif(PLAY == PLAY_TYPE_TABLE.pause) then
+        end
+        if(PLAY == PLAY_TYPE_TABLE.pause) then
+            love.graphics.setColor(2/255, 2/255, 2/255, 0.5)
+            love.graphics.rectangle("fill", 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
+            love.graphics.setColor(1,1,1,1) -- default
             uiPause:draw()
         end
     elseif(PLAY == PLAY_TYPE_TABLE.main) then
