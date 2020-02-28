@@ -36,7 +36,7 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
             m.update()
         end
         for i, t in ipairs(self.teams) do
-            t.update()
+            t.update(moved)
         end
     end
     -- fonction d'affichage pour love.draw
@@ -52,7 +52,7 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
             m.draw()
         end 
         for i, t in ipairs(self.teams) do
-            t.draw()
+            t.draw(moved)
         end
     end
 

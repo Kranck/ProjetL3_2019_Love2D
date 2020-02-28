@@ -20,17 +20,17 @@ function Equipe:New(t, color, name)
         table.insert(self.personnages, Personnage:New(self, color, i))
     end
 
-    local draw = function ()
+    local draw = function (moved)
         for j, p in ipairs(self.personnages) do
             grounded = p.isGrounded()
-            p.draw(grounded, false)
+            p.draw(grounded, moved)
         end
     end
 
-    local update = function ()
+    local update = function (moved)
         for j, p in ipairs(self.personnages) do
             grounded = p.isGrounded()
-            p.update(grounded, false)
+            p.update(grounded, moved)
         end
     end
 
