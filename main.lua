@@ -66,11 +66,13 @@ function love.keyreleased(key, scancode)
         if key == "c" then
             love.keyboard.setKeyRepeat(false) -- Deactivate repeat on keyboard keys
             PLAY = PLAY_TYPE_TABLE.weapons
+            return
         end
         -- Passe en mode menu pause
         if key == "escape" then
             love.keyboard.setKeyRepeat(false) -- Deactivate repeat on keyboard keys
             PLAY = PLAY_TYPE_TABLE.pause
+            return
         end
 
         -- Regénère une nouvelle map et la redessine
@@ -83,6 +85,7 @@ function love.keyreleased(key, scancode)
                     end
                 end 
             end
+            return
         end
 
         return
@@ -110,7 +113,7 @@ function love.keyreleased(key, scancode)
             love.keyboard.setKeyRepeat(true) -- Re-enable Key Repeat
             PLAY = PLAY_TYPE_TABLE.normal
         else
-            ui_input(uiPause, 'keypressed', key, scancode)
+            ui_input(uiPause, 'keyreleased', key, scancode)
         end
         
         return
@@ -122,7 +125,7 @@ function love.keyreleased(key, scancode)
 
 end
 
-function love.keypressed(key)
+function love.keypressed(key, scancode, isrepeat)
     if PLAY == PLAY_TYPE_TABLE.normal then
         -- Tirer
         if key == 'e' then
