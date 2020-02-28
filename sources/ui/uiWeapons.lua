@@ -1,7 +1,7 @@
 require('var')
 
 local colorTable = {
-	['text'] = '#afafaf',
+	['text'] = '#000000',
 	['window'] = '#eee8d5',
 	['header'] = '#fdf6e3',
 	['border'] = '#414141',
@@ -34,8 +34,11 @@ local colorTable = {
 local style_table_general = {
     ['window'] = {
         ['padding'] = {x = 3, y = 4},
-        ['group padding'] = {x = 0, y = 0}
-    }
+        ['group padding'] = {x = 0, y = 0},
+    },
+    ['button'] = {
+        ['border color'] = '#fdf6e3',
+    },
 }
 
 local style_table_inner_group_weapons = {
@@ -48,6 +51,19 @@ local style_table_inner_group_craft = {
     ['window'] = {
         ['group padding'] = {x = 4, y = 2}
     }
+}
+
+local style_group_info = {
+    ['window'] = {
+        ['group padding'] = {x = 5, y = 10},
+
+    },
+    ['button'] = {
+        ['normal'] = '#323232',
+        ['hover']  = '#323232',
+        ['active'] = '#323232',
+        ['border color'] = '#323232',
+    },
 }
 
 local weapons_imgs = {}
@@ -171,15 +187,37 @@ return function (ui)
             ui:groupEnd() -- End of 'WeaponsAndCraft'
             ui:stylePop()
         end
+        ui:stylePush(style_group_info)
         if ui:groupBegin('Info', 'border') then
             if current_weapon ~= nil then
                 ui:layoutRow('dynamic', 2 * TILESIZE, {0.2, 0.6, 0.2})
                 ui:spacing(1)
                 ui:button(nil, current_weapon.img)
+                ui:layoutRow('dynamic', 15, 1)
                 ui:spacing(1)
+                ui:label("Damages : "..current_weapon.dmg.." hp")
+                ui:label("Disponibles : "..current_weapon.num)
+                ui:label("En Or : "..current_weapon.cost.Gold, 'centered')
+                if  current_weapon.cost.Terre ~= 0 or current_weapon.cost.Souffre ~= 0
+                or current_weapon.cost.Pierre ~= 0 or current_weapon.cost.Fer ~= 0 then
+                    ui:label("OU", 'centered')
+                end
+                if current_weapon.cost.Terre ~= 0 then
+                    ui:label(current_weapon.cost.Terre.." blocs de Terre", 'centered')
+                end
+                if current_weapon.cost.Pierre ~= 0 then
+                    ui:label(current_weapon.cost.Pierre.." blocs de Terre", 'centered')
+                end
+                if current_weapon.cost.Fer ~= 0 then
+                    ui:label(current_weapon.cost.Fer.." blocs de Terre", 'centered')
+                end
+                if current_weapon.cost.Souffre ~= 0 then
+                    ui:label(current_weapon.cost.Souffre.." blocs de Terre", 'centered')
+                end
             end
             ui:groupEnd() -- End of 'Info'
         end
+        ui:stylePop()
 	end
     ui:windowEnd()
     
