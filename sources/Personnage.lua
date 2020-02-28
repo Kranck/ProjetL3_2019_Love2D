@@ -107,7 +107,11 @@ function Personnage:New(e, color) -- Générer un Terrain à partir de 3 Tiles d
             for i=1, table.getn(to_remove) do
                 mat_to_remove = self.equipe.terrain.materiaux[i]
                 if mat_to_remove ~= nil then
-                    self.equipe.materiaux[mat_to_remove.type] = self.equipe.materiaux[mat_to_remove.type] + 1
+                    if mat_to_remove.type=="Fer" or mat_to_remove.type=="Souffre" or mat_to_remove.type=="Gold" then
+                        self.equipe.materiaux[mat_to_remove.type] = self.equipe.materiaux[mat_to_remove.type] + math.random(1, 4)
+                    else
+                        self.equipe.materiaux[mat_to_remove.type] = self.equipe.materiaux[mat_to_remove.type] + 1
+                    end
                 end
                 table.remove(self.equipe.terrain.materiaux, to_remove[i])
             end
