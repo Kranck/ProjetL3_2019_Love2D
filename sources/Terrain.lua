@@ -8,7 +8,7 @@ require(TILESDIR.."Soufre")
 
 Terrain = {}
 Terrain.__index = Terrain
-Terrain.background = love.graphics.newImage(ASSETSDIR.."sky_background.jpg")
+Terrain.background = nil --love.graphics.newImage(ASSETSDIR.."sky_background.jpg")
 
 function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Tile différentes
     local self = { 
