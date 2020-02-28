@@ -16,6 +16,7 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
                     width = width,
                     map_bloc = {},
                     materiaux = {},
+                    positionAvailable = {},
                     teams = {},
                 }
 
@@ -193,25 +194,24 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
                 end
             end
         end
-    end
 
-    local EmptyPositionForPersonnage = function ()
-        local positionAvailable = {}
+        -- On remplit le tableau de position que le personnage peut prendre au début de la game
         for i=1, 44 do
             for j=1, 80 do
                 if self.map_bloc[i][j] == nil and self.map_bloc[i+1][j] ~= nil then
-                    table.insert(positionAvailable, {i, j})
+                    table.insert(self.positionAvailable, {i, j})
                 end
             end
         end
-        local value = table.getn(positionAvailable)
-        local randomPosition = love.math.random(1, value)
-        return positionAvailable[randomPosition]
     end
 
     local getBlock = function (x, y) return self.map_bloc[y][x] end
 
     local destroy  = function (x, y) self.map_bloc[y][x] = nil end
+
+    local getPositionAvailable = function () return self.positionAvailable end
+
+    local setPositionAvailable = function (positionAvailable) self.positionAvailable = positionAvailable end 
 
     setmetatable(self, Terrain)
     
@@ -219,7 +219,8 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
     ----------------------------------------  Interface Extérieure  ------------------------------------------
     ----------------------------------------------------------------------------------------------------------
     return {
-        EmptyPositionForPersonnage = EmptyPositionForPersonnage,
+        getPositionAvailable = getPositionAvailable,
+        setPositionAvailable = setPositionAvailable,
         generateMap = generateMap,
         nextPerso = nextPerso,
         draw = draw,
@@ -227,7 +228,7 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
         getBlock = getBlock,
         destroy = destroy,
         teams = self.teams,
-        materiaux = self.materiaux,
+        materiaux = self.materiaux
     }
     
 end -- End Personnage:New
