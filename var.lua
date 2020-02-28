@@ -52,7 +52,7 @@ PLAY = PLAY_TYPE_TABLE.normal
 
 CHAR_HP = 100
 CHAR_NB = 4
-TEAM_NB = 3
+TEAM_NB = 5
 
 ------------------- DESIGN --------------------
 

@@ -61,7 +61,7 @@ return function (ui, blocks, teams)
 				ui:progress(team_life, CHAR_NB * CHAR_HP, false)
 			ui:stylePop()
 			-- Debug draw info about team life
-			ui:text(team_life.." / "..CHAR_NB * CHAR_HP, x + width/3 + 2 , y + 32*i - 20, 100, 10)
+			ui:text(team_life.." / "..CHAR_NB * CHAR_HP, x + width/3 + 2 , y + 34*i - 24, 100, 10)
 		end
 	end
 	ui:windowEnd()

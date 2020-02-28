@@ -370,7 +370,7 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         end
         --Toucher un autre personnage
 
-        for n_equipe=1 , table.getn(self.terrain.teams) do
+        for n_equipe=1 , TEAM_NB do
             for n_perso=1 , table.getn(self.terrain.teams[n_equipe].personnages) do
                 local other = self.terrain.teams[n_equipe].personnages[n_perso]
                 local pos = other.getPos()
