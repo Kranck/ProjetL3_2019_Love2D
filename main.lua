@@ -39,6 +39,10 @@ local init_game = function ()
     perso = terrain.teams[current_team_nb].getPersonnages()[current_team_nb]
 end
 
+local function ui_input(ui, name, ...)
+	return ui[name](ui, ...)
+end
+
 
 -- LOAD FUNCTION -> chargés au lancement de l'appli
 function love.load()
@@ -56,7 +60,7 @@ end
 ----------------------------------------------------------------------------------------------------------------
 -- ! INFOS : On fait les modif uniqement si on se trouve dans le bon "PLAY" cf var.lua
 
-function love.keyreleased(key)
+function love.keyreleased(key, scancode)
     if PLAY == PLAY_TYPE_TABLE.normal then
         -- Passe en mode craft
         if key == "c" then
@@ -84,28 +88,29 @@ function love.keyreleased(key)
         return
     end
 
-
     if PLAY == PLAY_TYPE_TABLE.weapons then
         -- Repasse en mode normal à partir du mode craft
         if key == "c" then
             love.keyboard.setKeyRepeat(true) -- Re-enable Key Repeat
             PLAY = PLAY_TYPE_TABLE.normal
-        end
         -- Passe en mode menu pause
-        if key == "escape" then
+        elseif key == "escape" then
             love.keyboard.setKeyRepeat(false) -- Deactivate repeat on keyboard keys
             PLAY = PLAY_TYPE_TABLE.pause
+        else
+            ui_input(uiWeapons, 'keyreleased', key, scancode)
         end
 
         return
     end
-
 
     if PLAY == PLAY_TYPE_TABLE.pause then 
         -- Repasse en mode normal à partir du mode menu pause
         if key == "escape" then
             love.keyboard.setKeyRepeat(true) -- Re-enable Key Repeat
             PLAY = PLAY_TYPE_TABLE.normal
+        else
+            ui_input(uiPause, 'keypressed', key, scancode)
         end
         
         return
@@ -123,6 +128,15 @@ function love.keypressed(key)
         if key == 'e' then
             perso.Tirer()
         end
+        return
+    end
+    if PLAY == PLAY_TYPE_TABLE.weapons then
+        ui_input(uiWeapons, 'keypressed', key, scancode, isrepeat)
+        return
+    end
+    if PLAY == PLAY_TYPE_TABLE.pause then
+        ui_input(uiPause, 'keypressed', key, scancode, isrepeat)
+        return
     end
 end
 
@@ -139,7 +153,68 @@ function love.wheelmoved(x, y)
             for i=1, 50 do
                 Camera:scale(1/1.001, perso)
             end
-        end    
+        end
+
+        return  
+    end
+
+    if PLAY == PLAY_TYPE_TABLE.weapons then
+        ui_input(uiWeapons, 'wheelmoved', x, y)
+        return
+    end
+
+    if PLAY == PLAY_TYPE_TABLE.pause then
+        ui_input(uiPause, 'wheelmoved', x, y)
+        return
+    end
+end
+
+
+function love.mousepressed(x, y, button, istouch, presses)
+    if PLAY == PLAY_TYPE_TABLE.weapons then
+        ui_input(uiWeapons, 'mousepressed', x, y, button, istouch, presses)
+        return
+    end
+
+    if PLAY == PLAY_TYPE_TABLE.pause then
+        ui_input(uiPause, 'mousepressed', x, y, button, istouch, presses)
+        return
+    end
+end
+
+function love.mousereleased(x, y, button, istouch, presses)
+    if PLAY == PLAY_TYPE_TABLE.weapons then
+        ui_input(uiWeapons, 'mousereleased', x, y, button, istouch, presses)
+        return
+    end
+
+    if PLAY == PLAY_TYPE_TABLE.pause then
+        ui_input(uiPause, 'mousereleased', x, y, button, istouch, presses)
+        return
+    end
+end
+
+function love.mousemoved(x, y, dx, dy, istouch)
+    if PLAY == PLAY_TYPE_TABLE.weapons then
+        ui_input(uiWeapons, 'mousemoved', x, y, dx, dy, istouch)
+        return
+    end
+
+    if PLAY == PLAY_TYPE_TABLE.pause then
+        ui_input(uiPause, 'mousemoved', x, y, dx, dy, istouch)
+        return
+    end
+end
+
+function love.textinput(text)
+    if PLAY == PLAY_TYPE_TABLE.weapons then
+        ui_input(uiWeapons, 'textinput', text)
+        return
+    end
+
+    if PLAY == PLAY_TYPE_TABLE.pause then
+        ui_input(uiPause, 'textinput', text)
+        return
     end
 end
 

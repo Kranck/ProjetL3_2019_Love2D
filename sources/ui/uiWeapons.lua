@@ -51,22 +51,88 @@ local style_table_inner_group_craft = {
 }
 
 local weapons_imgs = {}
-table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'pistol.png'))
-table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'ammo.png'))
-table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'pistol.png'))
-table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'ammo.png'))
-table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'pistol.png'))
-table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'ammo.png'))
-table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'pistol.png'))
-table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'ammo.png'))
-table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'pistol.png'))
-table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'ammo.png'))
-table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'pistol.png'))
-table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'ammo.png'))
-table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'pistol.png'))
-table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'ammo.png'))
-table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'pistol.png'))
-table.insert(weapons_imgs, love.graphics.newImage(TEXTUREDIR..'ammo.png'))
+table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'pistol.png'),
+                            dmg = 20,
+                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
+                            num = 0,
+                            })
+table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'ammo.png'),
+                            dmg = 20,
+                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
+                            num = 0,
+                            })
+table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'pistol.png'),
+                            dmg = 20,
+                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
+                            num = 0,
+                            })
+table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'ammo.png'),
+                            dmg = 20,
+                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
+                            num = 0,
+                            })
+table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'pistol.png'),
+                            dmg = 20,
+                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
+                            num = 0,
+                            })
+table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'ammo.png'),
+                            dmg = 20,
+                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
+                            num = 0,
+                            })
+table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'pistol.png'),
+                            dmg = 20,
+                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
+                            num = 0,
+                            })
+table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'ammo.png'),
+                            dmg = 20,
+                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
+                            num = 0,
+                            })
+table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'pistol.png'),
+                            dmg = 20,
+                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
+                            num = 0,
+                            })
+table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'ammo.png'),
+                            dmg = 20,
+                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
+                            num = 0,
+                            })
+table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'pistol.png'),
+                            dmg = 20,
+                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
+                            num = 0,
+                            })
+table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'ammo.png'),
+                            dmg = 20,
+                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
+                            num = 0,
+                            })
+table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'pistol.png'),
+                            dmg = 20,
+                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
+                            num = 0,
+                            })
+table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'ammo.png'),
+                            dmg = 20,
+                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
+                            num = 0,
+                            })
+table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'pistol.png'),
+                            dmg = 20,
+                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
+                            num = 0,
+                            })
+table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'ammo.png'),
+                            dmg = 20,
+                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
+                            num = 0,
+                            })
+
+local current_weapon = nil
 
 local widget_width  = 0.3 * WINDOW_WIDTH
 local widget_height = 0.4 * WINDOW_HEIGHT
@@ -90,7 +156,9 @@ return function (ui)
             if ui:groupBegin('Weapons', 'border') then
                 ui:layoutRow('static', TILESIZE + 4, TILESIZE + 4, 5)
                 for _, w in ipairs(weapons_imgs) do
-                    ui:button(nil, w)
+                    if ui:button(nil, w.img) then
+                        current_weapon = w
+                    end
                 end
                 ui:groupEnd() -- End of 'Weapons'
             end
@@ -104,6 +172,12 @@ return function (ui)
             ui:stylePop()
         end
         if ui:groupBegin('Info', 'border') then
+            if current_weapon ~= nil then
+                ui:layoutRow('dynamic', 2 * TILESIZE, {0.2, 0.6, 0.2})
+                ui:spacing(1)
+                ui:button(nil, current_weapon.img)
+                ui:spacing(1)
+            end
             ui:groupEnd() -- End of 'Info'
         end
 	end

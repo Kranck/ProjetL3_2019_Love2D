@@ -37,7 +37,7 @@ MAX_SPEED_FALLING = 3.4
 RANGE = TILESIZE * 2
 
 -- Délai pour les actions (en secondes)
-CD_DESTROYBLOCK = 0.3
+CD_DESTROYBLOCK = 0.25
 
 --------------- Option de debug ---------------
 DEBUG = true
@@ -52,7 +52,7 @@ PLAY = PLAY_TYPE_TABLE.normal
 
 CHAR_HP = 100
 CHAR_NB = 4
-TEAM_NB = 5
+TEAM_NB = 6
 
 ------------------- DESIGN --------------------
 
