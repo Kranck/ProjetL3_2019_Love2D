@@ -79,9 +79,9 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         end
 
         for i=1, table.getn(self.terrain.teams) do
-            for j=1, table.getn(self.terrain.teams[i].personnages) do
-                if not(self.number == self.terrain.teams[i].personnages[j].getNumber() and self.equipe.color==self.terrain.teams[i].personnages[j].getEquipe().color) then
-                    pos = self.terrain.teams[i].personnages[j].getPos()
+            for j=1, table.getn(self.terrain.teams[i].getPersonnages()) do
+                if not(self.number == self.terrain.teams[i].getPersonnages()[j].getNumber() and self.equipe.color==self.terrain.teams[i].getPersonnages()[j].getEquipe().color) then
+                    pos = self.terrain.teams[i].getPersonnages()[j].getPos()
                     if(nextPositionX==pos.posX and nextPositionY==pos.posY) then
                         return
                     end
@@ -148,10 +148,10 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
             for i=1, table.getn(to_remove) do
                 mat_to_remove = self.equipe.terrain.materiaux[i]
                 if mat_to_remove ~= nil then
-                    if mat_to_remove.type=="Fer" or mat_to_remove.type=="Souffre" or mat_to_remove.type=="Gold" then
-                        self.equipe.materiaux[mat_to_remove.type] = self.equipe.materiaux[mat_to_remove.type] + math.random(1, 4)
+                    if mat_to_remove.getType()=="Fer" or mat_to_remove.getType()=="Souffre" or mat_to_remove.getType()=="Gold" then
+                        self.equipe.materiaux[mat_to_remove.getType()] = self.equipe.materiaux[mat_to_remove.getType()] + math.random(1, 4)
                     else
-                        self.equipe.materiaux[mat_to_remove.type] = self.equipe.materiaux[mat_to_remove.type] + 1
+                        self.equipe.materiaux[mat_to_remove.getType()] = self.equipe.materiaux[mat_to_remove.getType()] + 1
                     end
                 end
                 table.remove(self.equipe.terrain.materiaux, to_remove[i])
@@ -161,9 +161,9 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
 
     local isOnPersonnage = function()
         for i=1, table.getn(self.terrain.teams) do
-            for j=1, table.getn(self.terrain.teams[i].personnages) do
-                if not(self.number == self.terrain.teams[i].personnages[j].getNumber() and self.equipe.color==self.terrain.teams[i].personnages[j].getEquipe().color) then
-                    pos = self.terrain.teams[i].personnages[j].getPos()
+            for j=1, table.getn(self.terrain.teams[i].getPersonnages()) do
+                if not(self.number == self.terrain.teams[i].getPersonnages()[j].getNumber() and self.equipe.color==self.terrain.teams[i].getPersonnages()[j].getEquipe().color) then
+                    pos = self.terrain.teams[i].getPersonnages()[j].getPos()
                     if (pos.posY < self.posY+TILESIZE-1+4 and self.posY+TILESIZE-1+4 < pos.posY+TILESIZE-1) then
                         if (self.posX < pos.posX and self.posX +TILESIZE-1 > pos.posX ) or (self.posX<pos.posX+TILESIZE-1 and self.posX+TILESIZE-1>pos.posX+TILESIZE-1) or (self.posX==pos.posX) then
                             return true
@@ -252,50 +252,6 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         end
     end
 
-    -- Méthode de draw du personnage prenant en comptant les inputs
-    local Move = function (grounded, moved)
-        self.Yspeed = self.Yspeed + self.Yacc
-        self.Xspeed = self.Xspeed + self.Xacc
-    
-        -- On limite les vitesses
-        if self.Yspeed > MAX_SPEED_FALLING then
-            self.Yspeed = MAX_SPEED_FALLING
-        end
-    
-        if grounded and self.Xspeed > GROUNDSPEED then
-            self.Xspeed = GROUNDSPEED
-        elseif grounded and self.Xspeed < - GROUNDSPEED then
-            self.Xspeed = - GROUNDSPEED
-        elseif not grounded and self.Xspeed > AIRSPEED then
-            self.Xspeed = AIRSPEED
-        elseif not grounded and self.Xspeed < - AIRSPEED then
-            self.Xspeed = - AIRSPEED
-        end
-    
-        -- On applique le déplacement 
-    
-        if (self.Xspeed - math.floor(self.Xspeed)>0.5) then
-            MoveTo(math.floor(self.Xspeed+1), 0)
-        else
-            MoveTo(math.floor(self.Xspeed), 0)
-        end
-        MoveTo(0, math.floor(self.Yspeed))
-    
-        -- On draw le personnage
-        love.graphics.draw(self.sprite, self.img, self.posX, self.posY)
-    
-        if grounded and not moved then
-            -- On stop le mouvement au sol
-            self.Xspeed = 0
-            self.Xacc = 0
-            if(self.orientation == RIGHT) then
-                self.img = love.graphics.newQuad(0, 0, TILESIZE, TILESIZE, self.sprite:getDimensions())
-            else
-                self.img = love.graphics.newQuad(TILESIZE, 0, TILESIZE, TILESIZE, self.sprite:getDimensions())
-            end
-        end
-    end
-
     -- Change l'angle de visée du personnage vers le haut (limité à 90 deg)
     local changeAngleUp = function ()
         if (self.angle < 90) then
@@ -381,10 +337,10 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
     end
 
     function Personnage:ramasserMateriau(materiau)
-        positionMatMinX = materiau.posX
-        positionMatMaxX = materiau.posX+TILESIZE
-        positionMatMinY = materiau.posY
-        positionMatMaxY = materiau.posY+TILESIZE
+        positionMatMinX = materiau.getPos().posX
+        positionMatMaxX = materiau.getPos().posX+TILESIZE
+        positionMatMinY = materiau.getPos().posY
+        positionMatMaxY = materiau.getPos().posY+TILESIZE
         HALF_TILESIZE = TILESIZE/2
         if self.posX+HALF_TILESIZE<positionMatMaxX and self.posX+HALF_TILESIZE>positionMatMinX and self.posY+HALF_TILESIZE<positionMatMaxY and self.posY+HALF_TILESIZE>positionMatMinY then
             return materiau
@@ -514,6 +470,49 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         end
     end
 
+    local update = function (grounded, moved)
+        self.Yspeed = self.Yspeed + self.Yacc
+        self.Xspeed = self.Xspeed + self.Xacc
+    
+        -- On limite les vitesses
+        if self.Yspeed > MAX_SPEED_FALLING then
+            self.Yspeed = MAX_SPEED_FALLING
+        end
+    
+        if grounded and self.Xspeed > GROUNDSPEED then
+            self.Xspeed = GROUNDSPEED
+        elseif grounded and self.Xspeed < - GROUNDSPEED then
+            self.Xspeed = - GROUNDSPEED
+        elseif not grounded and self.Xspeed > AIRSPEED then
+            self.Xspeed = AIRSPEED
+        elseif not grounded and self.Xspeed < - AIRSPEED then
+            self.Xspeed = - AIRSPEED
+        end
+    
+        -- On applique le déplacement 
+    
+        if (self.Xspeed - math.floor(self.Xspeed)>0.5) then
+            MoveTo(math.floor(self.Xspeed+1), 0)
+        else
+            MoveTo(math.floor(self.Xspeed), 0)
+        end
+        MoveTo(0, math.floor(self.Yspeed))
+    end
+
+    local draw = function (grounded, moved)
+        love.graphics.draw(self.sprite, self.img, self.posX, self.posY)
+    
+        if grounded and not moved then
+            -- On stop le mouvement au sol
+            self.Xspeed = 0
+            self.Xacc = 0
+            if(self.orientation == RIGHT) then
+                self.img = love.graphics.newQuad(0, 0, TILESIZE, TILESIZE, self.sprite:getDimensions())
+            else
+                self.img = love.graphics.newQuad(TILESIZE, 0, TILESIZE, TILESIZE, self.sprite:getDimensions())
+            end
+        end
+    end
 
     setmetatable(self, Personnage)
 
@@ -544,7 +543,9 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         equipe = equipe,
         Tirer = Tirer,
         getEquipe = getEquipe,
-        getNumber = getNumber
+        getNumber = getNumber,
+        draw = draw,
+        update = update
     }
 
 end -- End Personnage:New

@@ -18,6 +18,7 @@ local uiMenu, uiInGame, uiPause, uiWeapons
 local terrain = nil
 local current_team_nb = 1
 local perso = nil
+local moved = false
 
 
 ----------------------------------------------------------------------------------------------------------------
@@ -35,7 +36,7 @@ local init_game = function ()
     end
 
     -- Premier personnage à jouer
-    perso = terrain.teams[current_team_nb].personnages[current_team_nb]
+    perso = terrain.teams[current_team_nb].getPersonnages()[current_team_nb]
 end
 
 
@@ -167,23 +168,21 @@ function love.update(dt)
         -- check if a personnage has been knocked out of the map or is dead
         for i, t in ipairs(terrain.teams) do
             to_remove = {}
-            for j, p in ipairs(t.personnages) do
+            for j, p in ipairs(t.getPersonnages()) do
                 local persoCheckedGrounded = p.isGrounded()
                 if persoCheckedGrounded == "outOfBounds" or p.getHP()<=0 then
                     table.insert(to_remove, j)
                 end
             end
             for j=1, table.getn(to_remove) do
-                table.remove(t.personnages, to_remove[j])
+                table.remove(t.getPersonnages(), to_remove[j])
             end
         end
 
         if grounded == "outOfBounds" or perso.getHP()<=0 then
             perso = terrain.nextPerso(current_team_nb)
         end
-
-        local moved = false -- Reset : le personnage ne s'est pas déplacer pendant cette frame
-        
+    
         --------------------------------------------------
         ------  Bindings des touche en mode normal  ------
         --------------------------------------------------
@@ -226,6 +225,10 @@ function love.update(dt)
                 Weapons(uiWeapons)
             uiWeapons:frameEnd()
         end
+
+        terrain.update(moved)
+
+        moved = false -- Reset : le personnage ne s'est pas déplacer pendant cette frame
     end
         
     ------------------------------------------------------
@@ -258,7 +261,7 @@ function love.draw()
         Camera:set()
         --if PLAY == PLAY_TYPE_TABLE.normal or PLAY == PLAY_TYPE_TABLE.weapons then
             -- draw order -> terrain -> equipe -> personnages
-            terrain.draw()
+            terrain.draw(moved)
         --end
         Camera:setPosition(perso)
         -- On affiche le curseur pour la visée

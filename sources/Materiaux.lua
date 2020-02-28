@@ -10,35 +10,31 @@ require(TILESDIR.."Soufre")
 require(TILESDIR.."Gold")
 
 function Materiaux:New(type, x_index, y_index, terrain)
-    local this = {}
-    setmetatable(this, Materiaux)
-    this.posX = (x_index-1)*TILESIZE
-    this.posY = (y_index-1)*TILESIZE
-    this.type = type -- Terre, Pierre, Fer, Souffre, Gold
-    this.terrain = terrain
-    this.img = nil
-    this.Yspeed = 0
-    this.Yacc = GRAVITY
-
-    if this.type == "Terre" then
-        this.img = Terre.fallen
-    elseif this.type == "Pierre" then
-        this.img = Pierre.fallen
-    elseif this.type == "Fer" then
-        this.img = Fer.fallen
-    elseif this.type == "Souffre" then
-        this.img = Soufre.fallen
-    elseif this.type == "Gold" then
-        this.img = Gold.fallen
+    local self = {
+        posX = (x_index-1)*TILESIZE,
+        posY = (y_index-1)*TILESIZE,
+        type = type, -- Terre, Pierre, Fer, Souffre, Gold
+        terrain = terrain,
+        img = nil,
+        Yspeed = 0,
+        Yacc = GRAVITY
+    }
+    
+    if self.type == "Terre" then
+        self.img = Terre.fallen
+    elseif self.type == "Pierre" then
+        self.img = Pierre.fallen
+    elseif self.type == "Fer" then
+        self.img = Fer.fallen
+    elseif self.type == "Souffre" then
+        self.img = Soufre.fallen
+    elseif self.type == "Gold" then
+        self.img = Gold.fallen
     end
 
-    this.draw = function ()
-        love.graphics.draw(this.img, this.posX, this.posY)
-    end
-
-    this.MoveTo = function (x, y)
-        local actualPositionX = this.posX
-        local actualPositionY = this.posY
+    local MoveTo = function (x, y)
+        local actualPositionX = self.posX
+        local actualPositionY = self.posY
         local nextPositionX = actualPositionX+x
         local nextPositionY = actualPositionY+y
 
@@ -67,66 +63,68 @@ function Materiaux:New(type, x_index, y_index, terrain)
             return
         end
 
-        if (this.terrain.getBlock(xPositionMin, yPositionMin) == nil)
-        and (this.terrain.getBlock(xPositionMin, yPositionMax) == nil)
-        and (this.terrain.getBlock(xPositionMax, yPositionMin) ~= nil)
-        and (this.terrain.getBlock(xPositionMax, yPositionMax) ~= nil) then
-            this.posX = xPositionMin*TILESIZE-TILESIZE
+        if (self.terrain.getBlock(xPositionMin, yPositionMin) == nil)
+        and (self.terrain.getBlock(xPositionMin, yPositionMax) == nil)
+        and (self.terrain.getBlock(xPositionMax, yPositionMin) ~= nil)
+        and (self.terrain.getBlock(xPositionMax, yPositionMax) ~= nil) then
+            self.posX = xPositionMin*TILESIZE-TILESIZE
         end
 
-        if (this.terrain.getBlock(xPositionMin, yPositionMin) ~= nil)
-        and (this.terrain.getBlock(xPositionMin, yPositionMax) ~= nil)
-        and (this.terrain.getBlock(xPositionMax, yPositionMin) == nil)
-        and (this.terrain.getBlock(xPositionMax, yPositionMax) == nil) then
-            this.posX = xPositionMax*TILESIZE-TILESIZE
+        if (self.terrain.getBlock(xPositionMin, yPositionMin) ~= nil)
+        and (self.terrain.getBlock(xPositionMin, yPositionMax) ~= nil)
+        and (self.terrain.getBlock(xPositionMax, yPositionMin) == nil)
+        and (self.terrain.getBlock(xPositionMax, yPositionMax) == nil) then
+            self.posX = xPositionMax*TILESIZE-TILESIZE
         end
 
-        if (this.terrain.getBlock(xPositionMin, yPositionMax) ~= nil)
-        and (this.terrain.getBlock(xPositionMax, yPositionMax) ~= nil)
-        and (this.terrain.getBlock(xPositionMax, yPositionMin) == nil)
-        and (this.terrain.getBlock(xPositionMin, yPositionMin) == nil) then
-            this.posY = yPositionMin*TILESIZE-TILESIZE
+        if (self.terrain.getBlock(xPositionMin, yPositionMax) ~= nil)
+        and (self.terrain.getBlock(xPositionMax, yPositionMax) ~= nil)
+        and (self.terrain.getBlock(xPositionMax, yPositionMin) == nil)
+        and (self.terrain.getBlock(xPositionMin, yPositionMin) == nil) then
+            self.posY = yPositionMin*TILESIZE-TILESIZE
         end
 
-        if (this.terrain.getBlock(xPositionMin, yPositionMin) == nil)
-        and (this.terrain.getBlock(xPositionMin, yPositionMax) == nil)
-        and (this.terrain.getBlock(xPositionMax, yPositionMin) == nil)
-        and (this.terrain.getBlock(xPositionMax, yPositionMax) == nil) then
-            this.posX = nextPositionX
-            this.posY = nextPositionY
+        if (self.terrain.getBlock(xPositionMin, yPositionMin) == nil)
+        and (self.terrain.getBlock(xPositionMin, yPositionMax) == nil)
+        and (self.terrain.getBlock(xPositionMax, yPositionMin) == nil)
+        and (self.terrain.getBlock(xPositionMax, yPositionMax) == nil) then
+            self.posX = nextPositionX
+            self.posY = nextPositionY
         end
     end
 
-    this.isGrounded = function ()
-        actualPositionY = this.posY
+    local isGrounded = function ()
+        actualPositionY = self.posY
         nextPositionY = actualPositionY + 4
-        xPositionMin = math.floor(((this.posX+1)/TILESIZE)+1)
-        xPositionMax = math.floor(((this.posX+(TILESIZE-1))/TILESIZE)+1)
+        xPositionMin = math.floor(((self.posX+1)/TILESIZE)+1)
+        xPositionMax = math.floor(((self.posX+(TILESIZE-1))/TILESIZE)+1)
         yPositionMax = math.floor(((nextPositionY+(TILESIZE-1))/TILESIZE)+1)
 
         if yPositionMax>44 then
             return "outOfBounds"
         end
-        if (this.terrain.getBlock(xPositionMin, yPositionMax)) ~= nil or (this.terrain.getBlock(xPositionMax, yPositionMax)) ~= nil then
+        if (self.terrain.getBlock(xPositionMin, yPositionMax)) ~= nil or (self.terrain.getBlock(xPositionMax, yPositionMax)) ~= nil then
             return true
         end
         return false
     end
 
-    this.Move = function (grounded)
-        this.Yspeed = this.Yspeed + this.Yacc
+    local update = function(grounded)
+        self.Yspeed = self.Yspeed + self.Yacc
     
         -- On limite les vitesses
-        if this.Yspeed > MAX_SPEED_FALLING then
-            this.Yspeed = MAX_SPEED_FALLING
+        if self.Yspeed > MAX_SPEED_FALLING then
+            self.Yspeed = MAX_SPEED_FALLING
         end
     
         -- On applique le déplacement 
     
-        this.MoveTo(0, math.floor(this.Yspeed))
-    
+        MoveTo(0, math.floor(self.Yspeed))
+    end
+
+    local draw = function (grounded)
         -- On draw le personnage
-        this.draw()
+        love.graphics.draw(self.img, self.posX, self.posY)
     
         if grounded then
             -- On stop le mouvement au sol
@@ -134,5 +132,16 @@ function Materiaux:New(type, x_index, y_index, terrain)
         end
     end
 
-    return this
+    local getPos = function () return {posX = self.posX, posY = self.posY} end
+    local getType = function () return self.type end
+
+    setmetatable(self, Materiaux)
+
+    return {
+        update=update,
+        draw = draw,
+        isGrounded = isGrounded,
+        getPos = getPos,
+        getType = getType
+    }
 end

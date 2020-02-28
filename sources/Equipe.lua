@@ -6,23 +6,49 @@ Equipe = {}
 Equipe.__index = Equipe
 
 function Equipe:New(t, color, name)
-    local this = {}
-    setmetatable(this, Equipe)
-    this.terrain = t
-    this.color = color
-    this.name = name
-    this.personnages = {}
+    local self = {
+        terrain = t,
+        color = color,
+        name = name,
+        personnages = {},
+        materiaux = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
+        --armePermanente = Pioche:New()
+        armeCraft = {}
+    }
+
     for i=1, CHAR_NB do
-        table.insert(this.personnages, Personnage:New(this, color, i))
+        table.insert(self.personnages, Personnage:New(self, color, i))
     end
-    this.materiaux = {
-                        Terre = 0, 
-                        Pierre = 0,
-                        Fer = 0,
-                        Souffre = 0,
-                        Gold = 0
-                    }
-    --this.armePermanente = Pioche:New()
-    this.armeCraft = {}
-    return this
+
+    local draw = function (moved)
+        for j, p in ipairs(self.personnages) do
+            grounded = p.isGrounded()
+            p.draw(grounded, moved)
+        end
+    end
+
+    local update = function (moved)
+        for j, p in ipairs(self.personnages) do
+            grounded = p.isGrounded()
+            p.update(grounded, moved)
+        end
+    end
+
+    local getPersonnages = function () return self.personnages end
+    local getTerrain = function () return self.terrain end
+    local getColor = function () return self.color end
+    local getName = function () return self.name end
+    local getMateriaux = function () return self.materiaux end
+
+    setmetatable(self, Equipe)
+
+    return {
+        draw = draw,
+        update = update,
+        getPersonnages = getPersonnages,
+        getTerrain = getTerrain,
+        getColor = getColor,
+        getName = getName,
+        getMateriaux = getMateriaux
+    }
 end
