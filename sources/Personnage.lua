@@ -164,6 +164,7 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         end
     end
 
+
     -- Le personnage touche-t-il le sol ?
     local isGrounded = function ()
         actualPositionY = self.posY
