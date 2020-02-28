@@ -371,8 +371,8 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         --Toucher un autre personnage
 
         for n_equipe=1 , TEAM_NB do
-            for n_perso=1 , table.getn(self.terrain.teams[n_equipe].personnages) do
-                local other = self.terrain.teams[n_equipe].personnages[n_perso]
+            for n_perso=1 , table.getn(self.terrain.teams[n_equipe].getPersonnages()) do
+                local other = self.terrain.teams[n_equipe].getPersonnages()[n_perso]
                 local pos = other.getPos()
                 if(pos.posX ~= self.posX or pos.posY ~= self.posY) then
                     if(x >= pos.posX and x <= pos.posX + TILESIZE and y >= pos.posY and y <= pos.posY + TILESIZE) then
