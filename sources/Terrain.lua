@@ -57,18 +57,6 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
         end
     end
 
-    -- Choix du perso suivant pour le prochain tour
-    local nextPerso = function(team_nb)
-        return self.teams[team_nb].getPersonnages()[1]
-        --debut implem pour multi-team
-        --local next_team = 1
-        --if(team_nb ~= TEAM_NB) then
-        --    next_team = team_nb + 1
-        --end
-        --while(table.getn(self.teams[next_team]) == 0 and next_team ~= team_nb) do
-        --    next_team = next_team + 1
-        --end
-    end
     
     local generateMap = function ()
         -- Initialisation d'un terrain de tout le terrain à nil
@@ -222,7 +210,6 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
         getPositionAvailable = getPositionAvailable,
         setPositionAvailable = setPositionAvailable,
         generateMap = generateMap,
-        nextPerso = nextPerso,
         draw = draw,
         update = update,
         getBlock = getBlock,
