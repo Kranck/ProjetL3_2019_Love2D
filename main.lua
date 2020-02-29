@@ -222,6 +222,14 @@ function love.textinput(text)
 end
 
 
+-- Perte de focus --> met la pause
+function love.focus(f)
+    if not f then
+        if PLAY == PLAY_TYPE_TABLE.main then return end
+        PLAY = PLAY_TYPE_TABLE.pause
+    end
+end
+
 
 
 ----------------------------------------------------------------------------------------------------------------
