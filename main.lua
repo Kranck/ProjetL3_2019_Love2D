@@ -235,7 +235,7 @@ end
 function love.update(dt)
     -------VARIABLES UTILES AU TOUR PAR TOUR POUR PAS DUPLIQUER LE CODE------
     next_team_nb = current_team_nb+1
-    while(terrain.teams[next_team_nb]==nil) do
+    while(terrain.teams[next_team_nb].teamIsDead()==true) do
         if(next_team_nb<table.getn(terrain.teams)) then
             next_team_nb = next_team_nb+1
         else
@@ -283,6 +283,7 @@ function love.update(dt)
         if grounded == "outOfBounds" or perso.getHP()<=0 then
             print("CHANGING OF PERSO")
             terrain.teams[current_team_nb].setCurrentPlayer(next_perso_nb)
+            terrain.teams[next_team_nb].reset_current_player()
             current_perso_index = terrain.teams[next_team_nb].getCurrentPlayer()
             perso = terrain.teams[next_team_nb].getPersonnages()[current_perso_index]
             current_team_nb = next_team_nb
@@ -332,9 +333,10 @@ function love.update(dt)
             uiWeapons:frameEnd()
         end
 
-        if cpt_time>=5.0 then
+        if cpt_time>=10.0 then
             print("CHANGING OF PERSO")
             terrain.teams[current_team_nb].setCurrentPlayer(next_perso_nb)
+            terrain.teams[next_team_nb].reset_current_player()
             current_perso_index = terrain.teams[next_team_nb].getCurrentPlayer()
             perso = terrain.teams[next_team_nb].getPersonnages()[current_perso_index]
             current_team_nb = next_team_nb

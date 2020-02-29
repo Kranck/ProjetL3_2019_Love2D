@@ -36,10 +36,25 @@ function Equipe:New(t, color, name)
     end
 
     local teamIsDead = function()
-        if self.personnages==nil then
+        if self.personnages=={} then
             return true
         end
+        return false
     end
+
+    local reset_current_player = function()
+        if(self.personnages[self.current_player]==nil) then
+            self.current_player = self.current_player+1
+            while(self.personnages[self.current_player]==nil) do
+                if(self.current_player<table.getn(self.personnages)) then
+                    self.current_player = self.current_player+1
+                else
+                    self.current_player = 1
+                end
+            end
+        end
+    end
+
 
     local getPersonnages = function () return self.personnages end
     local getTerrain = function () return self.terrain end
@@ -61,6 +76,7 @@ function Equipe:New(t, color, name)
         getMateriaux = getMateriaux,
         teamIsDead = teamIsDead,
         getCurrentPlayer = getCurrentPlayer,
-        setCurrentPlayer = setCurrentPlayer
+        setCurrentPlayer = setCurrentPlayer,
+        reset_current_player = reset_current_player
     }
 end
