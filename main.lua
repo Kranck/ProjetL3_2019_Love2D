@@ -233,6 +233,24 @@ end
 ----------------------------------------------------------------------------------------------------------------
 
 function love.update(dt)
+    -------VARIABLES UTILES AU TOUR PAR TOUR POUR PAS DUPLIQUER LE CODE------
+    next_team_nb = current_team_nb+1
+    while(terrain.teams[next_team_nb]==nil) do
+        if(next_team_nb<table.getn(terrain.teams)) then
+            next_team_nb = next_team_nb+1
+        else
+            next_team_nb = 1
+        end
+    end
+    next_perso_nb = current_perso_index+1
+    while(terrain.teams[current_team_nb].getPersonnages()[next_perso_nb]==nil) do
+        if(next_perso_nb<table.getn(terrain.teams[current_team_nb].getPersonnages())) then
+            next_perso_nb = next_perso_nb+1
+        else
+            next_perso_nb = 1
+        end
+    end
+    ---------------------------------------------------------
     cpt_time=cpt_time+dt
     dt_destroyBlock = dt_destroyBlock + dt
     if PLAY == PLAY_TYPE_TABLE.normal or PLAY == PLAY_TYPE_TABLE.weapons then
@@ -263,7 +281,12 @@ function love.update(dt)
         end
 
         if grounded == "outOfBounds" or perso.getHP()<=0 then
-            perso = terrain.nextPerso(current_team_nb)
+            print("CHANGING OF PERSO")
+            terrain.teams[current_team_nb].setCurrentPlayer(next_perso_nb)
+            current_perso_index = terrain.teams[next_team_nb].getCurrentPlayer()
+            perso = terrain.teams[next_team_nb].getPersonnages()[current_perso_index]
+            current_team_nb = next_team_nb
+            cpt_time = 0
         end
     
         --------------------------------------------------
@@ -309,24 +332,8 @@ function love.update(dt)
             uiWeapons:frameEnd()
         end
 
-        if cpt_time>=10.0 then
+        if cpt_time>=5.0 then
             print("CHANGING OF PERSO")
-            next_team_nb = current_team_nb+1
-            while(terrain.teams[next_team_nb]==nil) do
-                if(next_team_nb<table.getn(terrain.teams)) then
-                    next_team_nb = next_team_nb+1
-                else
-                    next_team_nb = 1
-                end
-            end
-            next_perso_nb = current_perso_index+1
-            while(terrain.teams[current_team_nb].getPersonnages()[next_perso_nb]==nil) do
-                if(next_perso_nb<table.getn(terrain.teams[current_team_nb].getPersonnages())) then
-                    next_perso_nb = next_perso_nb+1
-                else
-                    next_perso_nb = 1
-                end
-            end
             terrain.teams[current_team_nb].setCurrentPlayer(next_perso_nb)
             current_perso_index = terrain.teams[next_team_nb].getCurrentPlayer()
             perso = terrain.teams[next_team_nb].getPersonnages()[current_perso_index]
