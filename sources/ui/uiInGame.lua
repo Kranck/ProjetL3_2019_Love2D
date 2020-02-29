@@ -16,7 +16,12 @@ local progress_style = {
 }
 
 
-return function (ui, blocks, teams)
+local default_font = love.graphics.getFont()
+local mat_font = love.graphics.newFont(15)
+local timer_font = love.graphics.newFont(30)
+
+
+return function (ui, blocks, teams, dt)
     if ui:windowBegin('Blocks', (WINDOW_WIDTH - bar_width)/2, 32, bar_width, 40) then
 		x, y, width, height = ui:windowGetContentRegion()
 		-- print("window : w="..width.." h="..height, 200, 40)
@@ -27,8 +32,7 @@ return function (ui, blocks, teams)
 		ui:image(love.graphics.newImage(TEXTUREDIR..'Sulfure_Block.png'))
 		ui:image(love.graphics.newImage(TEXTUREDIR..'Gold_Block.png'))
 		
-		local old_font = love.graphics.getFont()
-		love.graphics.setFont(love.graphics.newFont(15))
+		love.graphics.setFont(mat_font)
 		love.graphics.setColor(0, 0, 0)
 			ui:text(blocks.earth, x + 8, y + 19, 10, 10)
 			ui:text(blocks.stone, x + 8 + TILESIZE + 4, y + 19, 10, 10)
@@ -36,7 +40,7 @@ return function (ui, blocks, teams)
 			ui:text(blocks.sulfure, x + 8 + (TILESIZE + 4) * 3, y + 19, 10, 10)
 			ui:text(blocks.gold, x + 8 + (TILESIZE + 4) * 4, y + 19, 10, 10)
 		love.graphics.setColor(1, 1, 1) -- => white / default color
-		love.graphics.setFont(old_font)
+		love.graphics.setFont(default_font)
         
 	end
 	ui:windowEnd()
@@ -44,7 +48,7 @@ return function (ui, blocks, teams)
 	-- variables pour l'affichage de la vie des équipes
 	local team_bar_height = (32+4) * TEAM_NB
 
-	if ui:windowBegin('Teams', 40, 720 - team_bar_height -40, 200, team_bar_height) then
+	if ui:windowBegin('Teams', 40, WINDOW_HEIGHT - team_bar_height -30, 200, team_bar_height) then
 		x, y, width, height = ui:windowGetContentRegion()
 		ui:layoutRow('dynamic', 30, 1)
 		for i, t in ipairs(teams) do
@@ -65,4 +69,21 @@ return function (ui, blocks, teams)
 		end
 	end
 	ui:windowEnd()
+
+	local timer_style = {
+		['window'] = {
+			['padding'] = {x = 5, y = 10},
+		},
+	}
+	-- Affichage du timer
+	if ui:windowBegin('Timer', WINDOW_WIDTH - 100, WINDOW_HEIGHT - 80, 60, 40) then
+		love.graphics.setFont(timer_font)
+		ui:stylePush(timer_style)
+			ui:layoutRow('dynamic', 30, 1)
+			ui:label(""..math.ceil( TOUR_TIME - dt ), 'centered', '#FFFFFF')
+		ui:stylePop()
+		love.graphics.setFont(default_font)
+	end
+	ui:windowEnd()
+
 end

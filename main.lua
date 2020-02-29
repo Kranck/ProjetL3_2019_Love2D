@@ -19,7 +19,12 @@ local terrain = nil
 local current_team_nb = 1
 local perso = nil
 local moved = false
-local cpt_time = 0
+
+-- Timer de tour
+local cpt_time
+
+--Timer séparant les coups de pioches des persos
+local dt_destroyBlock
 
 
 ----------------------------------------------------------------------------------------------------------------
@@ -50,6 +55,8 @@ end
 -- LOAD FUNCTION -> chargés au lancement de l'appli
 function love.load()
     dt_destroyBlock = 0
+    cpt_time = 0
+    
     uiMenu   = nuklear.newUI()
     uiInGame = nuklear.newUI()
     uiWeapons= nuklear.newUI() 
@@ -242,30 +249,37 @@ end
 function love.update(dt)
     -------VARIABLES UTILES AU TOUR PAR TOUR POUR PAS DUPLIQUER LE CODE------
     local next_team_nb = current_team_nb+1
-    if(next_team_nb>table.getn(terrain.teams)) then
+    if next_team_nb > table.getn(terrain.teams) then
         next_team_nb=1
     end
-    while(terrain.teams[next_team_nb].teamIsDead()) do
+    while terrain.teams[next_team_nb].teamIsDead() do
         next_team_nb = next_team_nb+1
-        if(next_team_nb>table.getn(terrain.teams)) then
+        if next_team_nb>table.getn(terrain.teams) then
             next_team_nb=1
         end
     end
     
     local next_perso_nb = current_perso_index+1
-    while(terrain.teams[current_team_nb].getPersonnages()[next_perso_nb]==nil) do
-        if(next_perso_nb<table.getn(terrain.teams[current_team_nb].getPersonnages())) then
+    while terrain.teams[current_team_nb].getPersonnages()[next_perso_nb] == nil do
+        if next_perso_nb<table.getn(terrain.teams[current_team_nb].getPersonnages()) then
             next_perso_nb = next_perso_nb+1
         else
             next_perso_nb = 1
         end
     end
-    ---------------------------------------------------------
-    cpt_time=cpt_time+dt
-    dt_destroyBlock = dt_destroyBlock + dt
+
+    
+
+
     if PLAY == PLAY_TYPE_TABLE.normal or PLAY == PLAY_TYPE_TABLE.weapons then
+            ---------------------------------------------------------
+            -----------------  Maj des compteurs  -------------------
+            ---------------------------------------------------------
+    cpt_time = cpt_time + dt
+    dt_destroyBlock = dt_destroyBlock + dt
+
         uiInGame:frameBegin()
-            InGame(uiInGame, perso.getItems(), terrain.teams)
+            InGame(uiInGame, perso.getItems(), terrain.teams, cpt_time)
         uiInGame:frameEnd()
         if PLAY == PLAY_TYPE_TABLE.weapons then
             uiWeapons:frameBegin()
@@ -281,7 +295,7 @@ function love.update(dt)
             to_remove = {}
             for j, p in ipairs(t.getPersonnages()) do
                 local persoCheckedGrounded = p.isGrounded()
-                if persoCheckedGrounded == "outOfBounds" or p.getHP()<=0 then
+                if persoCheckedGrounded == "outOfBounds" or p.getHP() <= 0 then
                     table.insert(to_remove, j)
                 end
             end
@@ -290,7 +304,7 @@ function love.update(dt)
             end
         end
 
-        if grounded == "outOfBounds" or perso.getHP()<=0 then
+        if grounded == "outOfBounds" or perso.getHP() <= 0 then
             print("CHANGING OF PERSO")
             terrain.teams[current_team_nb].setCurrentPlayer(next_perso_nb)
             terrain.teams[next_team_nb].reset_current_player()
@@ -343,7 +357,7 @@ function love.update(dt)
             uiWeapons:frameEnd()
         end
 
-        if cpt_time>=10.0 then
+        if cpt_time >= TOUR_TIME then
             print("CHANGING OF PERSO")
             terrain.teams[current_team_nb].setCurrentPlayer(next_perso_nb)
             terrain.teams[next_team_nb].reset_current_player()
@@ -363,7 +377,7 @@ function love.update(dt)
     ------------------------------------------------------
     if PLAY == PLAY_TYPE_TABLE.pause then
         uiInGame:frameBegin()
-            InGame(uiInGame, perso.getItems(), terrain.teams)
+            InGame(uiInGame, perso.getItems(), terrain.teams, cpt_time)
         uiInGame:frameEnd()
         uiMenu:frame(Pause)
     end
