@@ -36,7 +36,7 @@ function Equipe:New(t, color, name)
     end
 
     local teamIsDead = function()
-        if self.personnages=={} then
+        if self.personnages[1]==nil then
             return true
         end
         return false
