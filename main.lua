@@ -19,6 +19,7 @@ local terrain = nil
 local current_team_nb = 1
 local perso = nil
 local moved = false
+local cpt_time = 0
 
 
 ----------------------------------------------------------------------------------------------------------------
@@ -28,6 +29,7 @@ local moved = false
 --- Initialise un nouveau tableau
 local init_game = function ()
     current_team_nb = 1
+    next_team_nb=2
     -- On instancie les équipes et les personnages
     terrain = Terrain:New(HEIGHT, WIDTH)
     terrain.generateMap()
@@ -36,7 +38,9 @@ local init_game = function ()
     end
 
     -- Premier personnage à jouer
-    perso = terrain.teams[current_team_nb].getPersonnages()[current_team_nb]
+    current_perso_index = terrain.teams[current_team_nb].getCurrentPlayer()
+    perso = terrain.teams[current_team_nb].getPersonnages()[current_perso_index]
+
 end
 
 local function ui_input(ui, name, ...)
@@ -229,6 +233,7 @@ end
 ----------------------------------------------------------------------------------------------------------------
 
 function love.update(dt)
+    cpt_time=cpt_time+dt
     dt_destroyBlock = dt_destroyBlock + dt
     if PLAY == PLAY_TYPE_TABLE.normal or PLAY == PLAY_TYPE_TABLE.weapons then
         uiInGame:frameBegin()
@@ -302,6 +307,31 @@ function love.update(dt)
             uiWeapons:frameBegin()
                 Weapons(uiWeapons)
             uiWeapons:frameEnd()
+        end
+
+        if cpt_time>=10.0 then
+            print("CHANGING OF PERSO")
+            next_team_nb = current_team_nb+1
+            while(terrain.teams[next_team_nb]==nil) do
+                if(next_team_nb<table.getn(terrain.teams)) then
+                    next_team_nb = next_team_nb+1
+                else
+                    next_team_nb = 1
+                end
+            end
+            next_perso_nb = current_perso_index+1
+            while(terrain.teams[current_team_nb].getPersonnages()[next_perso_nb]==nil) do
+                if(next_perso_nb<table.getn(terrain.teams[current_team_nb].getPersonnages())) then
+                    next_perso_nb = next_perso_nb+1
+                else
+                    next_perso_nb = 1
+                end
+            end
+            terrain.teams[current_team_nb].setCurrentPlayer(next_perso_nb)
+            current_perso_index = terrain.teams[next_team_nb].getCurrentPlayer()
+            perso = terrain.teams[next_team_nb].getPersonnages()[current_perso_index]
+            current_team_nb = next_team_nb
+            cpt_time = 0
         end
 
         terrain.update(moved)

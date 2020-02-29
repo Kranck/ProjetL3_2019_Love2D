@@ -13,7 +13,8 @@ function Equipe:New(t, color, name)
         personnages = {},
         materiaux = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
         --armePermanente = Pioche:New()
-        armeCraft = {}
+        armeCraft = {},
+        current_player = 1
     }
 
     for i=1, CHAR_NB do
@@ -34,11 +35,19 @@ function Equipe:New(t, color, name)
         end
     end
 
+    local teamIsDead = function()
+        if self.personnages==nil then
+            return true
+        end
+    end
+
     local getPersonnages = function () return self.personnages end
     local getTerrain = function () return self.terrain end
     local getColor = function () return self.color end
     local getName = function () return self.name end
     local getMateriaux = function () return self.materiaux end
+    local getCurrentPlayer = function () return self.current_player end
+    local setCurrentPlayer = function (x) self.current_player = x end 
 
     setmetatable(self, Equipe)
 
@@ -49,6 +58,9 @@ function Equipe:New(t, color, name)
         getTerrain = getTerrain,
         getColor = getColor,
         getName = getName,
-        getMateriaux = getMateriaux
+        getMateriaux = getMateriaux,
+        teamIsDead = teamIsDead,
+        getCurrentPlayer = getCurrentPlayer,
+        setCurrentPlayer = setCurrentPlayer
     }
 end

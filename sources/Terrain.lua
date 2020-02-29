@@ -36,8 +36,15 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
         for i, m in ipairs(self.materiaux) do
             m.update()
         end
+        team_to_remove = {}
         for i, t in ipairs(self.teams) do
+            if t.teamIsDead() then
+                table.insert(team_to_remove,i)
+            end
             t.update(moved)
+        end
+        for i=1, table.getn(team_to_remove) do
+            table.remove(self.teams ,team_to_remove[i])
         end
     end
     -- fonction d'affichage pour love.draw

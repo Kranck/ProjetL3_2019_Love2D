@@ -187,7 +187,7 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
     end
 
 
-    -- Le personnage touche-t-il le sol ?
+    -- Le personnage touche-t-il le sol ou est il sur un personnage ?
     local isGrounded = function ()
         actualPositionY = self.posY
         nextPositionY = actualPositionY + 4
@@ -207,11 +207,11 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         end
 
         if self.equipe.terrain.getBlock(xPositionMin, yPositionMax) ~= nil
-        or self.equipe.terrain.getBlock(xPositionMax, yPositionMax) ~= nil or isOnPersonnage() then
+        or self.equipe.terrain.getBlock(xPositionMax, yPositionMax) ~= nil then
             return true
         end
 
-        return false
+        return isOnPersonnage()
     end
 
     -- fait sauter le personnage
