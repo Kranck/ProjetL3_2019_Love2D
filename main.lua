@@ -29,7 +29,6 @@ local cpt_time = 0
 --- Initialise un nouveau tableau
 local init_game = function ()
     current_team_nb = 1
-    next_team_nb=2
     -- On instancie les équipes et les personnages
     terrain = Terrain:New(HEIGHT, WIDTH)
     terrain.generateMap()
@@ -234,15 +233,15 @@ end
 
 function love.update(dt)
     -------VARIABLES UTILES AU TOUR PAR TOUR POUR PAS DUPLIQUER LE CODE------
-    next_team_nb = current_team_nb+1
-    while(terrain.teams[next_team_nb].teamIsDead()==true) do
+    local next_team_nb = current_team_nb+1
+    while(terrain.teams[next_team_nb]==nil or terrain.teams[next_team_nb].teamIsDead()) do
         if(next_team_nb<table.getn(terrain.teams)) then
             next_team_nb = next_team_nb+1
         else
             next_team_nb = 1
         end
     end
-    next_perso_nb = current_perso_index+1
+    local next_perso_nb = current_perso_index+1
     while(terrain.teams[current_team_nb].getPersonnages()[next_perso_nb]==nil) do
         if(next_perso_nb<table.getn(terrain.teams[current_team_nb].getPersonnages())) then
             next_perso_nb = next_perso_nb+1
