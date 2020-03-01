@@ -487,7 +487,11 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
 
     local isDestroying = function () return self.destroying end
 
-    local setDestroying = function (destroying) self.destroying = destroying end
+    local setDestroying = function (destroying)
+        current_animation:pauseAtStart()
+        current_animation:resume()
+        self.destroying = destroying
+    end
 
     -- Vérifie la vie d'un personnage
     local isDead = function ()

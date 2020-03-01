@@ -97,8 +97,6 @@ function love.keyreleased(key, scancode)
         end
         -- Reset anim miner
         if key == "f" then
-            current_animation:pauseAtStart()
-            current_animation:resume()
             perso.setDestroying(false)
         end
         return
