@@ -364,6 +364,7 @@ function love.update(dt)
 
         if cpt_time >= TOUR_TIME then
             print("CHANGING OF PERSO")
+            perso.setDestroying(false)
             terrain.teams[current_team_nb].setCurrentPlayer(next_perso_nb)
             terrain.teams[next_team_nb].reset_current_player()
             current_perso_index = terrain.teams[next_team_nb].getCurrentPlayer()
