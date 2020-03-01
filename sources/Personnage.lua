@@ -2,7 +2,7 @@ require('var')
 
 require(SRCDIR.."Terrain")
 require(SRCDIR.."Materiaux")
-
+local anim8   = require 'anim8'
 Personnage = {}
 Personnage.__index = Personnage
 
@@ -41,8 +41,16 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
     end
 
     positionTab = returnAvailablePos()
+    miner_sprite = love.graphics.newImage(ASSETSDIR.."perso/Jmh_miner.png")
+    grid_sprite = anim8.newGrid(48, 48, miner_sprite:getWidth(), miner_sprite:getHeight())
+    current_animation = nil
     local self = {
         sprite  = sprite,
+        miner_sprite = miner_sprite,
+        animations = {
+            miner_right = anim8.newAnimation(grid_sprite(1,1, 2,1, 3,1, 4,1), 0.1, onLoop),
+            miner_left = anim8.newAnimation(grid_sprite(1,2, 2,2, 3,2, 4,2), 0.1, onLoop)
+        },
         terrain = e.terrain,
         range   = RANGE,    -- Distance à laquelle le personnage peut casser des blocs
         img     = love.graphics.newQuad(0, 0, TILESIZE, TILESIZE, sprite:getDimensions()),
@@ -56,7 +64,8 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         Yspeed = 0, -- Vertical Speed
         Yacc = GRAVITY, -- Vertical acceleration
         equipe = e,
-        number = nb
+        number = nb,
+        destroying = false
     }
 
     -- Modifie la position du personnage vers les nouveaux points x, y en vérifiant qu'on reste dans
@@ -316,6 +325,7 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
 
     -- Destruction du block par le personnage
     local DestroyBlock = function ()
+        self.destroying = true
         coeff_droite, ordonne_origin, tile_to_destroyX, startX, startY = getEqDroite(self.posX, self.posY, self.angle, self.orientation, self.range)
 
         -- Si l'angle est trop élevé, on casse le bloc du haut
@@ -471,7 +481,15 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
 
     local getNumber = function () return self.number end
 
-    
+    -- Animations
+    local getMinerSprite = function () return self.miner_sprite end
+
+    local getAnimations = function () return self.animations end
+
+    local isDestroying = function () return self.destroying end
+
+    local setDestroying = function (destroying) self.destroying = destroying end
+
     -- Vérifie la vie d'un personnage
     local isDead = function ()
         if(self.pointDeVie<=0) then
@@ -481,7 +499,16 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         end
     end
 
-    local update = function (grounded, moved)
+    local update = function (grounded, moved, dt)
+        if self.destroying then
+            if self.orientation == RIGHT then
+                current_animation = self.animations.miner_right
+            else
+                current_animation = self.animations.miner_left
+            end
+            current_animation:update(dt)
+        end
+        
         self.Yspeed = self.Yspeed + self.Yacc
         self.Xspeed = self.Xspeed + self.Xacc
     
@@ -510,9 +537,16 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         MoveTo(0, math.floor(self.Yspeed))
     end
 
-    local draw = function (grounded, moved)
-        love.graphics.draw(self.sprite, self.img, self.posX, self.posY)
-    
+    local draw = function (grounded, moved, destroying)
+        if destroying then
+            if self.orientation == RIGHT then
+                current_animation:draw(self.miner_sprite, self.posX, self.posY-16)
+            else
+                current_animation:draw(self.miner_sprite, self.posX-16, self.posY-16)
+            end
+        else
+            love.graphics.draw(self.sprite, self.img, self.posX, self.posY)
+        end
         if grounded and not moved then
             -- On stop le mouvement au sol
             self.Xspeed = 0
@@ -551,12 +585,16 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         getItems = getItems,
         getHP = getHP,
         setHP = setHP,
+        getMinerSprite = getMinerSprite,
+        getAnimations = getAnimations,
         equipe = equipe,
         Tirer = Tirer,
         getEquipe = getEquipe,
         getNumber = getNumber,
         draw = draw,
-        update = update
+        update = update,
+        isDestroying = isDestroying,
+        setDestroying = setDestroying
     }
 
 end -- End Personnage:New

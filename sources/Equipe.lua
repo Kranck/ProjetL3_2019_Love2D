@@ -24,14 +24,14 @@ function Equipe:New(t, color, name)
     local draw = function (moved)
         for j, p in ipairs(self.personnages) do
             grounded = p.isGrounded()
-            p.draw(grounded, moved)
+            p.draw(grounded, moved, p.isDestroying())
         end
     end
 
-    local update = function (moved)
+    local update = function (moved, dt)
         for j, p in ipairs(self.personnages) do
             grounded = p.isGrounded()
-            p.update(grounded, moved)
+            p.update(grounded, moved, dt)
         end
     end
 

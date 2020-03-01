@@ -4,7 +4,6 @@ require(SRCDIR.."Tile")
 require(SRCDIR.."Terrain")
 require(SRCDIR.."Camera")
 require(SRCDIR.."Equipe")
-
 local nuklear = require 'nuklear'
 local Menu    = require(UIDIR..'uiMenu')
 local InGame  = require(UIDIR..'uiInGame')
@@ -19,7 +18,6 @@ local terrain = nil
 local current_team_nb = 1
 local perso = nil
 local moved = false
-
 -- Timer de tour
 local cpt_time
 
@@ -97,7 +95,12 @@ function love.keyreleased(key, scancode)
             end
             return
         end
-
+        -- Reset anim miner
+        if key == "f" then
+            current_animation:pauseAtStart()
+            current_animation:resume()
+            perso.setDestroying(false)
+        end
         return
     end
 
@@ -339,10 +342,12 @@ function love.update(dt)
             if love.keyboard.isScancodeDown("space") then
                 perso.Jump(grounded)
             end
-            
-            if love.keyboard.isScancodeDown("f") and dt_destroyBlock > CD_DESTROYBLOCK then
-                perso.DestroyBlock()
-                dt_destroyBlock = 0
+
+            if love.keyboard.isScancodeDown("f") then
+                if dt_destroyBlock > CD_DESTROYBLOCK then
+                    perso.DestroyBlock()
+                    dt_destroyBlock = 0
+                end
             end
 
             love.wheelmoved(0, 0)
@@ -367,7 +372,7 @@ function love.update(dt)
             cpt_time = 0
         end
 
-        terrain.update(moved)
+        terrain.update(dt)
 
         moved = false -- Reset : le personnage ne s'est pas déplacer pendant cette frame
     end

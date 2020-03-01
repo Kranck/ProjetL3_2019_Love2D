@@ -20,7 +20,7 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
                     teams = {},
                 }
 
-    local update = function ()
+    local update = function (dt)
         local to_remove = {}
         if self.materiaux[1] ~= nil then
             for i=1, table.getn(self.materiaux) do
@@ -37,7 +37,7 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
             m.update()
         end
         for i, t in ipairs(self.teams) do
-            t.update(moved)
+            t.update(moved, dt)
         end
     end
     -- fonction d'affichage pour love.draw
