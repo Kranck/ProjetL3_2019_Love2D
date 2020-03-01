@@ -186,13 +186,12 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
                     if (pos.posY < self.posY+TILESIZE-1+4 and self.posY+TILESIZE-1+4 < pos.posY+TILESIZE-1) then
                         if (self.posX < pos.posX and self.posX +TILESIZE-1 > pos.posX ) or (self.posX<pos.posX+TILESIZE-1 and self.posX+TILESIZE-1>pos.posX+TILESIZE-1) or (self.posX==pos.posX) then
                             return true
-                        else
-                            return false
                         end
                     end
                 end
             end
         end
+        return false
     end
 
 
