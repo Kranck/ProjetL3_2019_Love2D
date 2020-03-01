@@ -13,21 +13,27 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
     -- Sprite où chercher les images
     local sprite = nil
     if color=="#E03A3E" then
+        miner_sprite = love.graphics.newImage(ASSETSDIR.."perso/sprite_jm_miner_rouge.png")
         sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite_jm_rouge.png")
     end
     if color=="#002B5C" then
+        miner_sprite = love.graphics.newImage(ASSETSDIR.."perso/sprite_jm_miner_bleu.png")
         sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite_jm_bleu.png")        
     end
     if color=="#00471B" then
+        miner_sprite = love.graphics.newImage(ASSETSDIR.."perso/sprite_jm_miner_vert.png")
         sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite_jm_vert.png")        
     end
     if color=="#FFCD00" then
+        miner_sprite = love.graphics.newImage(ASSETSDIR.."perso/sprite_jm_miner_jaune.png")
         sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite_jm_jaune.png")        
     end
     if color=="#692261" then
+        miner_sprite = love.graphics.newImage(ASSETSDIR.."perso/sprite_jm_miner_violet.png")
         sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite_jm_violet.png")        
     end
     if color=="#C4CED4" then
+        miner_sprite = love.graphics.newImage(ASSETSDIR.."perso/sprite_jm_miner_blanc.png")
         sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite_jm_blanc.png")        
     end
 
@@ -41,7 +47,7 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
     end
 
     positionTab = returnAvailablePos()
-    miner_sprite = love.graphics.newImage(ASSETSDIR.."perso/Jmh_miner.png")
+    
     grid_sprite = anim8.newGrid(48, 48, miner_sprite:getWidth(), miner_sprite:getHeight())
     current_animation = nil
     local self = {
