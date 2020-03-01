@@ -125,6 +125,7 @@ function love.keyreleased(key, scancode)
         if key == "escape" then
             love.keyboard.setKeyRepeat(true) -- Re-enable Key Repeat
             PLAY = PLAY_TYPE_TABLE.normal
+            perso.setDestroying(false)
         else
             ui_input(uiPause, 'keyreleased', key, scancode)
         end
