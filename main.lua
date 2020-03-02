@@ -72,6 +72,7 @@ function love.keyreleased(key, scancode)
     if PLAY == PLAY_TYPE_TABLE.normal then
         -- Passe en mode craft
         if key == "c" then
+            perso.setDestroying(false)
             love.keyboard.setKeyRepeat(false) -- Deactivate repeat on keyboard keys
             PLAY = PLAY_TYPE_TABLE.weapons
             return
