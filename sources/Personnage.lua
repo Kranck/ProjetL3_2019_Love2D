@@ -49,7 +49,6 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
     positionTab = returnAvailablePos()
     
     grid_sprite = anim8.newGrid(48, 48, miner_sprite:getWidth(), miner_sprite:getHeight())
-    current_animation = nil
     local self = {
         sprite  = sprite,
         miner_sprite = miner_sprite,
@@ -73,6 +72,7 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         number = nb,
         destroying = false
     }
+    current_animation = self.animations.miner_right
 
     -- Modifie la position du personnage vers les nouveaux points x, y en vérifiant qu'on reste dans
     -- le terrain et qu'on ne rentre pas dans un mur
