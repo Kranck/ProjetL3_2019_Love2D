@@ -66,87 +66,6 @@ local style_group_info = {
     },
 }
 
-local weapons_imgs = {}
-table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'pistol.png'),
-                            dmg = 20,
-                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
-                            num = 0,
-                            })
-table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'ammo.png'),
-                            dmg = 20,
-                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
-                            num = 0,
-                            })
-table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'pistol.png'),
-                            dmg = 20,
-                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
-                            num = 0,
-                            })
-table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'ammo.png'),
-                            dmg = 20,
-                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
-                            num = 0,
-                            })
-table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'pistol.png'),
-                            dmg = 20,
-                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
-                            num = 0,
-                            })
-table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'ammo.png'),
-                            dmg = 20,
-                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
-                            num = 0,
-                            })
-table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'pistol.png'),
-                            dmg = 20,
-                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
-                            num = 0,
-                            })
-table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'ammo.png'),
-                            dmg = 20,
-                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
-                            num = 0,
-                            })
-table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'pistol.png'),
-                            dmg = 20,
-                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
-                            num = 0,
-                            })
-table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'ammo.png'),
-                            dmg = 20,
-                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
-                            num = 0,
-                            })
-table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'pistol.png'),
-                            dmg = 20,
-                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
-                            num = 0,
-                            })
-table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'ammo.png'),
-                            dmg = 20,
-                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
-                            num = 0,
-                            })
-table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'pistol.png'),
-                            dmg = 20,
-                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
-                            num = 0,
-                            })
-table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'ammo.png'),
-                            dmg = 20,
-                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
-                            num = 0,
-                            })
-table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'pistol.png'),
-                            dmg = 20,
-                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
-                            num = 0,
-                            })
-table.insert(weapons_imgs, {img = love.graphics.newImage(TEXTUREDIR..'ammo.png'),
-                            dmg = 20,
-                            cost = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
-                            num = 0,
-                            })
 
 local current_weapon = nil
 
@@ -171,7 +90,7 @@ return function (ui, team)
             ui:stylePush(style_table_inner_group_weapons)
             if ui:groupBegin('Weapons', 'border') then
                 ui:layoutRow('static', TILESIZE + 4, TILESIZE + 4, 5)
-                for _, w in ipairs(weapons_imgs) do
+                for _, w in ipairs(team.weapons) do
                     if ui:button(nil, w.img) then
                         current_weapon = w
                     end
@@ -188,10 +107,29 @@ return function (ui, team)
                 ui:spacing(1)
                 if ui:button("Craft avec Or") then
                     -- TODO ajouter arme current_weapon à team et enlever montant en or 
+                    if current_weapon.available > 0 then
+                        if team.materiaux.Gold >= current_weapon.cost.Gold then
+                            team.materiaux.Gold = team.materiaux.Gold - current_weapon.cost.Gold
+                            current_weapon.available = current_weapon.available + 1
+                        end
+                    end
                 end
                 ui:spacing(2)
                 if ui:button("Craft avec Matériaux") then
                     -- TODO ajouter arme current_weapon à team et enlever matériaux
+                    if current_weapon.available > 0 then
+                        if  team.materiaux.Terre >= current_weapon.cost.Terre
+                        and team.materiaux.Souffre >= current_weapon.cost.Souffre
+                        and team.materiaux.Pierre >= current_weapon.cost.Pierre
+                        and team.materiaux.Fer >= current_weapon.cost.Fer then
+                            team.materiaux.Gold = team.materiaux.Gold - current_weapon.cost.Gold
+                            team.materiaux.Pierre = team.materiaux.Pierre - current_weapon.cost.Pierre
+                            team.materiaux.Terre = team.materiaux.Terre - current_weapon.cost.Terre
+                            team.materiaux.Gold = team.materiaux.Gold - current_weapon.cost.Gold
+                            team.materiaux.Fer = team.materiaux.Fer - current_weapon.cost.Fer
+                            current_weapon.available = current_weapon.available + 1
+                        end
+                    end
                 end
                 ui:groupEnd() -- End of 'Craft'
             end
@@ -206,8 +144,10 @@ return function (ui, team)
                 ui:button(nil, current_weapon.img)
                 ui:layoutRow('dynamic', 15, 1)
                 ui:spacing(1)
-                ui:label("Damages : "..current_weapon.dmg.." hp")
-                ui:label("Disponibles : "..current_weapon.num)
+                if current_weapon.dmg ~= nil then
+                    ui:label("Damages : "..current_weapon.dmg.." hp")
+                end
+                ui:label("Disponibles : "..current_weapon.available)
                 ui:label("En Or : "..current_weapon.cost.Gold, 'centered')
                 if  current_weapon.cost.Terre ~= 0 or current_weapon.cost.Souffre ~= 0
                 or current_weapon.cost.Pierre ~= 0 or current_weapon.cost.Fer ~= 0 then

@@ -5,6 +5,16 @@ require(SRCDIR.."Personnage")
 Equipe = {}
 Equipe.__index = Equipe
 
+function copy(obj, seen)
+    if type(obj) ~= 'table' then return obj end
+    if seen and seen[obj] then return seen[obj] end
+    local s = seen or {}
+    local res = setmetatable({}, getmetatable(obj))
+    s[obj] = res
+    for k, v in pairs(obj) do res[copy(k, s)] = copy(v, s) end
+    return res
+end
+
 function Equipe:New(t, color, name)
     local self = {
         terrain = t,
@@ -12,8 +22,7 @@ function Equipe:New(t, color, name)
         name = name,
         personnages = {},
         materiaux = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
-        --armePermanente = Pioche:New()
-        armeCraft = {},
+        weapons = copy(WEAPONS_INIT),
         current_player = 1
     }
 
@@ -77,6 +86,7 @@ function Equipe:New(t, color, name)
         teamIsDead = teamIsDead,
         getCurrentPlayer = getCurrentPlayer,
         setCurrentPlayer = setCurrentPlayer,
-        reset_current_player = reset_current_player
+        reset_current_player = reset_current_player,
+        weapons = self.weapons,
     }
 end

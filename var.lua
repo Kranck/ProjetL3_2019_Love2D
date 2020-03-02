@@ -54,7 +54,25 @@ CHAR_HP = 100
 CHAR_NB = 5
 TEAM_NB = 4
 
-TOUR_TIME = 10.0
+TOUR_TIME = 40.0
+
+---------------- Weapons Parameters -----------------
+
+WEAPONS_INIT = {
+	['revolver'] = {
+		['available'] = 1, -- >= 0 craftable ; < 0 non-craftable 
+		['cost'] = {Gold = 30, Terre = 2, Pierre = 5, Souffre = 0, Fer = 20},
+		['dmg'] = 20,
+		['durability'] = 20,
+		['current_durability'] = 20,
+		['img'] = love.graphics.newImage(TEXTUREDIR..'pistol.png'),
+	},
+	['revolver_ammo'] = {
+		['available'] = 10,
+		['cost'] = {Gold = 2, Terre = 0, Pierre = 0, Souffre = 1, Fer = 1},
+		['img'] = love.graphics.newImage(TEXTUREDIR..'ammo.png'),
+	}
+}
 
 ------------------- DESIGN --------------------
 TEAM_COLORS = {
