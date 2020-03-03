@@ -9,9 +9,10 @@ local Menu    = require(UIDIR..'uiMenu')
 local InGame  = require(UIDIR..'uiInGame')
 local Weapons = require(UIDIR..'uiWeapons')
 local Pause   = require(UIDIR..'uiPause')
+local Endgame = require(UIDIR..'uiEndgame')
 
 -- HUDs
-local uiMenu, uiInGame, uiPause, uiWeapons
+local uiMenu, uiInGame, uiPause, uiWeapons, uiEndgame
 
 -- terrain ; équipe ; perso
 local terrain = nil
@@ -54,6 +55,7 @@ function love.load()
     uiInGame = nuklear.newUI()
     uiWeapons= nuklear.newUI() 
     uiPause  = nuklear.newUI()
+    uiEndgame = nuklear.newUI()
 
     init_game()
 end
@@ -267,8 +269,24 @@ function love.update(dt)
     end
 
     if current_team_nb == next_team_nb then
+        PLAY = PLAY_TYPE_TABLE.endgame
+        uiEndgame:frameBegin()
+            Endgame(uiEndgame, "L'Equipe "..terrain.teams[next_team_nb].getColorString().." a gagné")
+        uiEndgame:frameEnd()
         print("L'Equipe "..terrain.teams[next_team_nb].getColorString().." a gagné")
         print("Appuyer sur Entrée pour relancer une partie")
+        if love.keyboard.isDown("return") then
+            init_game()        
+            for i=1, CHAR_NB do
+                if key == ""..i then
+                    if terrain.teams[current_team_nb].personnages[i] ~= nil then
+                        perso = terrain.teams[current_team_nb].personnages[i]
+                    end
+                end 
+            end
+            PLAY = PLAY_TYPE_TABLE.normal
+            return
+        end
     end
 
 
@@ -428,6 +446,9 @@ function love.draw()
             love.graphics.rectangle("fill", 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
             love.graphics.setColor(1,1,1,1) -- default
             uiPause:draw()
+        end
+        if(PLAY == PLAY_TYPE_TABLE.endgame) then
+            uiEndgame:draw()
         end
     elseif(PLAY == PLAY_TYPE_TABLE.main) then
         uiMenu:draw()
