@@ -30,7 +30,7 @@ function Equipe:New(t, color, name)
     local draw = function (moved)
         for j, p in ipairs(self.personnages) do
             grounded = p.isGrounded()
-            p.draw(grounded, moved, p.isDestroying())
+            p.draw(grounded, moved)
         end
     end
 

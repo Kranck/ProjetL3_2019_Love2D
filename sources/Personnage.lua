@@ -16,31 +16,45 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
 
     -- Sprite où chercher les images
     local sprite = nil
+    local sprite_without_arms = nil
     if color=="#E03A3E" then
         miner_sprite = love.graphics.newImage(ASSETSDIR.."perso/sprite_jm_miner_rouge.png")
         sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite_jm_rouge.png")
+        sprite_without_arms = love.graphics.newImage(ASSETSDIR.."perso/sprite_jm_sans_bras_rouge.png")
+        sprite_arm_and_pistol = love.graphics.newImage(ASSETSDIR.."perso/sprite_bras_pistolet_rouge.png") 
     end
     if color=="#002B5C" then
         miner_sprite = love.graphics.newImage(ASSETSDIR.."perso/sprite_jm_miner_bleu.png")
-        sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite_jm_bleu.png")        
+        sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite_jm_bleu.png")
+        sprite_without_arms = love.graphics.newImage(ASSETSDIR.."perso/sprite_jm_sans_bras_bleu.png")
+        sprite_arm_and_pistol = love.graphics.newImage(ASSETSDIR.."perso/sprite_bras_pistolet_bleu.png")        
     end
     if color=="#00471B" then
         miner_sprite = love.graphics.newImage(ASSETSDIR.."perso/sprite_jm_miner_vert.png")
-        sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite_jm_vert.png")        
+        sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite_jm_vert.png")      
+        sprite_without_arms = love.graphics.newImage(ASSETSDIR.."perso/sprite_jm_sans_bras_vert.png")
+        sprite_arm_and_pistol = love.graphics.newImage(ASSETSDIR.."perso/sprite_bras_pistolet_vert.png")  
     end
     if color=="#FFCD00" then
         miner_sprite = love.graphics.newImage(ASSETSDIR.."perso/sprite_jm_miner_jaune.png")
         sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite_jm_jaune.png")        
+        sprite_without_arms = love.graphics.newImage(ASSETSDIR.."perso/sprite_jm_sans_bras_jaune.png")
+        sprite_arm_and_pistol = love.graphics.newImage(ASSETSDIR.."perso/sprite_bras_pistolet_jaune.png")
     end
     if color=="#692261" then
         miner_sprite = love.graphics.newImage(ASSETSDIR.."perso/sprite_jm_miner_violet.png")
-        sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite_jm_violet.png")        
+        sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite_jm_violet.png")
+        sprite_without_arms = love.graphics.newImage(ASSETSDIR.."perso/sprite_jm_sans_bras_violet.png")
+        sprite_arm_and_pistol = love.graphics.newImage(ASSETSDIR.."perso/sprite_bras_pistolet_violet.png")        
     end
     if color=="#C4CED4" then
         miner_sprite = love.graphics.newImage(ASSETSDIR.."perso/sprite_jm_miner_blanc.png")
-        sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite_jm_blanc.png")        
+        sprite = love.graphics.newImage(ASSETSDIR.."perso/".."sprite_jm_blanc.png")  
+        sprite_without_arms = love.graphics.newImage(ASSETSDIR.."perso/sprite_jm_sans_bras_blanc.png")
+        sprite_arm_and_pistol = love.graphics.newImage(ASSETSDIR.."perso/sprite_bras_pistolet_blanc.png")      
     end
 
+    
     local function returnAvailablePos()
         newTab = e.terrain.getPositionAvailable()
         randIndex = math.random(1, table.getn(newTab))
@@ -74,6 +88,7 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         Yacc = GRAVITY, -- Vertical acceleration
         equipe = e,
         number = nb,
+        weapon = "",
         destroying = false
     }
     current_animation = self.animations.miner_right
@@ -294,6 +309,16 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         end
     end
     
+    local changeWeapon = function (newWeapon)
+        self.weapon = newWeapon
+        if(newWeapon == "pistolet") then
+            self.sprite = sprite_without_arms
+        end
+        if(newWeapon == "") then
+            self.sprite = sprite
+        end
+    end
+
     local getEqDroite = function(posX, posY, angle, orientation, range)
         local angle_in_radian = angle * math.pi/180
 
@@ -334,6 +359,7 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
 
     -- Destruction du block par le personnage
     local DestroyBlock = function ()
+        changeWeapon("")
         self.destroying = true
         coeff_droite, ordonne_origin, tile_to_destroyX, startX, startY = getEqDroite(self.posX, self.posY, self.angle, self.orientation, self.range)
 
@@ -417,6 +443,7 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
 
     -- Tirer
     local Tirer = function()
+        changeWeapon("pistolet")
         coeff_droite, ordonne_origin, tile_to_destroyX, startX, startY = getEqDroite(self.posX, self.posY, self.angle, self.orientation, self.range)
         local signe_pas = 1
 
@@ -495,8 +522,6 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
 
     local getAnimations = function () return self.animations end
 
-    local isDestroying = function () return self.destroying end
-
     local setDestroying = function (destroying)
         current_animation:pauseAtStart()
         current_animation:resume()
@@ -550,8 +575,19 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         MoveTo(0, math.floor(self.Yspeed))
     end
 
-    local draw = function (grounded, moved, destroying)
-        if destroying then
+    local draw = function (grounded, moved)
+        if self.weapon == "pistolet" then
+            if self.orientation == RIGHT then
+                quad_pistol = love.graphics.newQuad(0, 0, 18, 7, sprite_arm_and_pistol:getDimensions())
+                self.img = love.graphics.newQuad(0, 0, TILESIZE, TILESIZE, self.sprite:getDimensions())
+                love.graphics.draw(sprite_arm_and_pistol, quad_pistol, self.posX+18, self.posY+10, -self.angle*math.pi/180, 1, 1, 0, 4)
+            else
+                quad_pistol = love.graphics.newQuad(0, 8, 18, 7, sprite_arm_and_pistol:getDimensions())
+                self.img = love.graphics.newQuad(TILESIZE, 0, TILESIZE, TILESIZE, self.sprite:getDimensions())
+                love.graphics.draw(sprite_arm_and_pistol, quad_pistol, self.posX+14, self.posY+10, self.angle*math.pi/180, 1, 1, 17, 4)
+            end
+        end
+        if self.destroying then
             if self.orientation == RIGHT then
                 current_animation:draw(self.miner_sprite, self.posX, self.posY-16)
             else
@@ -606,7 +642,7 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         getNumber = getNumber,
         draw = draw,
         update = update,
-        isDestroying = isDestroying,
+        changeWeapon = changeWeapon,
         setDestroying = setDestroying
     }
 

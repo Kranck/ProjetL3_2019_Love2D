@@ -55,7 +55,7 @@ CHAR_HP = 100
 CHAR_NB = 4
 TEAM_NB = 4
 
-TOUR_TIME = 40.0
+TOUR_TIME = 3
 
 SENSI = 50 -- Entre 20 et 120 
 

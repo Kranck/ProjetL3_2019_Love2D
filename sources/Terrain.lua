@@ -59,6 +59,7 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
 
     local next_perso = function()
         print("CHANGING OF PERSO")
+        self.controlled_perso.changeWeapon("")
         self.teams[self.current_team_nb].setCurrentPlayer(self.next_perso_nb)
         self.teams[self.next_team_nb].reset_current_player()
         self.current_perso_index = self.teams[self.next_team_nb].getCurrentPlayer()
