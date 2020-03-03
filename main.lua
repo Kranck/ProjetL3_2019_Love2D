@@ -66,7 +66,6 @@ function love.keyreleased(key, scancode)
     if PLAY == PLAY_TYPE_TABLE.normal then
         -- Passe en mode craft
         if key == "c" then
-            perso.setDestroying(false)
             love.keyboard.setKeyRepeat(false) -- Deactivate repeat on keyboard keys
             PLAY = PLAY_TYPE_TABLE.weapons
             return
@@ -89,10 +88,6 @@ function love.keyreleased(key, scancode)
                 end 
             end
             return
-        end
-        -- Reset anim miner
-        if key == "f" then
-            perso.setDestroying(false)
         end
         return
     end
@@ -118,7 +113,6 @@ function love.keyreleased(key, scancode)
         if key == "escape" then
             love.keyboard.setKeyRepeat(true) -- Re-enable Key Repeat
             PLAY = PLAY_TYPE_TABLE.normal
-            perso.setDestroying(false)
         else
             ui_input(uiPause, 'keyreleased', key, scancode)
         end
@@ -339,6 +333,10 @@ function love.update(dt)
                     perso.DestroyBlock()
                     dt_destroyBlock = 0
                 end
+            end
+
+            if not love.keyboard.isDown('f') then
+                perso.setDestroying(false)
             end
 
             love.wheelmoved(0, 0)

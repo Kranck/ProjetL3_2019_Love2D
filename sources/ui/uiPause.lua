@@ -24,7 +24,6 @@ return function (ui, perso, terrain, current_team_nb, current_perso_index)
 		if ui:button("REPRENDRE") then
             love.keyboard.setKeyRepeat(true) -- Re-enable Key Repeat
             PLAY = PLAY_TYPE_TABLE.normal
-			perso.setDestroying(false)
 		end
         ui:layoutRow('dynamic', 5, 1)
 		ui:spacing(1)
