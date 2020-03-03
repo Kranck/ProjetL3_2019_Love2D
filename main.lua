@@ -271,7 +271,10 @@ function love.update(dt)
         end
     end
 
-    
+    if current_team_nb == next_team_nb then
+        print("L'Equipe "..terrain.teams[next_team_nb].getColorString().." a gagné")
+        print("Appuyer sur Entrée pour relancer une partie")
+    end
 
 
     if PLAY == PLAY_TYPE_TABLE.normal or PLAY == PLAY_TYPE_TABLE.weapons then

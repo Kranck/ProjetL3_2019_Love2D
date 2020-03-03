@@ -72,6 +72,26 @@ function Equipe:New(t, color, name)
     local getMateriaux = function () return self.materiaux end
     local getCurrentPlayer = function () return self.current_player end
     local setCurrentPlayer = function (x) self.current_player = x end 
+    local getColorString = function () 
+        if self.color=="#E03A3E" then
+            return "rouge"
+        end
+        if self.color=="#002B5C" then
+            return "bleue"
+        end
+        if self.color=="#00471B" then
+            return "verte"
+        end
+        if self.color=="#FFCD00" then
+            return "jaune"
+        end
+        if self.color=="#692261" then
+            return "violette"
+        end
+        if self.color=="#C4CED4" then
+            return "blanche"
+        end
+    end
 
     setmetatable(self, Equipe)
 
@@ -88,5 +108,6 @@ function Equipe:New(t, color, name)
         setCurrentPlayer = setCurrentPlayer,
         reset_current_player = reset_current_player,
         weapons = self.weapons,
+        getColorString = getColorString
     }
 end
