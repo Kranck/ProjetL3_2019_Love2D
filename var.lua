@@ -52,8 +52,8 @@ PLAY_TYPE_TABLE = { ['normal']  = 1, --> normal
 PLAY = PLAY_TYPE_TABLE.normal
 
 CHAR_HP = 100
-CHAR_NB = 5
-TEAM_NB = 2
+CHAR_NB = 4
+TEAM_NB = 4
 
 TOUR_TIME = 40.0
 

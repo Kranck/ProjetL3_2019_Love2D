@@ -32,13 +32,10 @@ local dt_destroyBlock
 
 --- Initialise un nouveau tableau
 local init_game = function ()
-    current_team_nb = 1
     -- On instancie les équipes et les personnages
     terrain = Terrain:New(HEIGHT, WIDTH)
-
     -- Premier personnage à jouer
-    current_perso_index = terrain.teams[current_team_nb].getCurrentPlayer()
-    perso = terrain.teams[current_team_nb].getPersonnages()[current_perso_index]
+    perso = terrain.get_controlled_perso()
 end
 
 local function ui_input(ui, name, ...)
@@ -87,7 +84,7 @@ function love.keyreleased(key, scancode)
             for i=1, CHAR_NB do
                 if key == ""..i then
                     if terrain.teams[current_team_nb].personnages[i] ~= nil then
-                        perso = terrain.teams[current_team_nb].personnages[i]
+                        perso = terrain.get_controlled_perso()
                     end
                 end 
             end
@@ -248,39 +245,21 @@ end
 
 function love.update(dt)
     -------VARIABLES UTILES AU TOUR PAR TOUR POUR PAS DUPLIQUER LE CODE------
-    local next_team_nb = current_team_nb+1
-    if next_team_nb > table.getn(terrain.teams) then
-        next_team_nb=1
-    end
-    while terrain.teams[next_team_nb].teamIsDead() do
-        next_team_nb = next_team_nb+1
-        if next_team_nb>table.getn(terrain.teams) then
-            next_team_nb=1
-        end
-    end
     
-    local next_perso_nb = current_perso_index+1
-    while terrain.teams[current_team_nb].getPersonnages()[next_perso_nb] == nil do
-        if next_perso_nb<table.getn(terrain.teams[current_team_nb].getPersonnages()) then
-            next_perso_nb = next_perso_nb+1
-        else
-            next_perso_nb = 1
-        end
-    end
 
-    if current_team_nb == next_team_nb then
+    if terrain.get_current_team_nb() == terrain.get_next_team_nb() then
         PLAY = PLAY_TYPE_TABLE.endgame
         uiEndgame:frameBegin()
-            Endgame(uiEndgame, "L'Equipe "..terrain.teams[next_team_nb].getColorString().." a gagné")
+            Endgame(uiEndgame, "L'Equipe "..terrain.teams[terrain.get_next_team_nb()].getColorString().." a gagné")
         uiEndgame:frameEnd()
-        print("L'Equipe "..terrain.teams[next_team_nb].getColorString().." a gagné")
+        print("L'Equipe "..terrain.teams[terrain.get_next_team_nb()].getColorString().." a gagné")
         print("Appuyer sur Entrée pour relancer une partie")
         if love.keyboard.isDown("return") then
             init_game()        
             for i=1, CHAR_NB do
                 if key == ""..i then
-                    if terrain.teams[current_team_nb].personnages[i] ~= nil then
-                        perso = terrain.teams[current_team_nb].personnages[i]
+                    if terrain.teams[get_current_team_nb()].personnages[i] ~= nil then
+                        perso = terrain.get_controlled_perso()
                     end
                 end 
             end
@@ -324,12 +303,8 @@ function love.update(dt)
         end
 
         if grounded == "outOfBounds" or perso.getHP() <= 0 then
-            print("CHANGING OF PERSO")
-            terrain.teams[current_team_nb].setCurrentPlayer(next_perso_nb)
-            terrain.teams[next_team_nb].reset_current_player()
-            current_perso_index = terrain.teams[next_team_nb].getCurrentPlayer()
-            perso = terrain.teams[next_team_nb].getPersonnages()[current_perso_index]
-            current_team_nb = next_team_nb
+            terrain.next_perso()
+            perso = terrain.get_controlled_perso()
             cpt_time = 0
         end
     
@@ -379,13 +354,8 @@ function love.update(dt)
         end
 
         if cpt_time >= TOUR_TIME then
-            print("CHANGING OF PERSO")
-            perso.setDestroying(false)
-            terrain.teams[current_team_nb].setCurrentPlayer(next_perso_nb)
-            terrain.teams[next_team_nb].reset_current_player()
-            current_perso_index = terrain.teams[next_team_nb].getCurrentPlayer()
-            perso = terrain.teams[next_team_nb].getPersonnages()[current_perso_index]
-            current_team_nb = next_team_nb
+            terrain.next_perso()
+            perso = terrain.get_controlled_perso()
             cpt_time = 0
         end
 

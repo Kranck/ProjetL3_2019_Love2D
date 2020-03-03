@@ -11,14 +11,62 @@ Terrain.__index = Terrain
 Terrain.background = nil --love.graphics.newImage(ASSETSDIR.."sky_background.jpg")
 
 function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Tile différentes
-    local self = { 
+    local self = {  
+                    current_perso_index = nil,
+                    next_team_nb = nil,
+                    current_team_nb = 1,
                     height = height,
                     width = width,
                     map_bloc = {},
                     materiaux = {},
                     positionAvailable = {},
                     teams = {},
+                    controlled_perso = nil,
+                    next_perso_nb = nil
                 }
+
+    local set_next_perso_nb = function()
+        self.next_perso_nb = self.current_perso_index+1
+        while self.teams[self.current_team_nb].getPersonnages()[self.next_perso_nb] == nil do
+            if self.next_perso_nb<table.getn(self.teams[self.current_team_nb].getPersonnages()) then
+                self.next_perso_nb = self.next_perso_nb+1
+            else
+                self.next_perso_nb = 1
+            end
+        end
+    end
+
+    local set_current_perso_nb = function()
+
+    end
+
+    local set_next_team_nb = function()
+        self.next_team_nb = self.current_team_nb+1
+        if self.next_team_nb > table.getn(self.teams) then
+            self.next_team_nb=1
+        end
+        while self.teams[self.next_team_nb].teamIsDead() do
+            self.next_team_nb = self.next_team_nb+1
+            if self.next_team_nb>table.getn(self.teams) then
+                self.next_team_nb=1
+            end
+        end
+    end
+
+    local set_current_team_nb = function()
+
+    end
+
+    local next_perso = function()
+        print("CHANGING OF PERSO")
+        self.teams[self.current_team_nb].setCurrentPlayer(self.next_perso_nb)
+        self.teams[self.next_team_nb].reset_current_player()
+        self.current_perso_index = self.teams[self.next_team_nb].getCurrentPlayer()
+        self.controlled_perso = self.teams[self.next_team_nb].getPersonnages()[self.current_perso_index]
+        self.current_team_nb = self.next_team_nb
+        set_next_perso_nb()
+        set_next_team_nb()
+    end
 
     local update = function (dt)
         local to_remove = {}
@@ -39,6 +87,8 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
         for i, t in ipairs(self.teams) do
             t.update(moved, dt)
         end
+        set_next_perso_nb()
+        set_next_team_nb()
     end
     -- fonction d'affichage pour love.draw
     local draw = function () 
@@ -220,6 +270,18 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
         }, TEAM_COLORS[i], "Equipe "..i))
     end
 
+    self.current_perso_index = self.teams[self.current_team_nb].getCurrentPlayer()
+    set_next_team_nb()
+    set_next_perso_nb()
+    self.controlled_perso = self.teams[self.current_team_nb].getPersonnages()[self.current_perso_index]
+    self.current_perso_index = self.teams[self.current_team_nb].getCurrentPlayer()
+
+    local get_current_team_nb = function() return self.current_team_nb end
+    local get_current_perso_index = function() return self.current_perso_index end
+    local get_controlled_perso = function() return self.controlled_perso end
+    local get_next_team_nb = function() return self.next_team_nb end
+    local get_next_perso_nb = function() return self.next_perso_nb end
+
     ----------------------------------------------------------------------------------------------------------
     ----------------------------------------  Interface Extérieure  ------------------------------------------
     ----------------------------------------------------------------------------------------------------------
@@ -232,7 +294,13 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
         getBlock = getBlock,
         destroy = destroy,
         teams = self.teams,
-        materiaux = self.materiaux
+        materiaux = self.materiaux,
+        get_controlled_perso = get_controlled_perso,
+        get_current_team_nb = get_current_team_nb,
+        get_current_perso_index = get_current_perso_index,
+        get_next_team_nb = get_next_team_nb,
+        get_next_perso_nb = get_next_perso_nb,
+        next_perso = next_perso
     }
     
 end -- End Personnage:New
