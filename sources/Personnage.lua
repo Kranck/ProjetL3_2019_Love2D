@@ -6,6 +6,10 @@ local anim8   = require 'anim8'
 Personnage = {}
 Personnage.__index = Personnage
 
+local function sensi(x) -- map a value between 0.5 and 
+    return (math.atan(SENSI/40 * x) / math.pi) * 6
+end
+
 
 function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Tiles différentes
     -- stocker le reste dans terrain : utiliset la séquence de Halton
@@ -279,14 +283,14 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
     -- Change l'angle de visée du personnage vers le haut (limité à 90 deg)
     local changeAngleUp = function ()
         if (self.angle < 90) then
-            self.angle = self.angle + 1
+            self.angle = self.angle + sensi(1)
         end
     end
 
     -- Change l'angle de visée du personnage vers le bas (limité à - 90 deg)
     local changeAngleDown = function ()
         if (self.angle > -90) then
-            self.angle = self.angle - 1
+            self.angle = self.angle - sensi(1)
         end
     end
     

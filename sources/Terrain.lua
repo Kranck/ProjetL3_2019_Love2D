@@ -203,6 +203,23 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
 
     setmetatable(self, Terrain)
     
+    
+    generateMap()
+
+    for i=1, TEAM_NB do
+        table.insert(self.teams, Equipe:New({
+            getPositionAvailable = getPositionAvailable,
+            setPositionAvailable = setPositionAvailable,
+            generateMap = generateMap,
+            draw = draw,
+            update = update,
+            getBlock = getBlock,
+            destroy = destroy,
+            teams = self.teams,
+            materiaux = self.materiaux
+        }, TEAM_COLORS[i], "Equipe "..i))
+    end
+
     ----------------------------------------------------------------------------------------------------------
     ----------------------------------------  Interface Extérieure  ------------------------------------------
     ----------------------------------------------------------------------------------------------------------

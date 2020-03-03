@@ -56,6 +56,8 @@ TEAM_NB = 2
 
 TOUR_TIME = 40.0
 
+SENSI = 50 -- Entre 20 et 120 
+
 ---------------- Weapons Parameters -----------------
 
 WEAPONS_INIT = {

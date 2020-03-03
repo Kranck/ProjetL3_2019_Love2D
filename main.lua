@@ -34,15 +34,10 @@ local init_game = function ()
     current_team_nb = 1
     -- On instancie les équipes et les personnages
     terrain = Terrain:New(HEIGHT, WIDTH)
-    terrain.generateMap()
-    for i=1, TEAM_NB do
-        table.insert(terrain.teams, Equipe:New(terrain, TEAM_COLORS[i], "Equipe "..i))
-    end
 
     -- Premier personnage à jouer
     current_perso_index = terrain.teams[current_team_nb].getCurrentPlayer()
     perso = terrain.teams[current_team_nb].getPersonnages()[current_perso_index]
-
 end
 
 local function ui_input(ui, name, ...)
@@ -281,8 +276,8 @@ function love.update(dt)
             ---------------------------------------------------------
             -----------------  Maj des compteurs  -------------------
             ---------------------------------------------------------
-    cpt_time = cpt_time + dt
-    dt_destroyBlock = dt_destroyBlock + dt
+        cpt_time = cpt_time + dt
+        dt_destroyBlock = dt_destroyBlock + dt
 
         uiInGame:frameBegin()
             InGame(uiInGame, perso.getItems(), terrain.teams, cpt_time)
@@ -388,7 +383,9 @@ function love.update(dt)
         uiInGame:frameBegin()
             InGame(uiInGame, perso.getItems(), terrain.teams, cpt_time)
         uiInGame:frameEnd()
-        uiMenu:frame(Pause)
+        uiPause:frameBegin()
+            Pause(uiPause, perso, terrain, current_team_nb, current_perso_index)
+        uiPause:frameEnd()
     end
 
     -----------------------------------------------------
