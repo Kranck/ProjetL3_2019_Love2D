@@ -370,7 +370,12 @@ function love.update(dt)
             InGame(uiInGame, perso.getItems(), terrain.teams, cpt_time)
         uiInGame:frameEnd()
         uiPause:frameBegin()
-            terrain = Pause(uiPause,terrain)
+            new_terrain = Pause(uiPause,terrain)
+            if terrain~=new_terrain then
+                terrain=new_terrain
+                perso = terrain.get_controlled_perso()
+                cpt_time=0
+            end
         uiPause:frameEnd()
     end
 
