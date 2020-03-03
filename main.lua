@@ -370,7 +370,7 @@ function love.update(dt)
             InGame(uiInGame, perso.getItems(), terrain.teams, cpt_time)
         uiInGame:frameEnd()
         uiPause:frameBegin()
-            Pause(uiPause, perso, terrain, current_team_nb, current_perso_index)
+            terrain = Pause(uiPause,terrain)
         uiPause:frameEnd()
     end
 

@@ -16,7 +16,7 @@ local style = {
 	}
 }
 
-return function (ui, perso, terrain, current_team_nb, current_perso_index)
+return function (ui, terrain)
 	ui:stylePush(style)
     if ui:windowBegin('Pause Menu', widget_width_padding, widget_height_padding, widget_width, widget_height) then
         ui:layoutRow('dynamic', 32, 1)
@@ -36,15 +36,8 @@ return function (ui, perso, terrain, current_team_nb, current_perso_index)
         ui:layoutRow('dynamic', 32, 1)
 		if ui:button("RECOMMENCER") then
             love.keyboard.setKeyRepeat(true) -- Re-enable Key Repeat
-			
-			current_team_nb = 1
-			-- On instancie les équipes et les personnages
-			terrain = Terrain:New(HEIGHT, WIDTH)
-			
-			-- Premier personnage à jouer
-			current_perso_index = terrain.teams[current_team_nb].getCurrentPlayer()
-			perso = terrain.teams[current_team_nb].getPersonnages()[current_perso_index]
             PLAY = PLAY_TYPE_TABLE.normal
+			return Terrain:New(HEIGHT, WIDTH)
 		end
         ui:layoutRow('dynamic', 10, 1)
 		ui:spacing(1)
@@ -55,4 +48,5 @@ return function (ui, perso, terrain, current_team_nb, current_perso_index)
 	end
 	ui:windowEnd()
 	ui:stylePop()
+	return terrain
 end
