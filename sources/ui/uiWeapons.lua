@@ -78,6 +78,8 @@ local widget_height_padding = (WINDOW_HEIGHT - widget_height)/2
 local style = {}
 
 return function (ui, team)
+    local materiaux = team.getMateriaux()
+
     ui:styleLoadColors(colorTable)
     ui:stylePush(style_table_general)
 
@@ -90,7 +92,7 @@ return function (ui, team)
             ui:stylePush(style_table_inner_group_weapons)
             if ui:groupBegin('Weapons', 'border') then
                 ui:layoutRow('static', TILESIZE + 4, TILESIZE + 4, 5)
-                for _, w in ipairs(team.weapons) do
+                for _, w in pairs(team.weapons) do
                     if ui:button(nil, w.img) then
                         current_weapon = w
                     end
@@ -105,28 +107,28 @@ return function (ui, team)
                 ui:spacing(1)
                 ui:layoutRow('dynamic', 34 , {0.08, 0.84, 0.08})
                 ui:spacing(1)
-                if ui:button("Craft avec Or") then
+                if ui:button("Craft avec Or") and current_weapon ~= nil then
                     -- TODO ajouter arme current_weapon à team et enlever montant en or 
                     if current_weapon.available > 0 then
-                        if team.materiaux.Gold >= current_weapon.cost.Gold then
-                            team.materiaux.Gold = team.materiaux.Gold - current_weapon.cost.Gold
+                        if materiaux.Gold >= current_weapon.cost.Gold then
+                            materiaux.Gold = materiaux.Gold - current_weapon.cost.Gold
                             current_weapon.available = current_weapon.available + 1
                         end
                     end
                 end
                 ui:spacing(2)
-                if ui:button("Craft avec Matériaux") then
+                if ui:button("Craft avec Matériaux") and current_weapon ~= nil then
                     -- TODO ajouter arme current_weapon à team et enlever matériaux
                     if current_weapon.available > 0 then
-                        if  team.materiaux.Terre >= current_weapon.cost.Terre
-                        and team.materiaux.Souffre >= current_weapon.cost.Souffre
-                        and team.materiaux.Pierre >= current_weapon.cost.Pierre
-                        and team.materiaux.Fer >= current_weapon.cost.Fer then
-                            team.materiaux.Gold = team.materiaux.Gold - current_weapon.cost.Gold
-                            team.materiaux.Pierre = team.materiaux.Pierre - current_weapon.cost.Pierre
-                            team.materiaux.Terre = team.materiaux.Terre - current_weapon.cost.Terre
-                            team.materiaux.Gold = team.materiaux.Gold - current_weapon.cost.Gold
-                            team.materiaux.Fer = team.materiaux.Fer - current_weapon.cost.Fer
+                        if  materiaux.Terre >= current_weapon.cost.Terre
+                        and materiaux.Souffre >= current_weapon.cost.Souffre
+                        and materiaux.Pierre >= current_weapon.cost.Pierre
+                        and materiaux.Fer >= current_weapon.cost.Fer then
+                            materiaux.Gold = materiaux.Gold - current_weapon.cost.Gold
+                            materiaux.Pierre = materiaux.Pierre - current_weapon.cost.Pierre
+                            materiaux.Terre = materiaux.Terre - current_weapon.cost.Terre
+                            materiaux.Gold = materiaux.Gold - current_weapon.cost.Gold
+                            materiaux.Fer = materiaux.Fer - current_weapon.cost.Fer
                             current_weapon.available = current_weapon.available + 1
                         end
                     end
@@ -157,13 +159,13 @@ return function (ui, team)
                     ui:label(current_weapon.cost.Terre.." blocs de Terre", 'centered')
                 end
                 if current_weapon.cost.Pierre ~= 0 then
-                    ui:label(current_weapon.cost.Pierre.." blocs de Terre", 'centered')
+                    ui:label(current_weapon.cost.Pierre.." blocs de Pierre", 'centered')
                 end
                 if current_weapon.cost.Fer ~= 0 then
-                    ui:label(current_weapon.cost.Fer.." blocs de Terre", 'centered')
+                    ui:label(current_weapon.cost.Fer.." blocs de Fer", 'centered')
                 end
                 if current_weapon.cost.Souffre ~= 0 then
-                    ui:label(current_weapon.cost.Souffre.." blocs de Terre", 'centered')
+                    ui:label(current_weapon.cost.Souffre.." blocs de Souffre", 'centered')
                 end
             end
             ui:groupEnd() -- End of 'Info'

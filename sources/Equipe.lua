@@ -5,13 +5,10 @@ require(SRCDIR.."Personnage")
 Equipe = {}
 Equipe.__index = Equipe
 
-function copy(obj, seen)
+function copy(obj)
     if type(obj) ~= 'table' then return obj end
-    if seen and seen[obj] then return seen[obj] end
-    local s = seen or {}
-    local res = setmetatable({}, getmetatable(obj))
-    s[obj] = res
-    for k, v in pairs(obj) do res[copy(k, s)] = copy(v, s) end
+    local res = {}
+    for k, v in pairs(obj) do res[copy(k)] = copy(v) end
     return res
 end
 

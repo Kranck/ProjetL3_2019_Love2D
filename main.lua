@@ -358,7 +358,7 @@ function love.update(dt)
         -------------------------------------------------------------------
         if PLAY == PLAY_TYPE_TABLE.weapons then
             uiWeapons:frameBegin()
-                Weapons(uiWeapons)
+                Weapons(uiWeapons, terrain.teams[current_team_nb])
             uiWeapons:frameEnd()
         end
 
