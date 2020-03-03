@@ -17,5 +17,6 @@ return function (ui, msg)
         ui:label(msg, 'centered', "#FFFFFF")
 		love.graphics.setFont(default_font)
 	end
-	ui:windowEnd()
+    ui:windowEnd()
+    ui:windowSetFocus('Fin de partie')
 end 

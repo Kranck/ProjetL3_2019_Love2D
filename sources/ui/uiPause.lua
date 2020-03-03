@@ -48,5 +48,6 @@ return function (ui, terrain)
 	end
 	ui:windowEnd()
 	ui:stylePop()
+	ui:windowSetFocus('Pause Menu')
 	return terrain
 end

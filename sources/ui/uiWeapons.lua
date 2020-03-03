@@ -173,6 +173,7 @@ return function (ui, team)
         ui:stylePop()
 	end
     ui:windowEnd()
-    
     ui:stylePop()
+    
+	ui:windowSetFocus('Weapons Menu')
 end
