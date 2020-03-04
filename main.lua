@@ -116,6 +116,12 @@ function love.keyreleased(key, scancode)
         end
     end
 
+    
+    if PLAY == PLAY_TYPE_TABLE.endgame then
+        PLAY = PLAY_TYPE_TABLE.menu
+        return
+    end
+
 end
 
 function love.keypressed(key, scancode, isrepeat)
@@ -267,12 +273,6 @@ function love.update(dt)
         uiEndgame:frameBegin()
             Endgame(uiEndgame, "L'Equipe "..won.." a gagné")
         uiEndgame:frameEnd()
-        print("L'Equipe "..won.." a gagné")
-        print("Appuyer sur Entrée pour continuer")
-        if love.keyboard.isDown("return") then
-            PLAY = PLAY_TYPE_TABLE.menu
-            return
-        end
     end
 
     if PLAY == PLAY_TYPE_TABLE.normal or PLAY == PLAY_TYPE_TABLE.weapons then
@@ -444,9 +444,8 @@ function love.draw()
             love.graphics.setColor(1,1,1,1) -- default
             uiPause:draw()
         end
-        if(PLAY == PLAY_TYPE_TABLE.endgame) then
-            uiEndgame:draw()
-        end
+    elseif  PLAY == PLAY_TYPE_TABLE.endgame then
+        uiEndgame:draw()
     elseif(PLAY == PLAY_TYPE_TABLE.menu) then
         uiMenu:draw()
     end
