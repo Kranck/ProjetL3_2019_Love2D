@@ -119,7 +119,7 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
             end
         end
 
-        -- Initialisation des variables nécéssaires pour la génération d'un bruit de perlin
+        -- Initialisation des variables nécéssaire pour la génération d'un bruit de perlin
         love.math.setRandomSeed(os.time())
         scale = 19
         dx = love.math.random(0, 1000)
@@ -157,7 +157,6 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
                         if randomNumber<64 then
                             self.map_bloc[height_to_destroy+i][j] = Fer:New()
                         end
-                    self.map_bloc[height_to_destroy+i][j] = Terre:New()
                 end
             end
         end
