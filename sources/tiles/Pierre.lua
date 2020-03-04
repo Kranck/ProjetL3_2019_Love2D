@@ -21,9 +21,22 @@ function Pierre:New()
     return this
 end
 
+local function map_hp_block(hp)
+    if hp == Pierre.hp then
+        return 0
+    end
+    if hp > 3 then
+        return 1
+    end
+    if hp > 2 then
+        return 2
+    end
+    return 3
+end
+
 function Pierre:ChangeQuad(newNum, newHp)
     self.pdv = newHp or self.pdv
-    self.img = love.graphics.newQuad(0, 0 , TILESIZE, TILESIZE, Pierre.sprite:getDimensions())
+    self.img = love.graphics.newQuad(0, map_hp_block(self.pdv) * TILESIZE, TILESIZE, TILESIZE, Pierre.sprite:getDimensions())
 end
 
 function Pierre:Destroy()
