@@ -46,16 +46,17 @@ DEBUG = true
 PLAY_TYPE_TABLE = { ['normal']  = 1, --> normal
                     ['weapons'] = 2, --> menu arme/craft
                     ['pause']   = 3, --> menu pause
-					['main']    = 4, --> menu principal
+					['menu']    = 4, --> menu principal
 					['endgame'] = 5, --> fin de partie
-                    }
-PLAY = PLAY_TYPE_TABLE.normal
+					}
+					
+PLAY = PLAY_TYPE_TABLE.menu
 
 CHAR_HP = 100
 CHAR_NB = 4
-TEAM_NB = 4
+TEAM_NB = 2
 
-TOUR_TIME = 3
+TOUR_TIME = 45
 
 SENSI = 50 -- Entre 20 et 120 
 

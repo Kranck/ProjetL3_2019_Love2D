@@ -29,7 +29,7 @@ return function (ui, terrain)
 		ui:spacing(1)
         ui:layoutRow('dynamic', 32, 1)
 		if ui:button("MENU PRINCIPAL") then
-			PLAY = PLAY_TYPE_TABLE.main
+			PLAY = PLAY_TYPE_TABLE.menu
 		end
         ui:layoutRow('dynamic', 5, 1)
 		ui:spacing(1)

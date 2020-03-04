@@ -11,7 +11,7 @@ local Weapons = require(UIDIR..'uiWeapons')
 local Pause   = require(UIDIR..'uiPause')
 local Endgame = require(UIDIR..'uiEndgame')
 
--- HUDs
+-- UIs
 local uiMenu, uiInGame, uiPause, uiWeapons, uiEndgame
 
 -- terrain ; équipe ; perso
@@ -48,13 +48,11 @@ function love.load()
     dt_destroyBlock = 0
     cpt_time = 0
     
-    uiMenu   = nuklear.newUI()
-    uiInGame = nuklear.newUI()
-    uiWeapons= nuklear.newUI() 
-    uiPause  = nuklear.newUI()
+    uiMenu    = nuklear.newUI()
+    uiInGame  = nuklear.newUI()
+    uiWeapons = nuklear.newUI() 
+    uiPause   = nuklear.newUI()
     uiEndgame = nuklear.newUI()
-
-    init_game()
 end
 
 ----------------------------------------------------------------------------------------------------------------
@@ -74,19 +72,6 @@ function love.keyreleased(key, scancode)
         if key == "escape" then
             love.keyboard.setKeyRepeat(false) -- Deactivate repeat on keyboard keys
             PLAY = PLAY_TYPE_TABLE.pause
-            return
-        end
-
-        -- Regénère une nouvelle map et la redessine
-        if key == "return" then
-            init_game()        
-            for i=1, CHAR_NB do
-                if key == ""..i then
-                    if terrain.teams[current_team_nb].personnages[i] ~= nil then
-                        perso = terrain.get_controlled_perso()
-                    end
-                end 
-            end
             return
         end
         return
@@ -121,7 +106,14 @@ function love.keyreleased(key, scancode)
     end
 
     -- Main menu
-    if PLAY == PLAY_TYPE_TABLE.main then
+    if PLAY == PLAY_TYPE_TABLE.menu then
+        ui_input(uiMenu, 'keyreleased', key, scancode)
+
+        -- Regénère une nouvelle map et la redessine
+        if key == "return" then
+            init_game()
+            PLAY = PLAY_TYPE_TABLE.normal
+        end
     end
 
 end
@@ -134,12 +126,19 @@ function love.keypressed(key, scancode, isrepeat)
         end
         return
     end
+
     if PLAY == PLAY_TYPE_TABLE.weapons then
         ui_input(uiWeapons, 'keypressed', key, scancode, isrepeat)
         return
     end
+
     if PLAY == PLAY_TYPE_TABLE.pause then
         ui_input(uiPause, 'keypressed', key, scancode, isrepeat)
+        return
+    end
+    
+    if PLAY == PLAY_TYPE_TABLE.menu then
+        ui_input(uiMenu, 'keypressed', key, scancode, isrepeat)
         return
     end
 end
@@ -171,6 +170,11 @@ function love.wheelmoved(x, y)
         ui_input(uiPause, 'wheelmoved', x, y)
         return
     end
+
+    if PLAY == PLAY_TYPE_TABLE.menu then
+        ui_input(uiMenu, 'wheelmoved', x, y)
+        return
+    end
 end
 
 
@@ -182,6 +186,11 @@ function love.mousepressed(x, y, button, istouch, presses)
 
     if PLAY == PLAY_TYPE_TABLE.pause then
         ui_input(uiPause, 'mousepressed', x, y, button, istouch, presses)
+        return
+    end
+
+    if PLAY == PLAY_TYPE_TABLE.menu then
+        ui_input(uiMenu, 'mousepressed', x, y, button, istouch, presses)
         return
     end
 end
@@ -196,6 +205,11 @@ function love.mousereleased(x, y, button, istouch, presses)
         ui_input(uiPause, 'mousereleased', x, y, button, istouch, presses)
         return
     end
+
+    if PLAY == PLAY_TYPE_TABLE.menu then
+        ui_input(uiMenu, 'mousereleased', x, y, button, istouch, presses)
+        return
+    end
 end
 
 function love.mousemoved(x, y, dx, dy, istouch)
@@ -206,6 +220,11 @@ function love.mousemoved(x, y, dx, dy, istouch)
 
     if PLAY == PLAY_TYPE_TABLE.pause then
         ui_input(uiPause, 'mousemoved', x, y, dx, dy, istouch)
+        return
+    end
+
+    if PLAY == PLAY_TYPE_TABLE.menu then
+        ui_input(uiMenu, 'mousemoved', x, y, dx, dy, istouch)
         return
     end
 end
@@ -220,13 +239,18 @@ function love.textinput(text)
         ui_input(uiPause, 'textinput', text)
         return
     end
+
+    if PLAY == PLAY_TYPE_TABLE.menu then
+        ui_input(uiMenu, 'textinput', text)
+        return
+    end
 end
 
 
 -- Perte de focus --> met la pause
 function love.focus(f)
     if not f then
-        if PLAY == PLAY_TYPE_TABLE.main then return end
+        if PLAY == PLAY_TYPE_TABLE.menu then return end
         PLAY = PLAY_TYPE_TABLE.pause
     end
 end
@@ -238,32 +262,26 @@ end
 ----------------------------------------------------------------------------------------------------------------
 
 function love.update(dt)
-    -------VARIABLES UTILES AU TOUR PAR TOUR POUR PAS DUPLIQUER LE CODE------
-    
-
-    if terrain.get_current_team_nb() == terrain.get_next_team_nb() then
-        PLAY = PLAY_TYPE_TABLE.endgame
+    if PLAY == PLAY_TYPE_TABLE.endgame then
+        local won = terrain.teams[terrain.get_next_team_nb()].getColorString()
         uiEndgame:frameBegin()
-            Endgame(uiEndgame, "L'Equipe "..terrain.teams[terrain.get_next_team_nb()].getColorString().." a gagné")
+            Endgame(uiEndgame, "L'Equipe "..won.." a gagné")
         uiEndgame:frameEnd()
-        print("L'Equipe "..terrain.teams[terrain.get_next_team_nb()].getColorString().." a gagné")
-        print("Appuyer sur Entrée pour relancer une partie")
+        print("L'Equipe "..won.." a gagné")
+        print("Appuyer sur Entrée pour continuer")
         if love.keyboard.isDown("return") then
-            init_game()        
-            for i=1, CHAR_NB do
-                if key == ""..i then
-                    if terrain.teams[get_current_team_nb()].personnages[i] ~= nil then
-                        perso = terrain.get_controlled_perso()
-                    end
-                end 
-            end
-            PLAY = PLAY_TYPE_TABLE.normal
+            PLAY = PLAY_TYPE_TABLE.menu
             return
         end
     end
 
-
     if PLAY == PLAY_TYPE_TABLE.normal or PLAY == PLAY_TYPE_TABLE.weapons then
+        ---------------------------------------------------------
+        ---------------  TRIGGER WIN CONDITION  -----------------
+        ---------------------------------------------------------
+        if terrain.get_current_team_nb() == terrain.get_next_team_nb() then
+            PLAY = PLAY_TYPE_TABLE.endgame
+        end
             ---------------------------------------------------------
             -----------------  Maj des compteurs  -------------------
             ---------------------------------------------------------
@@ -383,7 +401,13 @@ function love.update(dt)
     ------  Binding des touches en mode Main Menu  ------
     -----------------------------------------------------
     if PLAY == PLAY_TYPE_TABLE.menu then
-        uiMenu:frame(Menu)
+        uiMenu:frameBegin()
+            terrain = Menu(uiMenu, terrain)
+            if terrain ~= nil then 
+                perso = terrain.get_controlled_perso()
+                cpt_time = 0
+            end
+        uiMenu:frameEnd()
     end
 
 end
@@ -423,7 +447,7 @@ function love.draw()
         if(PLAY == PLAY_TYPE_TABLE.endgame) then
             uiEndgame:draw()
         end
-    elseif(PLAY == PLAY_TYPE_TABLE.main) then
+    elseif(PLAY == PLAY_TYPE_TABLE.menu) then
         uiMenu:draw()
     end
 end
