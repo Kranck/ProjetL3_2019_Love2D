@@ -34,11 +34,11 @@ return function (ui, blocks, teams, dt)
 		
 		love.graphics.setFont(mat_font)
 		love.graphics.setColor(0, 0, 0)
-			ui:text(blocks.earth, x + 8, y + 19, 10, 10)
-			ui:text(blocks.stone, x + 8 + TILESIZE + 4, y + 19, 10, 10)
-			ui:text(blocks.iron, x + 8 + (TILESIZE + 4) * 2, y + 19, 10, 10)
-			ui:text(blocks.sulfure, x + 8 + (TILESIZE + 4) * 3, y + 19, 10, 10)
-			ui:text(blocks.gold, x + 8 + (TILESIZE + 4) * 4, y + 19, 10, 10)
+			ui:text(blocks.earth, x + 8, y + 19, 20, 10)
+			ui:text(blocks.stone, x + 8 + TILESIZE + 4, y + 19, 20, 10)
+			ui:text(blocks.iron, x + 8 + (TILESIZE + 4) * 2, y + 19, 20, 10)
+			ui:text(blocks.sulfure, x + 8 + (TILESIZE + 4) * 3, y + 19, 20, 10)
+			ui:text(blocks.gold, x + 8 + (TILESIZE + 4) * 4, y + 19, 20, 10)
 		love.graphics.setColor(1, 1, 1) -- => white / default color
 		love.graphics.setFont(default_font)
         
