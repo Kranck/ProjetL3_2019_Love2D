@@ -34,6 +34,7 @@ local dt_destroyBlock
 local init_game = function ()
     -- On instancie les équipes et les personnages
     terrain = Terrain:New(HEIGHT, WIDTH)
+    Camera:setTerrain(terrain)
     -- Premier personnage à jouer
     perso = terrain.get_controlled_perso()
 end
@@ -391,6 +392,7 @@ function love.update(dt)
             new_terrain = Pause(uiPause,terrain)
             if terrain~=new_terrain then
                 terrain=new_terrain
+                Camera:setTerrain(terrain)
                 perso = terrain.get_controlled_perso()
                 cpt_time=0
             end
@@ -404,6 +406,7 @@ function love.update(dt)
         uiMenu:frameBegin()
             terrain = Menu(uiMenu, terrain)
             if terrain ~= nil then 
+                Camera:setTerrain(terrain)
                 perso = terrain.get_controlled_perso()
                 cpt_time = 0
             end
@@ -420,17 +423,12 @@ end
 
 function love.draw()
     if PLAY == PLAY_TYPE_TABLE.normal or PLAY == PLAY_TYPE_TABLE.weapons or PLAY == PLAY_TYPE_TABLE.pause then
-        Camera:set()
-        --if PLAY == PLAY_TYPE_TABLE.normal or PLAY == PLAY_TYPE_TABLE.weapons then
-            -- draw order -> terrain -> equipe -> personnages
-            terrain.draw(moved)
-        --end
         Camera:setPosition(perso)
         -- On affiche le curseur pour la visée
+        Camera:draw()
         perso.DrawCursor()
         --Affichage de la Graphic user Interface d'infos InGame
         uiInGame:draw()
-        Camera:unset()
         -- Affiche les informations de débuggage pour un personnage
         if DEBUG then
             perso.Debug(grounded)

@@ -3,10 +3,15 @@ require("var")
 require(SRCDIR.."Terrain")
 
 Camera = {}
+Camera.background = love.graphics.newImage(ASSETSDIR.."bg2.png")
 Camera.x = 0
 Camera.y = 0
 Camera.scaleX = 1
 Camera.scaleY = 1
+Camera.layers = {
+    ['background'] = {scale = 0.9, draw = function () love.graphics.draw(Camera.background, 0, 0) end},
+    ['terrain'] = {},
+}
 
 function Camera:set()
     love.graphics.push()
@@ -71,4 +76,29 @@ end
 
 function Camera:mousePosition()
     return love.mouse.getX(), love.mouse.getY()
+end
+
+
+function Camera:setTerrain(t)
+    Camera.layers['terrain'] = {draw = t.draw, scale = 1}
+end
+
+function Camera:draw()
+    local bx, by = self.x, self.y
+    local v
+    -- draw background
+    v = Camera.layers['background']
+    self.x = bx * v.scale
+    self.y = by * v.scale
+    Camera:set()
+        v.draw()
+    Camera:unset()
+
+    --draw terrain
+    v = Camera.layers['terrain']
+    self.x = bx * v.scale
+    self.y = by * v.scale
+    Camera:set()
+        v.draw()
+    Camera:unset()
 end
