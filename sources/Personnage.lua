@@ -1,5 +1,7 @@
 require('var')
 
+require(WEAPONDIR.."Pioche")
+require(WEAPONDIR.."Revolver")
 require(SRCDIR.."Terrain")
 require(SRCDIR.."Materiaux")
 local anim8   = require 'anim8'
@@ -88,10 +90,11 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         Yacc = GRAVITY, -- Vertical acceleration
         equipe = e,
         number = nb,
-        weapon = "",
+        weapon = "no_weapon",
         destroying = false
     }
     current_animation = self.animations.miner_right
+    
 
     -- Modifie la position du personnage vers les nouveaux points x, y en vérifiant qu'on reste dans
     -- le terrain et qu'on ne rentre pas dans un mur
@@ -314,16 +317,6 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
             end
         end
     end
-    
-    local changeWeapon = function (newWeapon)
-        self.weapon = newWeapon
-        if(newWeapon == "pistolet") then
-            self.sprite = sprite_without_arms
-        end
-        if(newWeapon == "") then
-            self.sprite = sprite
-        end
-    end
 
     local getEqDroite = function(posX, posY, angle, orientation, range)
         local angle_in_radian = angle * math.pi/180
@@ -365,7 +358,6 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
 
     -- Destruction du block par le personnage
     local DestroyBlock = function ()
-        changeWeapon("")
         self.destroying = true
         coeff_droite, ordonne_origin, tile_to_destroyX, startX, startY = getEqDroite(self.posX, self.posY, self.angle, self.orientation, self.range)
 
@@ -449,7 +441,6 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
 
     -- Tirer
     local Tirer = function()
-        changeWeapon("pistolet")
         coeff_droite, ordonne_origin, tile_to_destroyX, startX, startY = getEqDroite(self.posX, self.posY, self.angle, self.orientation, self.range)
         local signe_pas = 1
 
@@ -543,6 +534,12 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         end
     end
 
+    local set_weapon = function(str)
+        self.weapon = str
+    end
+
+    local get_weapon  = function() return self.weapon end
+
     local update = function (grounded, moved, dt)
         if self.destroying then
             if self.orientation == RIGHT then
@@ -582,7 +579,7 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
     end
 
     local draw = function (grounded, moved)
-        if self.weapon == "pistolet" then
+        if self.weapon.type == "Revolver" then
             if self.orientation == RIGHT then
                 quad_pistol = love.graphics.newQuad(0, 0, 18, 7, sprite_arm_and_pistol:getDimensions())
                 self.img = love.graphics.newQuad(0, 0, TILESIZE, TILESIZE, self.sprite:getDimensions())
@@ -593,7 +590,7 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
                 love.graphics.draw(sprite_arm_and_pistol, quad_pistol, self.posX+14, self.posY+10, self.angle*math.pi/180, 1, 1, 17, 4)
             end
         end
-        if self.destroying then
+        if self.weapon.type == "Pioche" then
             if self.orientation == RIGHT then
                 current_animation:draw(self.miner_sprite, self.posX, self.posY-16)
             else
@@ -648,8 +645,9 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         getNumber = getNumber,
         draw = draw,
         update = update,
-        changeWeapon = changeWeapon,
-        setDestroying = setDestroying
+        setDestroying = setDestroying,
+        set_weapon = set_weapon,
+        get_weapon = get_weapon
     }
 
 end -- End Personnage:New

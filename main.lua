@@ -128,8 +128,22 @@ end
 function love.keypressed(key, scancode, isrepeat)
     if PLAY == PLAY_TYPE_TABLE.normal then
         -- Tirer
-        if key == 'e' then
-            perso.Tirer()
+        if key == 'f' then
+            if perso.get_weapon().type == "Revolver" then
+                perso.Tirer()
+            end
+        end
+        -- Selectionner Pioche
+        if key == '1' then
+            perso.set_weapon(perso.getEquipe().weapons[1])
+            print(perso.weapon)
+            print("taking pioche")
+        end
+        -- Selectionner Revolver
+        if key == '2' then
+            perso.set_weapon(perso.getEquipe().weapons[2])
+            print(perso.weapon)
+            print("taking pistol")
         end
         return
     end
@@ -349,8 +363,10 @@ function love.update(dt)
 
             if love.keyboard.isScancodeDown("f") then
                 if dt_destroyBlock > CD_DESTROYBLOCK then
-                    perso.DestroyBlock()
-                    dt_destroyBlock = 0
+                    if perso.get_weapon().type == "Pioche" then
+                        perso.DestroyBlock()
+                        dt_destroyBlock = 0
+                    end
                 end
             end
 

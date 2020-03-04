@@ -1,6 +1,7 @@
 require("var")
 require(SRCDIR.."Personnage")
---require(SRCDIR.."../Pioche")
+require(WEAPONDIR.."Pioche")
+require(WEAPONDIR.."Revolver")
 
 Equipe = {}
 Equipe.__index = Equipe
@@ -19,9 +20,13 @@ function Equipe:New(t, color, name)
         name = name,
         personnages = {},
         materiaux = {Terre = 0, Pierre = 0, Fer = 0, Souffre = 0, Gold = 0},
-        weapons = copy(WEAPONS_INIT),
+        weapons = {},
+        selected_weapon = nil,
         current_player = 1
     }
+
+    table.insert(self.weapons, Pioche:New())
+    table.insert(self.weapons, Revolver:New())
 
     for i=1, CHAR_NB do
         table.insert(self.personnages, Personnage:New(self, color, i))
@@ -61,6 +66,7 @@ function Equipe:New(t, color, name)
         end
     end
 
+    self.selected_weapon = "no_weapon"
 
     local getPersonnages = function () return self.personnages end
     local getTerrain = function () return self.terrain end
@@ -105,6 +111,6 @@ function Equipe:New(t, color, name)
         setCurrentPlayer = setCurrentPlayer,
         reset_current_player = reset_current_player,
         weapons = self.weapons,
-        getColorString = getColorString
+        getColorString = getColorString,
     }
 end
