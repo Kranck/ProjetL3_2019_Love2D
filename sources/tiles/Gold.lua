@@ -4,6 +4,7 @@ require(SRCDIR.."Tile")
 
 Gold = Tile:New()
 Gold.sprite = love.graphics.newImage(TEXTUREDIR.."Gold_Block.png")
+Gold.fallen = love.graphics.newImage(TEXTUREDIR.."Gold_Block_Fallen.png")
 Gold.__index = Gold
 Gold.__type = "Gold"
 Gold.hp = 7
@@ -11,7 +12,7 @@ Gold.hp = 7
 function Gold:New()
     local this = {}
     this.img = love.graphics.newQuad(0, 0, TILESIZE, TILESIZE, Gold.sprite:getDimensions())
-
+    this.type = "Gold"
     this.draw = function (x, y)
         love.graphics.draw(Gold.sprite, this.img, x, y)
     end
