@@ -97,6 +97,7 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
         for i, t in ipairs(self.teams) do
             t.draw(moved)
         end
+        self.controlled_perso.DrawCursor()
     end
 
     
@@ -271,7 +272,10 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
 
     local get_current_team_nb = function() return self.current_team_nb end
     local get_current_perso_index = function() return self.current_perso_index end
-    local get_controlled_perso = function() return self.controlled_perso end
+    local get_controlled_perso = function() 
+        --self.controlled_perso.set_weapon(self.controlled_perso.getEquipe().weapons[1])
+        return self.controlled_perso
+    end
     local get_next_team_nb = function() return self.next_team_nb end
     local get_next_perso_nb = function() return self.next_perso_nb end
 

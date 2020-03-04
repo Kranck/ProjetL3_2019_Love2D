@@ -136,13 +136,13 @@ function love.keypressed(key, scancode, isrepeat)
         -- Selectionner Pioche
         if key == '1' then
             perso.set_weapon(perso.getEquipe().weapons[1])
-            print(perso.weapon)
+            print(perso.get_weapon)
             print("taking pioche")
         end
         -- Selectionner Revolver
         if key == '2' then
             perso.set_weapon(perso.getEquipe().weapons[2])
-            print(perso.weapon)
+            print(perso.get_weapon)
             print("taking pistol")
         end
         return
@@ -442,7 +442,6 @@ function love.draw()
         Camera:setPosition(perso)
         -- On affiche le curseur pour la visée
         Camera:draw()
-        perso.DrawCursor()
         --Affichage de la Graphic user Interface d'infos InGame
         uiInGame:draw()
         -- Affiche les informations de débuggage pour un personnage
