@@ -4,7 +4,7 @@ TILESDIR = "sources/tiles/"
 UIDIR = "sources/ui/"
 ASSETSDIR = "assets/"
 TEXTUREDIR = "assets/textures/"
-WEAPONDIR = "sources/weapons/"
+WEAPONDIR = "sources/weapon/"
 
 ------------------ Tailles --------------------
 WINDOW_HEIGHT = 720
@@ -55,9 +55,7 @@ PLAY = PLAY_TYPE_TABLE.menu
 CHAR_HP = 100
 CHAR_NB = 4
 TEAM_NB = 2
-
 TOUR_TIME = 45
-
 SENSI = 50 -- Entre 20 et 120 
 
 ---------------- Weapons Parameters -----------------
