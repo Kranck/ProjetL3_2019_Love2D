@@ -36,6 +36,10 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
         end
     end
 
+    local set_current_perso_nb = function()
+
+    end
+
     local set_next_team_nb = function()
         self.next_team_nb = self.current_team_nb+1
         if self.next_team_nb > table.getn(self.teams) then
@@ -49,8 +53,13 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
         end
     end
 
+    local set_current_team_nb = function()
+
+    end
+
     local next_perso = function()
-        print("CHANGING OF PERSO")
+        self.controlled_perso.setDestroying(false)
+        self.controlled_perso.changeWeapon("")
         self.teams[self.current_team_nb].setCurrentPlayer(self.next_perso_nb)
         self.teams[self.next_team_nb].reset_current_player()
         self.current_perso_index = self.teams[self.next_team_nb].getCurrentPlayer()
@@ -148,7 +157,6 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
                         if randomNumber<64 then
                             self.map_bloc[height_to_destroy+i][j] = Fer:New()
                         end
-                    self.map_bloc[height_to_destroy+i][j] = Terre:New()
                 end
             end
         end
