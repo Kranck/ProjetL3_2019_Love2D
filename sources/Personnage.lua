@@ -299,6 +299,9 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
     local changeAngleUp = function ()
         if (self.angle < 90) then
             self.angle = self.angle + sensi(1)
+            if (self.angle > 90) then
+                self.angle = 90
+            end
         end
     end
 
@@ -306,6 +309,9 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
     local changeAngleDown = function ()
         if (self.angle > -90) then
             self.angle = self.angle - sensi(1)
+            if (self.angle < -90) then
+                self.angle = -90
+            end
         end
     end
     
