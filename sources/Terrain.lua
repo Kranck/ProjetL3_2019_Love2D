@@ -157,7 +157,7 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
                         if randomNumber<64 then
                             self.map_bloc[height_to_destroy+i][j] = Fer:New()
                         end
-                    this.map_bloc[height_to_destroy+i][j] = Terre:New()
+                    self.map_bloc[height_to_destroy+i][j] = Terre:New()
                 end
             end
         end
