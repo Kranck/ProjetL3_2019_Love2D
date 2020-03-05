@@ -541,7 +541,7 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
     local get_weapon  = function() return self.weapon end
 
     local update = function (grounded, moved, dt)
-        if self.destroying then
+        if self.weapon.type=="Pioche" then
             if self.orientation == RIGHT then
                 current_animation = self.animations.miner_right
             else
@@ -592,13 +592,13 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         end
         if self.weapon.type == "Pioche" then
             if self.orientation == RIGHT then
-                quad_jmh_pioche = love.graphics.newQuad(144, 0, 48, 48, self.miner_sprite:getDimensions())
-                love.graphics.draw(self.miner_sprite, quad_jmh_pioche, self.posX, self.posY-16)
-                --current_animation:draw(self.miner_sprite, self.posX, self.posY-16)
+                --quad_jmh_pioche = love.graphics.newQuad(144, 0, 48, 48, self.miner_sprite:getDimensions())
+                --love.graphics.draw(self.miner_sprite, quad_jmh_pioche, self.posX, self.posY-16)
+                current_animation:draw(self.miner_sprite, self.posX, self.posY-16)
             else
-                quad_jmh_pioche = love.graphics.newQuad(144, 48, 48, 48, self.miner_sprite:getDimensions())
-                love.graphics.draw(self.miner_sprite, quad_jmh_pioche, self.posX-16, self.posY-16)
-                --current_animation:draw(self.miner_sprite, self.posX-16, self.posY-16)
+                --quad_jmh_pioche = love.graphics.newQuad(144, 48, 48, 48, self.miner_sprite:getDimensions())
+                --love.graphics.draw(self.miner_sprite, quad_jmh_pioche, self.posX-16, self.posY-16)
+                current_animation:draw(self.miner_sprite, self.posX-16, self.posY-16)
             end
         else
             love.graphics.draw(self.sprite, self.img, self.posX, self.posY)
