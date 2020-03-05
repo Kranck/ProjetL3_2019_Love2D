@@ -580,6 +580,7 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
 
     local draw = function (grounded, moved)
         if self.weapon.type == "Revolver" then
+            self.sprite = sprite_without_arms
             if self.orientation == RIGHT then
                 quad_pistol = love.graphics.newQuad(0, 0, 18, 7, sprite_arm_and_pistol:getDimensions())
                 self.img = love.graphics.newQuad(0, 0, TILESIZE, TILESIZE, self.sprite:getDimensions())
