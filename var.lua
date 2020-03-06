@@ -5,6 +5,7 @@ UIDIR = "sources/ui/"
 ASSETSDIR = "assets/"
 TEXTUREDIR = "assets/textures/"
 WEAPONDIR = "sources/weapon/"
+SOUNDSDIR = "sources/sounds/"
 
 ------------------ Tailles --------------------
 WINDOW_HEIGHT = 720

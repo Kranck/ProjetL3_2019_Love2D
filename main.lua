@@ -330,6 +330,8 @@ function love.update(dt)
         end
 
         if grounded == "outOfBounds" or perso.getHP() <= 0 then
+            quote = love.audio.newSource(SOUNDSDIR.."la_c_est_vraiment_du_travail_de_ptit_joueur.mp3", "static")
+            love.audio.play(quote)
             terrain.next_perso()
             perso = terrain.get_controlled_perso()
             cpt_time = 0
