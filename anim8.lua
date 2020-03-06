@@ -183,7 +183,7 @@ local function newAnimation(frames, durations, onLoop)
       totalDuration  = totalDuration,
       onLoop         = onLoop,
       timer          = 0,
-      position       = 1,
+      position       = 4,
       status         = "playing",
       flippedH       = false,
       flippedV       = false
@@ -247,13 +247,13 @@ function Animation:gotoFrame(position)
 end
 
 function Animation:pauseAtEnd()
-  self.position = #self.frames
+  self.position = 4
   self.timer = self.totalDuration
   self:pause()
 end
 
 function Animation:pauseAtStart()
-  self.position = 1
+  self.position = 4
   self.timer = 0
   self:pause()
 end

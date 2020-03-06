@@ -62,6 +62,7 @@ function Terrain:New(height, width) -- Générer une Terrain à  partir de 3 Til
         self.teams[self.current_team_nb].setCurrentPlayer(self.next_perso_nb)
         self.teams[self.next_team_nb].reset_current_player()
         self.current_perso_index = self.teams[self.next_team_nb].getCurrentPlayer()
+        self.controlled_perso.set_weapon("no_weapon")
         self.controlled_perso = self.teams[self.next_team_nb].getPersonnages()[self.current_perso_index]
         self.current_team_nb = self.next_team_nb
         set_next_perso_nb()
