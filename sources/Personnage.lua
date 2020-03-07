@@ -430,7 +430,7 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
                 -- On parcours tous les autres joueurs
                 if(self.equipe.name ~= other.getEquipe().name or self.number ~= other.getNumber()) then
                     if(x >= pos.posX and x <= pos.posX + TILESIZE and y >= pos.posY and y <= pos.posY + TILESIZE) then
-                        other.setHP(other.getHP() - 20)
+                        other.setHP(other.getHP() - self.equipe.weapons[2].degats)
                         return true
                     end
                 end
@@ -441,7 +441,7 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
 
     -- Tirer
     local Tirer = function()
-        coeff_droite, ordonne_origin, tile_to_destroyX, startX, startY = getEqDroite(self.posX, self.posY, self.angle, self.orientation, self.range)
+        coeff_droite, ordonne_origin, tile_to_destroyX, startX, startY = getEqDroite(self.posX, self.posY, self.angle, self.orientation, self.equipe.weapons[2].range)
         local signe_pas = 1
 
         if(math.abs(self.angle) > 86) then
