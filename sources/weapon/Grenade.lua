@@ -13,7 +13,6 @@ function Grenade:New(posX, posY, angle, terrain, orientation)
         posY = posY - TILESIZE/2,
         degats = Grenade.degats,
         sprite = Grenade.sprite,
-        range = Grenade.range,
         Xspeed = 3 * orientation * math.cos(angle*math.pi/180),
         Yspeed = -7 * math.sin(angle*math.pi/180),
         Xacc = 0,
