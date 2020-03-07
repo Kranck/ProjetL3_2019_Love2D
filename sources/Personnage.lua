@@ -345,7 +345,7 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
             return true
         end
         if(self.equipe.terrain.getBlock(nb_tileX, nb_tileY) ~= nil) then
-            self.equipe.terrain.getBlock(nb_tileX, nb_tileY):ChangeQuad(nil, self.equipe.terrain.getBlock(nb_tileX, nb_tileY).pdv - 1)
+            self.equipe.terrain.getBlock(nb_tileX, nb_tileY):ChangeQuad(nil, self.equipe.terrain.getBlock(nb_tileX, nb_tileY).pdv - self.equipe.weapons[1].degats)
             if(self.equipe.terrain.getBlock(nb_tileX, nb_tileY).pdv == 0) then
                 type_of_mat = self.equipe.terrain.getBlock(nb_tileX, nb_tileY).type
                 table.insert(self.equipe.terrain.materiaux, Materiaux:New(type_of_mat, nb_tileX, nb_tileY, self.equipe.terrain))
