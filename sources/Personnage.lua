@@ -77,7 +77,6 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
             miner_left = anim8.newAnimation(grid_sprite(1,2, 2,2, 3,2, 4,2), 0.1, onLoop)
         },
         terrain = e.terrain,
-        range   = RANGE,    -- Distance à laquelle le personnage peut casser des blocs
         img     = love.graphics.newQuad(0, 0, TILESIZE, TILESIZE, sprite:getDimensions()),
         angle   = 0,        -- angle 
         pointDeVie = CHAR_HP,
@@ -91,6 +90,7 @@ function Personnage:New(e, color, nb) -- Générer un Terrain à partir de 3 Til
         equipe = e,
         number = nb,
         weapon = "no_weapon",
+        range   = e.weapons[1].range,    -- Distance à laquelle le personnage peut casser des blocs
         destroying = false
     }
     current_animation = self.animations.miner_right

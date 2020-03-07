@@ -6,7 +6,7 @@ Pioche = Arme:New()
 Pioche.__type = "Pioche"
 Pioche.degats = 1
 Pioche.coutEnGold = 0
-Pioche.range = 2
+Pioche.range = RANGE
 Pioche.pattern = Arme.pattern --Array of [nbTerre, nbPierre, nbFer]
 
 function Pioche:New()
